@@ -1,0 +1,25 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Teardown and/or persist the current session.
+- !ruby/struct:SM::Flow::P 
+  body: If @_destroy is true, clear out the session completely, including removal of the session cookie itself.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "request<Merb::Request>:"
+    body: request object created from Rack environment.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::CookieSession#finalize
+is_singleton: false
+name: finalize
+params: (request)
+visibility: public

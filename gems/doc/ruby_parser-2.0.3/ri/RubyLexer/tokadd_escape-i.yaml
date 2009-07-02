@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyLexer#tokadd_escape
+is_singleton: false
+name: tokadd_escape
+params: (term
+visibility: public

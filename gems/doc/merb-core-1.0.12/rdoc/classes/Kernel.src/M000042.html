@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>load_dependency (Kernel)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/core_ext/kernel.rb, line 138</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_dependency</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">clr</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">ver</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">dep</span> = <span class="ruby-identifier">name</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Dependency</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">name</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">track_dependency</span>(<span class="ruby-identifier">name</span>, <span class="ruby-identifier">clr</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">ver</span>, <span class="ruby-operator">&amp;</span><span class="ruby-identifier">blk</span>)
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">dep</span>.<span class="ruby-identifier">require_as</span>
+      <span class="ruby-constant">Gem</span>.<span class="ruby-identifier">activate</span>(<span class="ruby-identifier">dep</span>)
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">LoadError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">e</span>.<span class="ruby-identifier">set_backtrace</span> <span class="ruby-identifier">dep</span>.<span class="ruby-identifier">original_caller</span>
+      <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;The gem #{name}, #{ver.inspect} was not found&quot;</span>, <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword kw">end</span>
+  
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">require</span> <span class="ruby-identifier">dep</span>.<span class="ruby-identifier">require_as</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">LoadError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">e</span>.<span class="ruby-identifier">set_backtrace</span> <span class="ruby-identifier">dep</span>.<span class="ruby-identifier">original_caller</span>
+      <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;The file #{dep.require_as} was not found&quot;</span>, <span class="ruby-identifier">e</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span> = <span class="ruby-identifier">dep</span>.<span class="ruby-identifier">require_block</span>
+      <span class="ruby-comment cmt"># reset the require block so it doesn't get called a second time</span>
+      <span class="ruby-identifier">dep</span>.<span class="ruby-identifier">require_block</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-identifier">block</span>.<span class="ruby-identifier">call</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">verbose!</span>(<span class="ruby-node">&quot;loading gem '#{dep.name}' ...&quot;</span>)
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">dep</span> <span class="ruby-comment cmt"># ensure needs explicit return</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

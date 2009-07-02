@@ -1,0 +1,16 @@
+// Translate Hypertime timeline into Simile event stream
+
+<% data = { 'dateTimeFormat' => 'iso8601',                %>
+<%          'events' => @timeline.timeline_events.sort.map do |te| %>
+<%          { 'eventID'     => te.event.id.to_s, %>
+<%            'id'          => te.id.to_s,        %>
+<%            'start'       => te.event.start,              %>
+<%            'end'         => te.event.end ? te.event.end : nil,  %>
+<%            'title'       => te.event.title || te.event.description.truncate, %>
+<%            'real_title'  => te.event.title, %>
+<%            'description' => te.event.description,            %>
+<%            'interpretation' => te.interpretation }     %>
+<%          end %>
+<%        }                                               %>
+
+<%= data.to_json %>

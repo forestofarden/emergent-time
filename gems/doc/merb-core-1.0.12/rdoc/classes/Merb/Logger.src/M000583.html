@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>set_log (Merb::Logger)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/logger.rb, line 98</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_log</span>(<span class="ruby-identifier">stream</span> = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:log_stream</span>],
+      <span class="ruby-identifier">log_level</span> = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:log_level</span>],
+      <span class="ruby-identifier">delimiter</span> = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:log_delimiter</span>],
+      <span class="ruby-identifier">auto_flush</span> = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:log_auto_flush</span>])
+
+      <span class="ruby-ivar">@buffer</span>                   = []
+      <span class="ruby-ivar">@delimiter</span>                = <span class="ruby-identifier">delimiter</span>
+      <span class="ruby-ivar">@auto_flush</span>               = <span class="ruby-identifier">auto_flush</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Levels</span>[<span class="ruby-identifier">log_level</span>]
+        <span class="ruby-ivar">@level</span>                  = <span class="ruby-constant">Levels</span>[<span class="ruby-identifier">log_level</span>]
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-ivar">@level</span>                  = <span class="ruby-identifier">log_level</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-ivar">@log</span>                      = <span class="ruby-identifier">stream</span>
+      <span class="ruby-ivar">@log</span>.<span class="ruby-identifier">sync</span>                 = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-ivar">@mutex</span> = (<span class="ruby-ivar">@@mutex</span>[<span class="ruby-ivar">@log</span>] <span class="ruby-operator">||=</span> <span class="ruby-constant">Mutex</span>.<span class="ruby-identifier">new</span>)
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

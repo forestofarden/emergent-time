@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: Spec::Matchers::MatcherDSL::expected_value
+is_singleton: true
+name: expected_value
+params: (&block)
+visibility: public

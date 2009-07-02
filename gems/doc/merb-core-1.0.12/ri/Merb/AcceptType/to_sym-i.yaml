@@ -1,0 +1,17 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/struct:SM::Flow::P 
+  body: "Symbol: The type as a symbol, e.g. :html."
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::AcceptType#to_sym
+is_singleton: false
+name: to_sym
+params: ()
+visibility: public

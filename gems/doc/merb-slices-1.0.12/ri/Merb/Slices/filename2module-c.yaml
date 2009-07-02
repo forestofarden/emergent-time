@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Helper method to transform a slice filename to a module Symbol
+full_name: Merb::Slices::filename2module
+is_singleton: true
+name: filename2module
+params: (slice_file)
+visibility: public

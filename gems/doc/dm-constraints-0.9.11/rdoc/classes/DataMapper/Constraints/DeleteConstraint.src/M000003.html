@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>add_delete_constraint_option (DataMapper::Constraints::DeleteConstraint)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/dm-constraints/delete_constraint.rb, line 81</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">add_delete_constraint_option</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">params</span>)
+        <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">last</span>
+
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">opts</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>)
+          <span class="ruby-comment cmt">#if it is a chain, set the constraint on the 1:M near relationship(anonymous)</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">DataMapper</span><span class="ruby-operator">::</span><span class="ruby-constant">Associations</span><span class="ruby-operator">::</span><span class="ruby-constant">RelationshipChain</span>)
+            <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">last</span>
+            <span class="ruby-identifier">near_rel</span> = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:parent_model</span>].<span class="ruby-identifier">relationships</span>[<span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:near_relationship_name</span>]]
+            <span class="ruby-identifier">near_rel</span>.<span class="ruby-identifier">options</span>[<span class="ruby-identifier">:constraint</span>] = <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:constraint</span>]
+            <span class="ruby-identifier">near_rel</span>.<span class="ruby-identifier">instance_variable_set</span> <span class="ruby-value str">&quot;@delete_constraint&quot;</span>, <span class="ruby-identifier">opts</span>[<span class="ruby-identifier">:constraint</span>]
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-ivar">@delete_constraint</span> = <span class="ruby-identifier">params</span>.<span class="ruby-identifier">last</span>[<span class="ruby-identifier">:constraint</span>]
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

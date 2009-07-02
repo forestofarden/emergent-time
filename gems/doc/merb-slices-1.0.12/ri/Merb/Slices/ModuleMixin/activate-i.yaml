@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Stub activation hook - runs after AfterAppLoads BootLoader.
+full_name: Merb::Slices::ModuleMixin#activate
+is_singleton: false
+name: activate
+params: ()
+visibility: public

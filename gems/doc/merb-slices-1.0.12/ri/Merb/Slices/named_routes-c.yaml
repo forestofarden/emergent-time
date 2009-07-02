@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Hash[Hash]&gt;"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  A Hash mapping between slice identifiers and non-prefixed named routes.\n"
+full_name: Merb::Slices::named_routes
+is_singleton: true
+name: named_routes
+params: ()
+visibility: public

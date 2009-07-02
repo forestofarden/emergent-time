@@ -1,0 +1,25 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: included
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This is mixed into Merb::Controller on framework boot.
+constants: []
+
+full_name: Merb::SessionMixin
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: needs_new_cookie!
+- !ruby/object:RI::MethodSummary 
+  name: needs_new_cookie?
+- !ruby/object:RI::MethodSummary 
+  name: rand_uuid
+- !ruby/object:RI::MethodSummary 
+  name: session
+name: SessionMixin
+superclass: 

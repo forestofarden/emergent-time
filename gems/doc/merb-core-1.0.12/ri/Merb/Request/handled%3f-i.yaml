@@ -1,0 +1,23 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: If @route_params is an Array, then it will be the rack response. In this case, the request is considered handled.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "Boolean:"
+    body: true if @route_params is an Array, false otherwise.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Request#handled?
+is_singleton: false
+name: handled?
+params: ()
+visibility: public

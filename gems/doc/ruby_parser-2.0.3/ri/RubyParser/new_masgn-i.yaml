@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser#new_masgn
+is_singleton: false
+name: new_masgn
+params: (lhs, rhs, wrap = false)
+visibility: public

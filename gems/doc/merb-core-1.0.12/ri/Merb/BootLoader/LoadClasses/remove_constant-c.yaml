@@ -1,0 +1,30 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Removes the specified class.
+- !ruby/struct:SM::Flow::P 
+  body: Additionally, removes the specified class from the subclass list of every superclass that tracks it's subclasses in an array returned by _subclasses_list. Classes that wish to use this functionality are required to alias the reader for their list of subclasses to _subclasses_list. Plugins for ORMs and other libraries should keep this in mind.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "const<Class>:"
+    body: The class to remove.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/struct:SM::Flow::P 
+  body: nil
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::BootLoader::LoadClasses::remove_constant
+is_singleton: true
+name: remove_constant
+params: (const)
+visibility: public

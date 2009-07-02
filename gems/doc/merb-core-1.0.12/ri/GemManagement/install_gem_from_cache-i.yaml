@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Install a gem - looks in the system's gem cache instead of remotely; won't process rdoc or ri options.
+full_name: GemManagement#install_gem_from_cache
+is_singleton: false
+name: install_gem_from_cache
+params: (gem, options = {})
+visibility: public

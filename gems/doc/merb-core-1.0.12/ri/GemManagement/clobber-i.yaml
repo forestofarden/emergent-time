@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: GemManagement#clobber
+is_singleton: false
+name: clobber
+params: (source_dir)
+visibility: public

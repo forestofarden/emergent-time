@@ -1,0 +1,26 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: ensure_wrapper
+- !ruby/object:RI::MethodSummary 
+  name: install
+- !ruby/object:RI::MethodSummary 
+  name: install_package
+- !ruby/object:RI::MethodSummary 
+  name: sudo
+- !ruby/object:RI::MethodSummary 
+  name: uninstall
+- !ruby/object:RI::MethodSummary 
+  name: windows?
+comment: 
+constants: []
+
+full_name: Merb::RakeHelper
+includes: []
+
+instance_methods: []
+
+name: RakeHelper
+superclass: 

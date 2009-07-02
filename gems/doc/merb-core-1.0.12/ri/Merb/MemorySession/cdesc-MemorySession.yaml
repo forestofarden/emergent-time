@@ -1,0 +1,27 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: store
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Sessions stored in memory.
+- !ruby/struct:SM::Flow::P 
+  body: "Set it up by adding the following to your init file:"
+- !ruby/struct:SM::Flow::VERB 
+  body: " Merb::Config.use do |c|\n   c[:session_store]      = :memory\n   c[:memory_session_ttl] = 3600 # in seconds, one hour\n end\n"
+- !ruby/struct:SM::Flow::P 
+  body: Sessions will remain in memory until the server is stopped or the time as set in :memory_session_ttl expires. Expired sessions are cleaned up in the background by a separate thread. Every time reaper cleans up expired sessions, garbage collection is scheduled start.
+- !ruby/struct:SM::Flow::P 
+  body: Memory session is accessed in a thread safe manner.
+constants: []
+
+full_name: Merb::MemorySession
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: store
+name: MemorySession
+superclass: SessionStoreContainer

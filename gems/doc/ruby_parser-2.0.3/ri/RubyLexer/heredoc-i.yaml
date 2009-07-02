@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyLexer#heredoc
+is_singleton: false
+name: heredoc
+params: (here
+visibility: public

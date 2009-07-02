@@ -1,0 +1,20 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: method for making your model a list. it will define a :position property if it does not exist, so be sure to have a position-column in your database (will be added automatically on auto_migrate) if the column has a different name, simply make a :position-property and set a custom :field
+- !ruby/struct:SM::Flow::P 
+  body: "@example [Usage]"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  is :list  # put this in your model to make it act as a list.\n  is :list, :scope =&gt; [:user_id] # you can also define scopes\n  is :list, :scope =&gt; [:user_id, :context_id] # also works with multiple params\n"
+- !ruby/struct:SM::Flow::P 
+  body: "@param options &lt;Hash&gt; a hash of options"
+- !ruby/struct:SM::Flow::P 
+  body: "@option :scope&lt;Array&gt; an array of attributes that should be used to scope lists"
+full_name: DataMapper::Is::List#is_list
+is_singleton: false
+name: is_list
+params: (options={})
+visibility: public

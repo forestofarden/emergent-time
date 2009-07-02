@@ -1,0 +1,232 @@
+<% require_js 'jquery.scrollTo', 'template', 'jeditable', 'jquery.autogrow', 'jquery.jeditable.autogrow.js', 'rep.input_listener' %>
+<% require_js "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.form" %>
+<% require_css "#{::RepertoireCore.public_path_for(:stylesheet)}/rep.ajax-validate" %>
+<% require_js "#{::RepertoireCore.public_path_for(:javascript)}/rep.ajax-validate" %>
+
+<% require_js 'emt_event_format' %>
+
+<% require_js 'ajax-load' %>
+
+<% @page_title = "Emergent Time - #{@timeline.title}" %>
+
+<script language="javascript">
+
+$().ready(function() {
+  
+  var $timeline = $('.emt_timeline');
+  
+  /*  NEED TO DO THIS ON A CASE-BY-CASE BASIS */
+  $.ajaxSetup({
+    'beforeSend': function(xhr) {xhr.setRequestHeader("Accept", "text/plain"); }  // JQuery uses wrong content type header
+  });
+
+  // sync events list to timeline on click
+  $timeline.bind("date_selected", function(e, evt) {
+    var id = evt.getID();
+    selectEvent(id);
+  });
+  
+  // sync timeline to events list on click
+  $("#events .event").live("click", function() {
+    var evt_start = $(this).attr('evt_start');
+    var tl = $('.emt_timeline').data('tl');
+    
+    evt_start = Timeline.DateTime.parseIso8601DateTime(evt_start);
+    tl.getBand(0).setCenterVisibleDate(evt_start);
+    
+    $("#events .event").removeClass('selected');
+    $(this).addClass('selected');
+  });
+  
+  // set up removing events from timeline
+  <% if session.user == @user %>
+    $("#events .event").live("mouseover", function() { $(this).find(".event_remove").show(); });
+    $("#events .event").live("mouseout", function() { $(this).find(".event_remove").hide(); });
+    $("#events .event .event_remove").live("click", function() {
+      var $event_elem = $(this).closest('.event');
+      var db_id = $event_elem.attr('db_id');
+
+      if (confirm("Unlink this event from timeline?")) {
+        $.ajax({
+          type: "DELETE",
+          url: '/timeline_events/' + db_id,
+          complete: function(XMLHttpRequest, textStatus) {
+            // server will send 302: redirect
+            $event_elem.remove();
+          
+            // TODO.  need to prompt timeline to reload and cue back to erased spot
+            //        could use simile timeline filter - for now, just reload
+            window.location.reload();
+          }
+        });
+      };
+    });
+  <% end %>
+  
+  var selectEvent = function(db_id) {
+    var $elem = $("#events .event[db_id=" + db_id + "]")
+    $("#events .event").removeClass('selected');
+    $elem.addClass('selected');
+    $("#events").scrollTo($elem);
+  }
+  
+  var updateEvents = function() {
+    var events_elem = $("#events");
+    events_elem.empty();
+    $.getJSON("<%= resource(@user, @timeline, :format => :json) %>", function(data) {
+      $.each(data.events, function() {
+        events_elem.append(formatEvent(this));
+      });
+    });
+  };
+  
+  updateEvents();
+  
+  // timeline edit metadata / delete
+  <% if session.user == @user %>
+    $('#title_bar').hover(function() { $(this).find('.timeline_opts').show(); },
+                          function() { $(this).find('.timeline_opts').hide(); });
+    $('#title_bar .rename').click(function() { $('#title_bar .title').click(); });
+    <% # note silly requirement of jeditable that element id is sent as field name... determines our css %>
+    $('#title_bar #title').editable('<%= resource(@timeline.user, @timeline) %>', {
+      method: 'PUT',
+      name: 'timeline[title]',
+      callback : function(value, settings) {
+        // special id-based redirection for timelines... to stay on same timeline after permalink changes
+        window.location = "<%= url(:redirect_to_timeline, :id => @timeline.id) %>";
+      }
+    });
+    $('#title_bar .remove').click(function() {
+      if (confirm("Delete this timeline?\n(This cannot be undone)")) {
+        $.ajax({
+          type: "DELETE",
+          url: "<%= resource(@user, @timeline) %>",
+          complete: function(XMLHttpRequest, textStatus) {
+            window.location = "<%= resource(@user, :timelines) %>";
+          }
+        });
+      }
+    });    
+    $('#timeline_intro').hover(function() { $(this).find('.edit').show(); },
+                               function() { $(this).find('.edit').hide(); });
+    $('#timeline_intro .edit').click(function() { $('#timeline_intro #intro').click(); });
+    <% # note silly requirement of jeditable that element id is sent as field name... determines our css %>
+    $('#timeline_intro #intro').editable('<%= resource(@timeline.user, @timeline) %>', {
+      type      : "textarea",
+      loadurl   : "<%= url(:user_timeline_field_value, @timeline.user.shortname, @timeline.permalink, 'intro') %>",
+      method    : 'PUT',
+      name      : 'timeline[intro]',
+      submit    : 'OK',
+      cancel    : 'Cancel',
+      onblur    : "ignore",
+      height    : '200px',      /* i.e. use css */
+      width     : '750px',
+      loadtext   : ''          /* Safari mangles default */
+    });
+  <% end %>
+  
+  // make events list scroll with timeline
+  // timeline constructor sets up jquery scroll event
+  $timeline.bind('scroll', function() {
+    var tl = $(this).data('tl');
+    
+    // if timeline not initialized yet, don't process event
+    if (!tl) { return; }
+
+    var centerDate = tl.getBand(0).getMinVisibleDate();
+
+    var docViewTop = $("#events").scrollTop();
+    var docViewBottom = docViewTop + $("#events").height();
+
+    // iterate through events and scroll to first one later than the timeline center
+    $('#events .event').each(function() {
+      var date = Timeline.DateTime.parseIso8601DateTime($(this).attr('evt_start'));
+      if (date.getTime() > centerDate.getTime()) {
+        $('#events').scrollTo($(this));
+        return false;
+      }
+    });
+  });
+  // can't bind scrolling other way at same time since it starts an event loop  
+  
+  // experiment in loading modular html+js+css via ajax
+  // applies to comments list and new comment form at the moment
+  $("a[alt=ajax-load]").ajaxLoad();
+  $(".assemble").assemble();
+  
+});
+
+</script>
+
+<div class="emt timeline_show">
+  <div>
+    <div class="pageinfo">
+      <%= partial './user_detail', :with => @user %>
+    </div>
+    <div id="related_timelines">
+      <% related = @timeline.related(5, 1) %>
+        <h3>Related Timelines</h3>
+      <% if related.empty? %>
+      There are no similar timelines.
+      <% else %>
+        <% related.each do |tl| %>
+          <div class="timeline">
+            <%= partial './timeline_stats', :timeline => tl, :image_size => 25 %>
+            <div class="clear"></div>
+          </div>
+        <% end %>
+      <% end %>
+    </div>
+    <div id="title_bar"><div id="title" <%= 'title="Sign in to edit timelines."' if !session.user %> ><%= @timeline.title %></div>
+    <% if session.user == @user %>
+    <div class="timeline_opts"><div class="rename"></div><div class="remove"></div></div>
+    <% end %>
+  </div>
+  <div id="timeinfo">
+  <div id="timeline_intro" <%= 'title="Sign in to edit timelines."' if !session.user %> >
+    <div id="intro" class="textarea"><%= textilize(@timeline.intro || "[ No intro yet ]") %></div>
+    <% if session.user == @user %>
+      <div class="edit"></div>
+    <% end %>
+  </div>
+  <div id="timeline_widgets">
+    <div id="timeline_graph">
+      <div>
+        <h3>Timeline</h3>
+      </div>
+      <%# Simile Timeline complains when the data file contains no events %>
+      <% unless @timeline.events.empty? %>
+        <%= partial './timeline', :url => resource(@user, @timeline, :format => :json), :cue => best_cue(@cue_event, @timeline) %>
+      <% else %>
+        <div class="emt_timeline empty">
+          This timeline is empty.  
+          <% if session.user == @user %>
+            Start by clicking 'Add an event'.
+          <% end %>
+        </div>
+      <% end %>
+    </div>
+    <div id="timeline_events">
+      <div>
+        <h3>Events</h3>
+        <% if session.user == @user %>
+          <a href="<%= url(:new_timeline_event, :timeline_id => @timeline.id) %>" id="create_event_toggle" class='assemble {width: 850, height: 550}'>[+] Add an event</a>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+      <ul id="events">
+        <!-- filled via ajax -->
+      </ul>
+    </div>
+    <div class="clear">
+  </div>
+
+  <div id="timeline_comments">
+    <a href="<%= resource(@timeline.user, @timeline, :timeline_comments) %>" alt='ajax-load'>Comments</a>
+  </div>
+  
+  <div id="timeline_create_comment">
+    <a href="<%= url(:new_user_timeline_timeline_comment) %>" alt='ajax-load'>Create comment</a>
+  </div>
+  
+</div>

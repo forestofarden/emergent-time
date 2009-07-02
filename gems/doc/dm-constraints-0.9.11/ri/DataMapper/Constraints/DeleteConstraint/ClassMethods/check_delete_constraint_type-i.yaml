@@ -1,0 +1,24 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Checks that the constraint type is appropriate to the relationship
+- !ruby/struct:SM::Flow::P 
+  body: "@param cardinality [Fixnum] cardinality of relationship"
+- !ruby/struct:SM::Flow::P 
+  body: "@param name [Symbol] name of relationship to evaluate constraint of"
+- !ruby/struct:SM::Flow::P 
+  body: "@param options [Hash] options hash"
+- !ruby/struct:SM::Flow::P 
+  body: "@raises ArgumentError"
+- !ruby/struct:SM::Flow::P 
+  body: "@return [nil]"
+- !ruby/struct:SM::Flow::P 
+  body: "@api semi-public"
+full_name: DataMapper::Constraints::DeleteConstraint::ClassMethods#check_delete_constraint_type
+is_singleton: false
+name: check_delete_constraint_type
+params: (cardinality, name, options = {})
+visibility: public

@@ -1,0 +1,23 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: The status that will be sent in the response when an instance is raised during a request. Override this to send a different status.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "Integer:"
+    body: The status code to send in the response. Defaults to 500.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public @overridable"
+full_name: Exception::status
+is_singleton: true
+name: status
+params: ()
+visibility: public

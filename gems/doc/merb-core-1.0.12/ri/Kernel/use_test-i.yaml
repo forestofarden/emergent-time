@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: Kernel#use_test
+is_singleton: false
+name: use_test
+params: (*args)
+visibility: public

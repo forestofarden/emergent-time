@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Assign args as the value of the entry keyed by method.
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Config::ConfigBlock#method_missing
+is_singleton: false
+name: method_missing
+params: (method, *args)
+visibility: public

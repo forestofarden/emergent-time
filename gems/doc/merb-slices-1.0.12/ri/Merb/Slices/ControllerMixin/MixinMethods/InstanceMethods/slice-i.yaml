@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Reference this controller's slice module directly.
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Module&gt; A slice module."
+full_name: Merb::Slices::ControllerMixin::MixinMethods::InstanceMethods#slice
+is_singleton: false
+name: slice
+params: ()
+visibility: public

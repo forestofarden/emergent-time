@@ -1,0 +1,17 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/struct:SM::Flow::P 
+  body: "&lt;Boolean&gt;:: true if either ETag matches or entity is not modified, so request is fresh; false otherwise"
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::ConditionalGetMixin#request_fresh?
+is_singleton: false
+name: request_fresh?
+params: ()
+visibility: public

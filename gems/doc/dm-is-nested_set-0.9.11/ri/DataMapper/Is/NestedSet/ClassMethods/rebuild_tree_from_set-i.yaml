@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: rebuilds the parent/child relationships (parent_id) from nested set (left/right values)
+full_name: DataMapper::Is::NestedSet::ClassMethods#rebuild_tree_from_set
+is_singleton: false
+name: rebuild_tree_from_set
+params: ()
+visibility: public

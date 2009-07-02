@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: get all ancestors of this node
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Collection&gt; collection of all parents, with root as first item @see #self_and_ancestors"
+full_name: DataMapper::Is::NestedSet::InstanceMethods#ancestors
+is_singleton: false
+name: ancestors
+params: ()
+visibility: public

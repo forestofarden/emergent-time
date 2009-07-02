@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>move_without_saving (DataMapper::Is::NestedSet::InstanceMethods)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/dm-is-nested_set/is/nested_set.rb, line 169</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">move_without_saving</span>(<span class="ruby-identifier">vector</span>)
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">vector</span>.<span class="ruby-identifier">is_a?</span> <span class="ruby-constant">Hash</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">action</span>,<span class="ruby-identifier">object</span> = <span class="ruby-identifier">vector</span>.<span class="ruby-identifier">keys</span>[<span class="ruby-value">0</span>],<span class="ruby-identifier">vector</span>.<span class="ruby-identifier">values</span>[<span class="ruby-value">0</span>] <span class="ruby-keyword kw">else</span> <span class="ruby-identifier">action</span> = <span class="ruby-identifier">vector</span> <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-identifier">changed_scope</span> = <span class="ruby-identifier">nested_set_scope</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">original_nested_set_scope</span>
+
+          <span class="ruby-identifier">position</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">action</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:higher</span>  <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">left_sibling</span>  <span class="ruby-value">? </span><span class="ruby-identifier">left_sibling</span>.<span class="ruby-identifier">lft</span>    <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;already at the top&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:highest</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">ancestor</span>      <span class="ruby-value">? </span><span class="ruby-identifier">ancestor</span>.<span class="ruby-identifier">lft</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>      <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;is root, or has no parent&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:lower</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">right_sibling</span> <span class="ruby-value">? </span><span class="ruby-identifier">right_sibling</span>.<span class="ruby-identifier">rgt</span><span class="ruby-operator">+</span><span class="ruby-value">1</span> <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;already at the bottom&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:lowest</span>  <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">ancestor</span>      <span class="ruby-value">? </span><span class="ruby-identifier">ancestor</span>.<span class="ruby-identifier">rgt</span>        <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;is root, or has no parent&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:indent</span>  <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">left_sibling</span>  <span class="ruby-value">? </span><span class="ruby-identifier">left_sibling</span>.<span class="ruby-identifier">rgt</span>    <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;cannot find a sibling to indent into&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:outdent</span> <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">ancestor</span>      <span class="ruby-value">? </span><span class="ruby-identifier">ancestor</span>.<span class="ruby-identifier">rgt</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>      <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;is root, or has no parent&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:into</span>    <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">object</span>        <span class="ruby-value">? </span><span class="ruby-identifier">object</span>.<span class="ruby-identifier">rgt</span>          <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;supply an object&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:above</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">object</span>        <span class="ruby-value">? </span><span class="ruby-identifier">object</span>.<span class="ruby-identifier">lft</span>          <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;supply an object&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:below</span>   <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">object</span>        <span class="ruby-value">? </span><span class="ruby-identifier">object</span>.<span class="ruby-identifier">rgt</span><span class="ruby-operator">+</span><span class="ruby-value">1</span>        <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;supply an object&quot;</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:to</span>      <span class="ruby-keyword kw">then</span> <span class="ruby-identifier">object</span>        <span class="ruby-value">? </span><span class="ruby-identifier">object</span>.<span class="ruby-identifier">to_i</span>         <span class="ruby-operator">:</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-comment cmt"># : &quot;supply a number&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-comment cmt">##</span>
+          <span class="ruby-comment cmt"># raising an error whenever it couldnt move seems a bit harsh. want to return self for nesting.</span>
+          <span class="ruby-comment cmt"># if anyone has a good idea about how it should react when it cant set a valid position,</span>
+          <span class="ruby-comment cmt"># don't hesitate to find me in #datamapper, or send me an email at sindre -a- identu -dot- no</span>
+          <span class="ruby-comment cmt">#</span>
+          <span class="ruby-comment cmt"># raise UnableToPositionError unless position.is_a?(Integer) &amp;&amp; position &gt; 0</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">position</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">position</span> <span class="ruby-operator">&lt;</span> <span class="ruby-value">1</span>
+          <span class="ruby-comment cmt"># return false if you are trying to move this into another scope</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> [<span class="ruby-identifier">:into</span>, <span class="ruby-identifier">:above</span>,<span class="ruby-identifier">:below</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">action</span>) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">nested_set_scope</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">object</span>.<span class="ruby-identifier">nested_set_scope</span>
+          <span class="ruby-comment cmt"># if node is already in the requested position</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">position</span> <span class="ruby-operator">||</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rgt</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">position</span> <span class="ruby-operator">-</span> <span class="ruby-value">1</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parent</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">ancestor</span> <span class="ruby-comment cmt"># must set this again, because it might have been changed by the user before move.</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">false</span>
+          <span class="ruby-keyword kw">end</span>
+
+
+          <span class="ruby-constant">DataMapper</span><span class="ruby-operator">::</span><span class="ruby-constant">Transaction</span>.<span class="ruby-identifier">new</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">repository</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">transaction</span><span class="ruby-operator">|</span>
+
+            <span class="ruby-comment cmt">##</span>
+            <span class="ruby-comment cmt"># if this node is already positioned we need to move it, and close the gap it leaves behind etc</span>
+            <span class="ruby-comment cmt"># otherwise we only need to open a gap in the set, and smash that buggar in</span>
+            <span class="ruby-comment cmt">#</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rgt</span>
+              <span class="ruby-comment cmt"># raise exception if node is trying to move into one of its descendants (infinate loop, spacetime will warp)</span>
+              <span class="ruby-identifier">raise</span> <span class="ruby-constant">RecursiveNestingError</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">position</span> <span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">position</span> <span class="ruby-operator">&lt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rgt</span>
+              <span class="ruby-comment cmt"># find out how wide this node is, as we need to make a gap large enough for it to fit in</span>
+              <span class="ruby-identifier">gap</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rgt</span> <span class="ruby-operator">-</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+
+              <span class="ruby-comment cmt"># make a gap at position, that is as wide as this node</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">model</span>.<span class="ruby-identifier">base_model</span>.<span class="ruby-identifier">adjust_gap!</span>(<span class="ruby-identifier">nested_set</span>,<span class="ruby-identifier">position</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>,<span class="ruby-identifier">gap</span>)
+
+              <span class="ruby-comment cmt"># offset this node (and all its descendants) to the right position</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">reload_attributes</span>(<span class="ruby-identifier">:lft</span>,<span class="ruby-identifier">:rgt</span>)
+              <span class="ruby-identifier">old_position</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span>
+              <span class="ruby-identifier">offset</span> = <span class="ruby-identifier">position</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">old_position</span>
+
+              <span class="ruby-identifier">nested_set</span>.<span class="ruby-identifier">all</span>(<span class="ruby-identifier">:rgt</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span><span class="ruby-operator">..</span><span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rgt</span>).<span class="ruby-identifier">adjust!</span>({<span class="ruby-identifier">:lft</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">offset</span>, <span class="ruby-identifier">:rgt</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">offset</span>},<span class="ruby-keyword kw">true</span>)
+              <span class="ruby-comment cmt"># close the gap this movement left behind.</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">model</span>.<span class="ruby-identifier">base_model</span>.<span class="ruby-identifier">adjust_gap!</span>(<span class="ruby-identifier">nested_set</span>,<span class="ruby-identifier">old_position</span>,<span class="ruby-operator">-</span><span class="ruby-identifier">gap</span>)
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">reload_attributes</span>(<span class="ruby-identifier">:lft</span>,<span class="ruby-identifier">:rgt</span>)
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-comment cmt"># make a gap where the new node can be inserted</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">model</span>.<span class="ruby-identifier">base_model</span>.<span class="ruby-identifier">adjust_gap!</span>(<span class="ruby-identifier">nested_set</span>,<span class="ruby-identifier">position</span><span class="ruby-operator">-</span><span class="ruby-value">1</span>,<span class="ruby-value">2</span>)
+              <span class="ruby-comment cmt"># set the position fields</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lft</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">rgt</span> = <span class="ruby-identifier">position</span>, <span class="ruby-identifier">position</span> <span class="ruby-operator">+</span> <span class="ruby-value">1</span>
+            <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parent</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">ancestor</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

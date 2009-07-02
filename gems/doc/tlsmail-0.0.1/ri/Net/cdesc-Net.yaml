@@ -1,0 +1,17 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: If smtp or pop is already loaded, remove all constants.
+constants: []
+
+full_name: Net
+includes: []
+
+instance_methods: []
+
+name: Net
+superclass: 

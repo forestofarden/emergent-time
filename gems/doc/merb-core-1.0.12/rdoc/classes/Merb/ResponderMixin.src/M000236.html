@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>_accept_types (Merb::ResponderMixin)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/controller/mixins/responder.rb, line 262</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">_accept_types</span>
+      <span class="ruby-identifier">accept</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">accept</span>
+      
+      <span class="ruby-constant">MIME_MUTEX</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-constant">ACCEPT_RESULTS</span>[<span class="ruby-identifier">accept</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-constant">ACCEPT_RESULTS</span>[<span class="ruby-identifier">accept</span>]
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-identifier">types</span> = <span class="ruby-identifier">request</span>.<span class="ruby-identifier">accept</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Const</span><span class="ruby-operator">::</span><span class="ruby-constant">ACCEPT_SPLIT</span>).<span class="ruby-identifier">map</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">entry</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">entry</span> <span class="ruby-operator">=~</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Const</span><span class="ruby-operator">::</span><span class="ruby-constant">MEDIA_RANGE</span>
+        <span class="ruby-identifier">media_range</span>, <span class="ruby-identifier">quality</span> = <span class="ruby-identifier">$1</span>, <span class="ruby-identifier">$3</span>
+        
+        <span class="ruby-identifier">kind</span>, <span class="ruby-identifier">sub_type</span> = <span class="ruby-identifier">media_range</span>.<span class="ruby-identifier">split</span>(<span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Const</span><span class="ruby-operator">::</span><span class="ruby-constant">SLASH_SPLIT</span>)
+        <span class="ruby-identifier">mime_sym</span> = <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">available_accepts</span>[<span class="ruby-identifier">media_range</span>]
+        <span class="ruby-identifier">mime</span> = <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">available_mime_types</span>[<span class="ruby-identifier">mime_sym</span>]
+        (<span class="ruby-identifier">quality</span> <span class="ruby-operator">||=</span> <span class="ruby-value">0</span><span class="ruby-value">.0</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">media_range</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;*/*&quot;</span>          
+        <span class="ruby-identifier">quality</span> = <span class="ruby-identifier">quality</span> <span class="ruby-value">? </span>(<span class="ruby-identifier">quality</span>.<span class="ruby-identifier">to_f</span> <span class="ruby-operator">*</span> <span class="ruby-value">100</span>).<span class="ruby-identifier">to_i</span> <span class="ruby-operator">:</span> <span class="ruby-value">100</span>
+        <span class="ruby-identifier">quality</span> <span class="ruby-operator">*=</span> (<span class="ruby-identifier">mime</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">mime</span>[<span class="ruby-identifier">:default_quality</span>] <span class="ruby-operator">||</span> <span class="ruby-value">1</span>)
+        [<span class="ruby-identifier">quality</span>, <span class="ruby-identifier">mime_sym</span>, <span class="ruby-identifier">media_range</span>, <span class="ruby-identifier">kind</span>, <span class="ruby-identifier">sub_type</span>, <span class="ruby-identifier">mime</span>]
+      <span class="ruby-keyword kw">end</span>
+    
+      <span class="ruby-identifier">accepts</span> = <span class="ruby-identifier">types</span>.<span class="ruby-identifier">sort_by</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>.<span class="ruby-identifier">first</span> }.<span class="ruby-identifier">reverse!</span>.<span class="ruby-identifier">map!</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">x</span><span class="ruby-operator">|</span> <span class="ruby-identifier">x</span>[<span class="ruby-value">1</span>]}      
+      
+      <span class="ruby-constant">MIME_MUTEX</span>.<span class="ruby-identifier">synchronize</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-constant">ACCEPT_RESULTS</span>[<span class="ruby-identifier">accept</span>] = <span class="ruby-identifier">accepts</span>.<span class="ruby-identifier">freeze</span>
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-identifier">accepts</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

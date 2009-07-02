@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: Net::SMTP::use_tls?
+is_singleton: true
+name: use_tls?
+params: ()
+visibility: public

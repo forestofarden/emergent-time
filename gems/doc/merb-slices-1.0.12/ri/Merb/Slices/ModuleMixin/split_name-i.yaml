@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Split a file name so a postfix can be inserted
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Array[String]&gt;"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  The first element will be the name up to the first dot, the second will be the rest.\n"
+full_name: Merb::Slices::ModuleMixin#split_name
+is_singleton: false
+name: split_name
+params: (name)
+visibility: protected

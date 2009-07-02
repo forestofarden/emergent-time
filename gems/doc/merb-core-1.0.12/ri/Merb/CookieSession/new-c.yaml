@@ -1,0 +1,36 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "session_id<String>:"
+    body: A unique identifier for this session.
+  - !ruby/struct:SM::Flow::LI 
+    label: "cookie<String>:"
+    body: The raw cookie data.
+  - !ruby/struct:SM::Flow::LI 
+    label: "secret<String>:"
+    body: A session secret.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Raises
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "ArgumentError:"
+    body: blank or insufficiently long secret.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::CookieSession::new
+is_singleton: true
+name: new
+params: (session_id, cookie, secret)
+visibility: public

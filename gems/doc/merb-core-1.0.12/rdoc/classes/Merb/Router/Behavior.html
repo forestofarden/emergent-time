@@ -1,0 +1,1023 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Merb::Router::Behavior</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Merb::Router::Behavior</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/merb-core/dispatch/router/behavior_rb.html">
+                lib/merb-core/dispatch/router/behavior.rb
+                </a>
+        <br />
+                <a href="../../../files/lib/merb-core/dispatch/router/resources_rb.html">
+                lib/merb-core/dispatch/router/resources.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000618">_route</a>&nbsp;&nbsp;
+      <a href="#M000617">_with_proxy</a>&nbsp;&nbsp;
+      <a href="#M000620">before</a>&nbsp;&nbsp;
+      <a href="#M000616">capture</a>&nbsp;&nbsp;
+      <a href="#M000603">default</a>&nbsp;&nbsp;
+      <a href="#M000609">default_routes</a>&nbsp;&nbsp;
+      <a href="#M000604">defaults</a>&nbsp;&nbsp;
+      <a href="#M000611">defer</a>&nbsp;&nbsp;
+      <a href="#M000610">defer_to</a>&nbsp;&nbsp;
+      <a href="#M000614">fixatable</a>&nbsp;&nbsp;
+      <a href="#M000613">full_name</a>&nbsp;&nbsp;
+      <a href="#M000608">identify</a>&nbsp;&nbsp;
+      <a href="#M000599">match</a>&nbsp;&nbsp;
+      <a href="#M000612">name</a>&nbsp;&nbsp;
+      <a href="#M000607">namespace</a>&nbsp;&nbsp;
+      <a href="#M000606">options</a>&nbsp;&nbsp;
+      <a href="#M000605">options</a>&nbsp;&nbsp;
+      <a href="#M000615">redirect</a>&nbsp;&nbsp;
+      <a href="#M000602">register</a>&nbsp;&nbsp;
+      <a href="#M000600">to</a>&nbsp;&nbsp;
+      <a href="#M000619">to_route</a>&nbsp;&nbsp;
+      <a href="#M000601">with</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="Resources.html">Resources</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="Behavior/Error.html" class="link">Merb::Router::Behavior::Error</a><br />
+Class <a href="Behavior/Proxy.html" class="link">Merb::Router::Behavior::Proxy</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000617" class="method-detail">
+        <a name="M000617"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000617.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000617.html');return false;">
+          <span class="method-name">_with_proxy</span><span class="method-args">(&amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<a href="Behavior/Proxy.html">Proxy</a> routes <a
+href="Behavior.html#M000601">with</a> the <a
+href="Behavior.html#M000603">default</a> behaviors.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">&amp;block:</td><td>defines routes within the provided context.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000616" class="method-detail">
+        <a name="M000616"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000616.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000616.html');return false;">
+          <span class="method-name">capture</span><span class="method-args">(&amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Capture any new routes that have been added within the block.
+</p>
+<p>
+This utility method lets you track routes that have been added; it
+doesn&#8216;t affect how/which routes are added.
+</p>
+<table>
+<tr><td valign="top">&amp;block:</td><td>A context in which routes are generated.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000603" class="method-detail">
+        <a name="M000603"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000603.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000603.html');return false;">
+          <span class="method-name">default</span><span class="method-args">(defaults = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets <a href="Behavior.html#M000603">default</a> values for route
+parameters. If no value for the key can be extracted from the request, then
+the value provided here will be used.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top"><a href="Behavior.html#M000604">defaults</a>&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>The <a href="Behavior.html#M000603">default</a> values for named segments.
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>All routes defined in the block will be scoped <a
+href="Behavior.html#M000600">to</a> the <a
+href="Behavior.html#M000604">defaults</a> defined by the <a
+href="Behavior.html#M000603">default</a> method.
+
+</td></tr>
+</table>
+<h4>Block parameters</h4>
+<table>
+<tr><td valign="top">r&lt;<a href="Behavior.html">Behavior</a>&gt;:</td><td><tt>optional</tt> - The <a href="Behavior.html#M000604">defaults</a>
+behavior object.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000609" class="method-detail">
+        <a name="M000609"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000609.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000609.html');return false;">
+          <span class="method-name">default_routes</span><span class="method-args">(params = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates the most common routes /:controller/:action/:id.format when called
+<a href="Behavior.html#M000601">with</a> no arguments. You can pass a hash
+or a block <a href="Behavior.html#M000600">to</a> add parameters or
+override the <a href="Behavior.html#M000603">default</a> behavior.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">params&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>This optional hash can be used <a href="Behavior.html#M000600">to</a>
+augment the <a href="Behavior.html#M000603">default</a> settings
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>When passing a block a new behavior is yielded and more refinement is
+possible.
+
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Route:</td><td>the <a href="Behavior.html#M000603">default</a> route
+
+</td></tr>
+</table>
+<h4>Examples</h4>
+<pre>
+  # Passing an extra parameter &quot;mode&quot; to all matches
+  r.default_routes :mode =&gt; &quot;default&quot;
+
+  # specifying exceptions within a block
+  r.default_routes do |nr|
+    nr.defer_to do |request, params|
+      nr.match(:protocol =&gt; &quot;http://&quot;).to(:controller =&gt; &quot;login&quot;,
+        :action =&gt; &quot;new&quot;) if request.env[&quot;REQUEST_URI&quot;] =~ /\/private\//
+    end
+  end
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000604" class="method-detail">
+        <a name="M000604"></a>
+
+        <div class="method-heading">
+          <span class="method-name">defaults</span><span class="method-args">(defaults = {}, &amp;block)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Behavior.html#M000603">default</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000611" class="method-detail">
+        <a name="M000611"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000611.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000611.html');return false;">
+          <span class="method-name">defer</span><span class="method-args">(deferred_block, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Takes a Proc as a parameter and applies it as a deferred proc for all the
+routes defined in the block. This is mostly interesting for plugin
+developers.
+</p>
+<h4>Examples</h4>
+<pre>
+  defered_block = proc do |r, p|
+    p.merge :controller =&gt; 'api/comments' if request.xhr?
+  end
+  defer(defered_block) do
+    resources :comments
+  end
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000610" class="method-detail">
+        <a name="M000610"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000610.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000610.html');return false;">
+          <span class="method-name">defer_to</span><span class="method-args">(params = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Takes a block and stores it for deferred conditional routes. The block
+takes the <tt>request</tt> object and the <tt>params</tt> hash as
+parameters.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">params&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>Parameters and conditions associated <a
+href="Behavior.html#M000601">with</a> this behavior.
+
+</td></tr>
+<tr><td valign="top">&amp;conditional_block:</td><td>A block <a href="Behavior.html#M000601">with</a> the conditions <a
+href="Behavior.html#M000600">to</a> be met for the behavior <a
+href="Behavior.html#M000600">to</a> take effect.
+
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Route :</td><td>The <a href="Behavior.html#M000603">default</a> route.
+
+</td></tr>
+</table>
+<h4>Note</h4>
+<p>
+The block takes two parameters, request and params. The params that are
+passed into the block are <b>just</b> the placeholder params from the
+route. If you want the full parsed params, use request.params.
+</p>
+<p>
+The rationale for this is that request.params is a fairly slow operation,
+and if the full params parsing is not required, we would rather not do the
+full parsing.
+</p>
+<h4>Examples</h4>
+<pre>
+  defer_to do |request, params|
+    params.merge :controller =&gt; 'here',
+      :action =&gt; 'there' if request.xhr?
+  end
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000614" class="method-detail">
+        <a name="M000614"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000614.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000614.html');return false;">
+          <span class="method-name">fixatable</span><span class="method-args">(enable = true)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Specifies that a route can be <a
+href="Behavior.html#M000614">fixatable</a>.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">enabled&lt;Boolean&gt;:</td><td>True enables fixation on the route.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000613" class="method-detail">
+        <a name="M000613"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000613.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000613.html');return false;">
+          <span class="method-name">full_name</span><span class="method-args">(name)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Names this route in <a href="../Router.html">Router</a>. Name must be a
+Symbol. The current name_prefix is ignored.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">symbol&lt;Symbol&gt;:</td><td>The <a href="Behavior.html#M000612">name</a> of the route.
+
+</td></tr>
+</table>
+<h4>Raises</h4>
+<table>
+<tr><td valign="top">ArgumentError:</td><td>symbol is not a Symbol.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000608" class="method-detail">
+        <a name="M000608"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000608.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000608.html');return false;">
+          <span class="method-name">identify</span><span class="method-args">(identifiers = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets a method for instances of specified Classes <a
+href="Behavior.html#M000600">to</a> be called <a
+href="Behavior.html#M000620">before</a> insertion into a route. This is
+useful when using models and want a specific method <a
+href="Behavior.html#M000600">to</a> be called on it (For example, for
+ActiveRecord::Base it would be to_param).
+</p>
+<p>
+The <a href="Behavior.html#M000603">default</a> method called on objects is
+to_s.
+</p>
+<h4>Paramters</h4>
+<table>
+<tr><td valign="top">identifiers&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>The keys are Classes and the values are the method that instances of the
+specified class should have called on.
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>All routes defined in the block will be call the specified methods during
+generation.
+
+</td></tr>
+</table>
+<h4>Block parameters</h4>
+<table>
+<tr><td valign="top">r&lt;<a href="Behavior.html">Behavior</a>&gt;:</td><td>The <a href="Behavior.html#M000608">identify</a> behavior object. This is
+optional
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000599" class="method-detail">
+        <a name="M000599"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000599.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000599.html');return false;">
+          <span class="method-name">match</span><span class="method-args">(path = {}, conditions = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Defines the <tt>conditions</tt> that are required <a
+href="Behavior.html#M000600">to</a> <a
+href="Behavior.html#M000599">match</a> a <a
+href="../Request.html">Request</a>. Each <tt>condition</tt> is applied <a
+href="Behavior.html#M000600">to</a> a method of the <a
+href="../Request.html">Request</a> object. Conditions can also be applied
+<a href="Behavior.html#M000600">to</a> segments of the <tt>path</tt>.
+</p>
+<p>
+If <a href="Behavior.html#M000599">match</a> is passed a block, it will
+create a new route scope <a href="Behavior.html#M000601">with</a> the
+conditions passed <a href="Behavior.html#M000600">to</a> it and yield <a
+href="Behavior.html#M000600">to</a> the block such that all routes that are
+defined in the block have the conditions applied <a
+href="Behavior.html#M000600">to</a> them.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">path&lt;<a href="../../String.html">String</a>, Regexp&gt;:</td><td>The pattern against which <a href="../Request.html">Merb::Request</a> path
+is matched.
+
+<p>
+When <tt>path</tt> is a <a href="../../String.html">String</a>, any
+substring that is wrapped in parenthesis is considered optional and any
+segment that begins <a href="Behavior.html#M000601">with</a> a colon, ex.:
+&quot;:login&quot;, defines both a <a
+href="Behavior.html#M000616">capture</a> and a named param. Extra
+conditions can then be applied each named param individually.
+</p>
+<p>
+When <tt>path</tt> is a Regexp, the pattern is left untouched and the <a
+href="../Request.html">Merb::Request</a> path is matched against it as is.
+</p>
+<p>
+<tt>path</tt> is optional.
+</p>
+</td></tr>
+<tr><td valign="top">conditions&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>Additional conditions that the request must meet in order <a
+href="Behavior.html#M000600">to</a> <a
+href="Behavior.html#M000599">match</a>. The keys must be the names of
+previously defined path segments or be methods that the <a
+href="../Request.html">Merb::Request</a> instance will respond <a
+href="Behavior.html#M000600">to</a>. The value is the string or regexp that
+matched the returned value. Conditions are inherited by child routes.
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>All routes defined in the block will be scoped <a
+href="Behavior.html#M000600">to</a> the conditions defined by the <a
+href="Behavior.html#M000599">match</a> method.
+
+</td></tr>
+</table>
+<h4>Block parameters</h4>
+<table>
+<tr><td valign="top">r&lt;<a href="Behavior.html">Behavior</a>&gt;:</td><td><tt>optional</tt> - The <a href="Behavior.html#M000599">match</a> behavior
+object.
+
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="Behavior.html">Behavior</a>:</td><td>A new instance of <a href="Behavior.html">Behavior</a> <a
+href="Behavior.html#M000601">with</a> the specified path and conditions.
+
+</td></tr>
+</table>
+<p>
+<tt>Tip</tt>: When nesting always make sure the most inner sub-<a
+href="Behavior.html#M000599">match</a> registers a Route and doesn&#8216;t
+just return new Behaviors.
+</p>
+<h4>Examples</h4>
+<pre>
+  # registers /foo/bar to controller =&gt; &quot;foo&quot;, :action =&gt; &quot;bar&quot;
+  # and /foo/baz to controller =&gt; &quot;foo&quot;, :action =&gt; &quot;baz&quot;
+  match(&quot;/foo&quot;) do
+    match(&quot;/bar&quot;).to(:controller =&gt; &quot;foo&quot;, :action =&gt; &quot;bar&quot;)
+    match(&quot;/baz&quot;).to(:controller =&gt; &quot;foo&quot;, :action =&gt; &quot;caz&quot;)
+  end
+
+  # Checks the format of the segments against the specified Regexp
+  match(&quot;/:string/:number&quot;, :string =&gt; /[a-z]+/, :number =&gt; /\d+/).
+    to(:controller =&gt; &quot;string_or_numbers&quot;)
+
+  # Equivalent to the default_route
+  match(&quot;/:controller(/:action(:id))(.:format)&quot;).register
+
+  #match only if the browser string contains MSIE or Gecko
+  match(&quot;/foo&quot;, :user_agent =&gt; /(MSIE|Gecko)/ )
+       .to(:controller =&gt; 'foo', :action =&gt; 'popular')
+
+  # Route GET and POST requests to different actions (see also #resources)
+  r.match('/foo', :method =&gt; :get).to(:action =&gt; 'show')
+  r.match('/foo', :method =&gt; :post).to(:action =&gt; 'create')
+
+  # match also takes regular expressions
+
+  r.match(%r[/account/([a-z]{4,6})]).to(:controller =&gt; &quot;account&quot;,
+     :action =&gt; &quot;show&quot;, :id =&gt; &quot;[1]&quot;)
+
+  r.match(%r{/?(en|es|fr|be|nl)?}).to(:language =&gt; &quot;[1]&quot;) do
+    match(&quot;/guides/:action/:id&quot;).to(:controller =&gt; &quot;tour_guides&quot;)
+  end
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000612" class="method-detail">
+        <a name="M000612"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000612.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000612.html');return false;">
+          <span class="method-name">name</span><span class="method-args">(prefix, name = nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Registers the route as a named route <a
+href="Behavior.html#M000601">with</a> the <a
+href="Behavior.html#M000612">name</a> given.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">symbol&lt;Symbol&gt;:</td><td>the <a href="Behavior.html#M000612">name</a> of the route.
+
+</td></tr>
+</table>
+<h4>Raises</h4>
+<table>
+<tr><td valign="top">ArgumentError:</td><td>symbol is not a Symbol.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000607" class="method-detail">
+        <a name="M000607"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000607.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000607.html');return false;">
+          <span class="method-name">namespace</span><span class="method-args">(name_or_path, opts = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="Behavior.html#M000607">namespace</a> for a route. This
+way you can have logical separation <a href="Behavior.html#M000600">to</a>
+your routes.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">name_or_path&lt;<a href="../../String.html">String</a>, Symbol&gt;:</td><td>The <a href="Behavior.html#M000612">name</a> or path of the <a
+href="Behavior.html#M000607">namespace</a>.
+
+</td></tr>
+<tr><td valign="top"><a href="Behavior.html#M000605">options</a>&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>Optional hash (see below)
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>All routes defined in the block will be scoped <a
+href="Behavior.html#M000600">to</a> the <a
+href="Behavior.html#M000607">namespace</a> defined by the <a
+href="Behavior.html#M000607">namespace</a> method.
+
+</td></tr>
+</table>
+<h4>Options (opts)</h4>
+<table>
+<tr><td valign="top">:path&lt;<a href="../../String.html">String</a>&gt;:</td><td><a href="Behavior.html#M000599">match</a> against this url
+
+</td></tr>
+</table>
+<h4>Block parameters</h4>
+<table>
+<tr><td valign="top">r&lt;<a href="Behavior.html">Behavior</a>&gt;:</td><td>The <a href="Behavior.html#M000607">namespace</a> behavior object. This is
+optional
+
+</td></tr>
+</table>
+<h4>Examples</h4>
+<pre>
+  namespace :admin do
+    resources :accounts
+    resource :email
+  end
+
+  # /super_admin/accounts
+  namespace(:admin, :path=&gt;&quot;super_admin&quot;) do
+    resources :accounts
+  end
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000606" class="method-detail">
+        <a name="M000606"></a>
+
+        <div class="method-heading">
+          <span class="method-name">options</span><span class="method-args">(opts = {}, &amp;block)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Behavior.html#M000605">options</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000605" class="method-detail">
+        <a name="M000605"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000605.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000605.html');return false;">
+          <span class="method-name">options</span><span class="method-args">(opts = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Allows the fine tuning of certain router <a
+href="Behavior.html#M000605">options</a>.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top"><a href="Behavior.html#M000605">options</a>&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>The <a href="Behavior.html#M000605">options</a> <a
+href="Behavior.html#M000600">to</a> set for all routes defined in the
+scope. The currently supported <a href="Behavior.html#M000605">options</a>
+are:
+
+<ul>
+<li>:controller_prefix - The module that the controller is included in.
+
+</li>
+<li>:name_prefix - The prefix added <a href="Behavior.html#M000600">to</a> all
+routes named <a href="Behavior.html#M000601">with</a> <a
+href="Behavior.html#M000612">name</a>
+
+</li>
+</ul>
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>All routes defined in the block will be scoped <a
+href="Behavior.html#M000600">to</a> the <a
+href="Behavior.html#M000605">options</a> defined by the <a
+href="Behavior.html#M000605">options</a> method.
+
+</td></tr>
+</table>
+<h4>Block parameters</h4>
+<table>
+<tr><td valign="top">r&lt;<a href="Behavior.html">Behavior</a>&gt;:</td><td>The <a href="Behavior.html#M000605">options</a> behavior object. This is
+optional
+
+</td></tr>
+</table>
+<h4>Examples</h4>
+<pre>
+  # If :group is not matched in the path, it will be &quot;registered&quot; instead
+  # of nil.
+  match(&quot;/users(/:group)&quot;).default(:group =&gt; &quot;registered&quot;)
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000615" class="method-detail">
+        <a name="M000615"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000615.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000615.html');return false;">
+          <span class="method-name">redirect</span><span class="method-args">(url, opts = {})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Redirects the current route.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">path&lt;<a href="../../String.html">String</a>&gt;:</td><td>The path <a href="Behavior.html#M000600">to</a> <a
+href="Behavior.html#M000615">redirect</a> <a
+href="Behavior.html#M000600">to</a>.
+
+</td></tr>
+<tr><td valign="top"><a href="Behavior.html#M000605">options</a>&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>Options (see below)
+
+</td></tr>
+</table>
+<h4>Options (opts)</h4>
+<table>
+<tr><td valign="top">:permanent&lt;Boolean&gt;:</td><td>Whether or not the <a href="Behavior.html#M000615">redirect</a> should be
+permanent. The <a href="Behavior.html#M000603">default</a> value is false.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000602" class="method-detail">
+        <a name="M000602"></a>
+
+        <div class="method-heading">
+          <span class="method-name">register</span><span class="method-args">(params = {}, &amp;block)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Behavior.html#M000600">to</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000600" class="method-detail">
+        <a name="M000600"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000600.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000600.html');return false;">
+          <span class="method-name">to</span><span class="method-args">(params = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a Route from one or more <a href="Behavior.html">Behavior</a>
+objects, unless a <tt>block</tt> is passed in.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">params&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>The parameters the route maps <a href="Behavior.html#M000600">to</a>.
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>All routes defined in the block will be scoped <a
+href="Behavior.html#M000600">to</a> the params defined by the <a
+href="Behavior.html#M000600">to</a> method.
+
+</td></tr>
+</table>
+<h4>Block parameters</h4>
+<table>
+<tr><td valign="top">r&lt;<a href="Behavior.html">Behavior</a>&gt;:</td><td><tt>optional</tt> - The <a href="Behavior.html#M000600">to</a> behavior
+object.
+
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Route:</td><td>It registers a new route and returns it.
+
+</td></tr>
+</table>
+<h4>Examples</h4>
+<pre>
+  match('/:controller/:id).to(:action =&gt; 'show')
+
+  to(:controller =&gt; 'simple') do
+    match('/test').to(:action =&gt; 'index')
+    match('/other').to(:action =&gt; 'other')
+  end
+</pre>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000601" class="method-detail">
+        <a name="M000601"></a>
+
+        <div class="method-heading">
+          <span class="method-name">with</span><span class="method-args">(params = {}, &amp;block)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="Behavior.html#M000600">to</a>
+</p>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Protected Instance methods</h3>
+
+      <div id="method-M000618" class="method-detail">
+        <a name="M000618"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000618.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000618.html');return false;">
+          <span class="method-name">_route</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the current route.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Route:</td><td>the route.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000620" class="method-detail">
+        <a name="M000620"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000620.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000620.html');return false;">
+          <span class="method-name">before</span><span class="method-args">(route, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Allows <a href="Behavior.html#M000600">to</a> insert the route at a certain
+spot in the list of routes instead of appending <a
+href="Behavior.html#M000600">to</a> the list.
+</p>
+<h4>Params</h4>
+<table>
+<tr><td valign="top">route&lt;Route&gt;:</td><td>the route <a href="Behavior.html#M000600">to</a> insert <a
+href="Behavior.html#M000620">before</a>.
+
+</td></tr>
+<tr><td valign="top">&amp;block:</td><td>the route definition <a href="Behavior.html#M000600">to</a> insert.
+
+</td></tr>
+</table>
+<p>
+:api: plugin
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000619" class="method-detail">
+        <a name="M000619"></a>
+
+        <div class="method-heading">
+          <a href="Behavior.src/M000619.html" target="Code" class="method-signature"
+            onclick="popupCode('Behavior.src/M000619.html');return false;">
+          <span class="method-name">to_route</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Turns a route definition into a Route object.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Route:</td><td>the route generated.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

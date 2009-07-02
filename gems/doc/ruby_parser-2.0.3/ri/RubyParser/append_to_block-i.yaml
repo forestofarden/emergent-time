@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser#append_to_block
+is_singleton: false
+name: append_to_block
+params: (head, tail
+visibility: public

@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: A lookup for finding a Slice module's path
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Hash&gt; A Hash mapping module names to root paths. @note Whenever a slice is deactivated, its path is removed from the lookup."
+full_name: Merb::Slices::paths
+is_singleton: true
+name: paths
+params: ()
+visibility: public

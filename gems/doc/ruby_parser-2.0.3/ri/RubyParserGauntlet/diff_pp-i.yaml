@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParserGauntlet#diff_pp
+is_singleton: false
+name: diff_pp
+params: (o1, o2)
+visibility: public

@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: get all descendants of this node, including self
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Collection&gt; flat collection, sorted according to nested_set positions"
+full_name: DataMapper::Is::NestedSet::InstanceMethods#self_and_descendants
+is_singleton: false
+name: self_and_descendants
+params: ()
+visibility: public

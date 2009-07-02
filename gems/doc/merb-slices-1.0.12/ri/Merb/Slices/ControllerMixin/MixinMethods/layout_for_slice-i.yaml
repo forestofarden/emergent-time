@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Use the slice's layout - defaults to underscored identifier.
+- !ruby/struct:SM::Flow::P 
+  body: This is set for generated stubs that support layouts.
+- !ruby/struct:SM::Flow::P 
+  body: "@param layout&lt;#to_s&gt; The layout name to use."
+full_name: Merb::Slices::ControllerMixin::MixinMethods#layout_for_slice
+is_singleton: false
+name: layout_for_slice
+params: (layout = nil)
+visibility: public

@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Reload the router - takes all_slices into account to load slices at runtime.
+full_name: Merb::Slices::Loader::reload_router!
+is_singleton: true
+name: reload_router!
+params: ()
+visibility: public

@@ -1,0 +1,34 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Determines whether or not the user is authenticated using the criteria in the provided authenticator block.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "&authenticator:"
+    body: A block that decides whether the provided username and password
+  type: :NOTE
+- !ruby/struct:SM::Flow::VERB 
+  body: "  are valid.\n"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "Object:"
+    body: False if basic auth is not provided, otherwise the return value of the authenticator block.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: "@overridable :api: public"
+full_name: Merb::AuthenticationMixin::BasicAuthentication#authenticate
+is_singleton: false
+name: authenticate
+params: (&authenticator)
+visibility: public

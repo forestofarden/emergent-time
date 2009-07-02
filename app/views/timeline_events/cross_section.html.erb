@@ -1,0 +1,12 @@
+<% unless @timeline_events.empty? %>
+  <% @timeline_events.each do |te| %>
+  <div class="cross_section">
+    <%= partial './timeline_stats', :timeline => te.timeline, :cue_event => te.event, :image_size => 25 %>
+    <div class="clear"></div>
+    <div class="interpretation">
+      <a href="<%= resource(te.timeline.user, te.timeline, :cue => te.event) %>"><%= te.interpretation ? te.interpretation.truncate(100) : "" %></a>
+    </div>
+    <div class="clear"></div>
+  </div>
+  <% end %>
+<% end %>

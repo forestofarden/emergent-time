@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RepertoireCore::Mixins::UserProperties::InstanceMethods#make_shortname
+is_singleton: false
+name: make_shortname
+params: ()
+visibility: protected

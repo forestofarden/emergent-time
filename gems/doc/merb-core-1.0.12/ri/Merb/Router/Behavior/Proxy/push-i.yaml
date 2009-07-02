@@ -1,0 +1,19 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Puts a behavior on the bottom of the stack.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Notes
+- !ruby/struct:SM::Flow::P 
+  body: The behaviors keep track of nested scopes.
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Router::Behavior::Proxy#push
+is_singleton: false
+name: push
+params: (behavior)
+visibility: public

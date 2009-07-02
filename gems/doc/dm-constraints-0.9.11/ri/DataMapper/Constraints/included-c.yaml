@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "Add before hooks to #has to check for proper constraint definitions Add before hooks to #destroy to properly constrain children"
+full_name: DataMapper::Constraints::included
+is_singleton: true
+name: included
+params: (model)
+visibility: public

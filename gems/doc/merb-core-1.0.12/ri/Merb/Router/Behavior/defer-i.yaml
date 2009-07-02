@@ -1,0 +1,19 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Takes a Proc as a parameter and applies it as a deferred proc for all the routes defined in the block. This is mostly interesting for plugin developers.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Examples
+- !ruby/struct:SM::Flow::VERB 
+  body: "  defered_block = proc do |r, p|\n    p.merge :controller =&gt; 'api/comments' if request.xhr?\n  end\n  defer(defered_block) do\n    resources :comments\n  end\n"
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::Router::Behavior#defer
+is_singleton: false
+name: defer
+params: (deferred_block, &block)
+visibility: public

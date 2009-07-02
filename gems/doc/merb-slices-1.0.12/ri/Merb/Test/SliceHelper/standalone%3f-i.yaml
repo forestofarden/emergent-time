@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Whether the specs are being run from a host application or standalone
+full_name: Merb::Test::SliceHelper#standalone?
+is_singleton: false
+name: standalone?
+params: ()
+visibility: public

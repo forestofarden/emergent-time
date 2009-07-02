@@ -1,0 +1,41 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This will dispatch the request, calling internal before/after dispatch callbacks. If the return value of _call_filters is not :filter_chain_completed the action is not called, and the return from the filters is used instead.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "action<~to_s>:"
+    body: "The action to dispatch to. This will be #send'ed in _call_action. Defaults to :to_s."
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "<~to_s>:"
+    body: Returns the string that was returned from the action.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Raises
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "ArgumentError:"
+    body: Invalid result caught from before filters.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: plugin"
+full_name: Merb::AbstractController#_dispatch
+is_singleton: false
+name: _dispatch
+params: (action)
+visibility: public

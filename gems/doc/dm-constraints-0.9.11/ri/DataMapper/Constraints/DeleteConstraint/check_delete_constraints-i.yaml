@@ -1,0 +1,22 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Checks delete constraints prior to destroying a dm resource or collection
+- !ruby/struct:SM::Flow::P 
+  body: "@throws :halt"
+- !ruby/struct:SM::Flow::P 
+  body: "@notes"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  - It only considers a relationship's constraints if this is the parent model (ie a child shouldn't delete a parent)\n  - RelationshipChains are skipped, as they are evaluated by their underlying 1:M relationships\n"
+- !ruby/struct:SM::Flow::P 
+  body: "@returns [nil]"
+- !ruby/struct:SM::Flow::P 
+  body: "@api semi-public"
+full_name: DataMapper::Constraints::DeleteConstraint#check_delete_constraints
+is_singleton: false
+name: check_delete_constraints
+params: ()
+visibility: public

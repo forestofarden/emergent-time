@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: repair the list this item belongs to
+full_name: DataMapper::Is::List::InstanceMethods#repair_list
+is_singleton: false
+name: repair_list
+params: ()
+visibility: public

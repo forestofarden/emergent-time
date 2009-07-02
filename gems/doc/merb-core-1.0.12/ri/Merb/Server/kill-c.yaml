@@ -1,0 +1,31 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "port<~to_s>:"
+    body: The port of the Merb process to kill.
+  - !ruby/struct:SM::Flow::LI 
+    label: "sig<~to_s>:"
+    body: The signal to send to the process, the default is 9 - SIGKILL.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: No Name Default Action Description 1 SIGHUP terminate process terminal line hangup 2 SIGINT terminate process interrupt program 3 SIGQUIT create core image quit program 4 SIGILL create core image illegal instruction 9 SIGKILL terminate process kill program 15 SIGTERM terminate process software termination signal 30 SIGUSR1 terminate process User defined signal 1 31 SIGUSR2 terminate process User defined signal 2
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Alternatives
+- !ruby/struct:SM::Flow::P 
+  body: If you pass &quot;all&quot; as the port, the signal will be sent to all Merb processes.
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Server::kill
+is_singleton: true
+name: kill
+params: (port, sig = "INT")
+visibility: public

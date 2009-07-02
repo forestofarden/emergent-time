@@ -1,0 +1,31 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Set the process title.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "whoami<Symbol>:"
+    body: Either :spawner for the master process or :worker for any of the worker
+  type: :NOTE
+- !ruby/struct:SM::Flow::VERB 
+  body: "  processes.\n"
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "port<Integer>:"
+    body: The base port that the app is running on.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Rack::AbstractAdapter::process_title
+is_singleton: true
+name: process_title
+params: (whoami, port)
+visibility: public

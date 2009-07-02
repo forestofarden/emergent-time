@@ -1,0 +1,18 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: CookieJar keeps track of cookies in a simple Mash.
+constants: []
+
+full_name: Merb::Test::RequestHelper::CookieJar
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: update_from_request
+name: CookieJar
+superclass: Mash

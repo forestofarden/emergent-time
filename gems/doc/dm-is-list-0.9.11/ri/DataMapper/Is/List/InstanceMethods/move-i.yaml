@@ -1,0 +1,22 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: move item to a position in the list. position should <em>only</em> be changed through this
+- !ruby/struct:SM::Flow::P 
+  body: "@example [Usage]"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  * node.move :higher           # moves node higher unless it is at the top of parent\n  * node.move :lower            # moves node lower unless it is at the bottom of parent\n  * node.move :below =&gt; other   # moves this node below other resource in the set\n"
+- !ruby/struct:SM::Flow::P 
+  body: "@param vector &lt;Symbol, Hash&gt; A symbol, or a key-value pair that describes the requested movement"
+- !ruby/struct:SM::Flow::P 
+  body: "@option :higher&lt;Symbol&gt; move item higher @option :up&lt;Symbol&gt; move item higher @option :highest&lt;Symbol&gt; move item to the top of the list @option :lower&lt;Symbol&gt; move item lower @option :down&lt;Symbol&gt; move item lower @option :lowest&lt;Symbol&gt; move item to the bottom of the list @option :above&lt;Resource&gt; move item above other item. must be in same scope @option :below&lt;Resource&gt; move item below other item. must be in same scope @option :to&lt;Fixnum&gt; move item to a specific location in the list"
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;TrueClass, FalseClass&gt; returns false if it cannot move to the position, otherwise true @see move_without_saving"
+full_name: DataMapper::Is::List::InstanceMethods#move
+is_singleton: false
+name: move
+params: (vector)
+visibility: public

@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Iterate over all registered slices
+- !ruby/struct:SM::Flow::P 
+  body: By default iterates alphabetically over all registered modules. If Merb::Plugins.config[:merb_slices][:queue] is set, only the defined modules are loaded in the given order. This can be used to selectively load slices, and also maintain load-order for slices that depend on eachother.
+- !ruby/struct:SM::Flow::P 
+  body: "@yield Iterate over known slices and pass in the slice module. @yieldparam module&lt;Module&gt; The Slice module."
+full_name: Merb::Slices::each_slice
+is_singleton: true
+name: each_slice
+params: (&block)
+visibility: public

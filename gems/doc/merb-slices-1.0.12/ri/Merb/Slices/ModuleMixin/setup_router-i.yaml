@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Stub to setup routes inside the host application.
+full_name: Merb::Slices::ModuleMixin#setup_router
+is_singleton: false
+name: setup_router
+params: (scope)
+visibility: public

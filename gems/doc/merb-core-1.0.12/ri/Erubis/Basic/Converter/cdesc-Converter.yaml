@@ -1,0 +1,22 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "This adds support for embedding the return value of a block call:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  &lt;%= foo do %&gt;...&lt;% end =%&gt;\n"
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+constants: []
+
+full_name: Erubis::Basic::Converter
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: convert_input
+name: Converter
+superclass: 

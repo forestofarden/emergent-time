@@ -1,0 +1,20 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+constants: []
+
+full_name: Merb::Test::SliceHelper
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: current_slice_root
+- !ruby/object:RI::MethodSummary 
+  name: dismount_slice
+- !ruby/object:RI::MethodSummary 
+  name: standalone?
+name: SliceHelper
+superclass: 

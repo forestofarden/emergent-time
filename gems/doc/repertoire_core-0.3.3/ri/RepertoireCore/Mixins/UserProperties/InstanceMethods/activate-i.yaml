@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Activate a user email programmatically, sending confirmation
+full_name: RepertoireCore::Mixins::UserProperties::InstanceMethods#activate
+is_singleton: false
+name: activate
+params: ()
+visibility: public

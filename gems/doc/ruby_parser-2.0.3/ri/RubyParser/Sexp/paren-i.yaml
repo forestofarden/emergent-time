@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser::Sexp#paren
+is_singleton: false
+name: paren
+params: ()
+visibility: public

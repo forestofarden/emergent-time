@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: get the root this node belongs to. this will atm always be the same as Resource.root, but has a meaning when scoped sets is implemented
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Resource, NilClass&gt;"
+full_name: DataMapper::Is::NestedSet::InstanceMethods#root
+is_singleton: false
+name: root
+params: ()
+visibility: public

@@ -1,0 +1,118 @@
+<% # params:  url [ url source of json event data ]
+   #          cue [ event to scroll to initially ]
+   #
+   # jquery extensions: on scrolling the timeline triggers a jquery event,
+   #          'scroll', with the timeline as data
+   #
+-%>
+<% cue    ||= DateTime.now %>
+<% timeline_id = "hypertime-timeline-#{Time.now.to_i}" %>
+<script type="text/javascript">
+
+SimileAjax.History.enabled = false;  /* clobber Timeline's history hack, since it doesn't map to a single url */
+
+$(document).ready(function() {
+  var tl;
+  
+  var defaultHeight = 500;
+  var defaultWidth  = 400;
+
+  // patch in our own bubble formatter
+  var oldFillInfoBubble = Timeline.DefaultEventSource.Event.prototype.fillInfoBubble;
+  Timeline.DefaultEventSource.Event.prototype.fillInfoBubble = 
+    function(elmt, theme, labeller) {
+      //oldFillInfoBubble.call(this, elmt, theme, labeller);
+      // ajax call to show other timelines this event was interpreted in
+      var $cs = $('<div id="bubble-ajax-contents"></div>');
+      $(elmt).append($cs);
+      $.ajax({
+        type: "GET",
+        url:  '/events/' + this.getEventID(),
+        dataType: "html",	
+        beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "text/html"); },
+        success: function(data) {
+          $cs.append(data);
+          
+          // crude hack to resize the timeline bubble once ajax contents are loaded.... see simile-widgets issues list on autosizing bubbles
+          var $container = $('.simileAjax-bubble-container');
+          $container.width(defaultWidth);
+          $container.height(defaultHeight);
+          },
+        error: function(e) { alert("error:" + e); }
+      });
+    };
+
+  // timeline configuration
+  var eventSource = new Timeline.DefaultEventSource();
+  var hypertimeTheme = Timeline.ClassicTheme.create();
+ 	hypertimeTheme.ether.backgroundColors[0] = "#FFFFFF";
+  hypertimeTheme.event.bubble.width = defaultHeight;
+  hypertimeTheme.event.bubble.height = defaultWidth;
+  var d = Timeline.DateTime.parseIso8601DateTime("<%= cue %>")
+  var bandInfos = [
+    Timeline.createBandInfo({
+	    eventSource:    eventSource,
+        date:           d,
+        width:          "75%", 
+        intervalUnit:   Timeline.DateTime.MONTH, 
+        intervalPixels: 320,
+        theme:          hypertimeTheme
+    }),
+    Timeline.createBandInfo({
+	      eventSource:    eventSource,
+        date:           d,
+        overview:       true,
+        width:          "17%", 
+        intervalUnit:   Timeline.DateTime.YEAR, 
+        intervalPixels: 160,
+        theme:          hypertimeTheme
+    }),
+    Timeline.createBandInfo({
+	    eventSource:    new Timeline.DefaultEventSource(),
+        date:           d,
+	    showEventText:  false,
+        trackHeight:    0.5,
+        trackGap:       0.2,
+        width:          "8%", 
+        intervalUnit:   Timeline.DateTime.DECADE, 
+        intervalPixels: 160
+    })  ];
+  bandInfos[1].syncWith = 0;
+  bandInfos[1].highlight = true;
+  bandInfos[2].syncWith = 1;
+  bandInfos[2].highlight = true;
+  
+  // wrap click listener in timeline to display event list before displaying bubble
+  var oldShowBubble = bandInfos[0].eventPainter._showBubble;
+  bandInfos[0].eventPainter._showBubble = function(x, y, evt) {
+    $("#<%= timeline_id %>").trigger('date_selected', evt);
+    oldShowBubble.call(this, x, y, evt);
+  }
+  
+  // create and load timeline
+  tl = Timeline.create(document.getElementById("<%= timeline_id %>"), bandInfos);  	
+  tl.loadJSON("<%= url %>",
+	    function(json, url) { eventSource.loadJSON(json, url); });
+
+  // make timeline visible in jquery data for this element
+  $("#<%= timeline_id %>").data('tl', tl);
+  $("#<%= timeline_id %>").data('eventSource', eventSource);
+
+  // make timeline emit scroll events
+  tl.getBand(0).addOnScrollListener(function() {
+    $("#<%= timeline_id %>").trigger('scroll');
+  });
+
+  var resizeTimerID = null;
+  $(window).bind('resize', function() {
+    if (resizeTimerID == null) {
+        resizeTimerID = window.setTimeout(function() {
+            resizeTimerID = null;
+            tl.layout();
+        }, 500);
+    }
+  });
+  
+});
+</script>
+<%= tag('div', '', :class => 'emt_timeline', :id => timeline_id) %>

@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: rebuilds the nested set using parent/child relationships and a chosen order
+full_name: DataMapper::Is::NestedSet::ClassMethods#rebuild_set_from_tree
+is_singleton: false
+name: rebuild_set_from_tree
+params: (order=nil)
+visibility: public

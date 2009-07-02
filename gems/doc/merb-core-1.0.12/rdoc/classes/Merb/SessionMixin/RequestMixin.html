@@ -1,0 +1,462 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Module: Merb::SessionMixin::RequestMixin</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Module</strong></td>
+          <td class="class-name-in-header">Merb::SessionMixin::RequestMixin</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../../files/lib/merb-core/dispatch/session_rb.html">
+                lib/merb-core/dispatch/session.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000137">default_cookies</a>&nbsp;&nbsp;
+      <a href="#M000130">default_session_store</a>&nbsp;&nbsp;
+      <a href="#M000142">destroy_session_cookie</a>&nbsp;&nbsp;
+      <a href="#M000135">finalize_session</a>&nbsp;&nbsp;
+      <a href="#M000136">finalize_sessions</a>&nbsp;&nbsp;
+      <a href="#M000129">included</a>&nbsp;&nbsp;
+      <a href="#M000132">session</a>&nbsp;&nbsp;
+      <a href="#M000133">session=</a>&nbsp;&nbsp;
+      <a href="#M000134">session?</a>&nbsp;&nbsp;
+      <a href="#M000140">session_cookie_value</a>&nbsp;&nbsp;
+      <a href="#M000141">session_id</a>&nbsp;&nbsp;
+      <a href="#M000131">session_stores</a>&nbsp;&nbsp;
+      <a href="#M000138">set_session_cookie_value</a>&nbsp;&nbsp;
+      <a href="#M000139">set_session_id_cookie</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Module <a href="RequestMixin/ClassMethods.html" class="link">Merb::SessionMixin::RequestMixin::ClassMethods</a><br />
+
+    </div>
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000129" class="method-detail">
+        <a name="M000129"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000129.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000129.html');return false;">
+          <span class="method-name">included</span><span class="method-args">(base)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Adds class methods to <a href="../Request.html">Merb::Request</a> object.
+Sets up repository of <a href="RequestMixin.html#M000132">session</a> store
+types. Sets the <a href="RequestMixin.html#M000132">session</a> ID key and
+expiry values.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000137" class="method-detail">
+        <a name="M000137"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000137.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000137.html');return false;">
+          <span class="method-name">default_cookies</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Assign default cookie values
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000130" class="method-detail">
+        <a name="M000130"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000130.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000130.html');return false;">
+          <span class="method-name">default_session_store</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The default <a href="RequestMixin.html#M000132">session</a> store type.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000142" class="method-detail">
+        <a name="M000142"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000142.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000142.html');return false;">
+          <span class="method-name">destroy_session_cookie</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Destroy the <a href="RequestMixin.html#M000132">session</a> cookie.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000135.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000135.html');return false;">
+          <span class="method-name">finalize_session</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Teardown and/or persist the current sessions.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000136" class="method-detail">
+        <a name="M000136"></a>
+
+        <div class="method-heading">
+          <span class="method-name">finalize_sessions</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="RequestMixin.html#M000135">finalize_session</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000132" class="method-detail">
+        <a name="M000132"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000132.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000132.html');return false;">
+          <span class="method-name">session</span><span class="method-args">(session_store = nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns <a href="RequestMixin.html#M000132">session</a> container. <a
+href="../../Merb.html">Merb</a> is able to handle multiple <a
+href="RequestMixin.html#M000132">session</a> stores, hence a parameter to
+pick it.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">session_store&lt;<a href="../../String.html">String</a>&gt;:</td><td>The type of <a href="RequestMixin.html#M000132">session</a> store to
+access,
+
+</td></tr>
+</table>
+<p>
+defaults to <a href="RequestMixin.html#M000130">default_session_store</a>.
+</p>
+<h3>Notes</h3>
+<p>
+If no suitable <a href="RequestMixin.html#M000132">session</a> store type
+is given, it defaults to cookie-based sessions.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../SessionContainer.html">SessionContainer</a>:</td><td>an instance of a <a href="RequestMixin.html#M000132">session</a> store
+extending <a href="../SessionContainer.html">Merb::SessionContainer</a>.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000133.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000133.html');return false;">
+          <span class="method-name">session=</span><span class="method-args">(new_session)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Parameters</h4>
+<table>
+<tr><td valign="top">new_session&lt;<a href="../SessionContainer.html">Merb::SessionContainer</a>&gt;:</td><td>A <a href="RequestMixin.html#M000132">session</a> store instance.
+
+</td></tr>
+</table>
+<h3>Notes</h3>
+<p>
+The <a href="RequestMixin.html#M000132">session</a> is assigned internally
+by its session_store_type key.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000134.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000134.html');return false;">
+          <span class="method-name">session?</span><span class="method-args">(session_store = nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Whether a <a href="RequestMixin.html#M000132">session</a> has been setup
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean:</td><td>true if the <a href="RequestMixin.html#M000132">session</a> is part of the
+<a href="RequestMixin.html#M000132">session</a> stores configured.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000140" class="method-detail">
+        <a name="M000140"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000140.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000140.html');return false;">
+          <span class="method-name">session_cookie_value</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../../String.html">String</a>:</td><td>The value of the <a href="RequestMixin.html#M000132">session</a> cookie;
+either the <a href="RequestMixin.html#M000132">session</a> id or the actual
+encoded data.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000141" class="method-detail">
+        <a name="M000141"></a>
+
+        <div class="method-heading">
+          <span class="method-name">session_id</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="RequestMixin.html#M000140">session_cookie_value</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000131" class="method-detail">
+        <a name="M000131"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000131.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000131.html');return false;">
+          <span class="method-name">session_stores</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../../Hash.html">Hash</a>:</td><td>All active <a href="RequestMixin.html#M000132">session</a> stores by type.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
+
+        <div class="method-heading">
+          <a href="RequestMixin.src/M000138.html" target="Code" class="method-signature"
+            onclick="popupCode('RequestMixin.src/M000138.html');return false;">
+          <span class="method-name">set_session_cookie_value</span><span class="method-args">(value, options = {})</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets <a href="RequestMixin.html#M000132">session</a> cookie value.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">value&lt;<a href="../../String.html">String</a>&gt;:</td><td>The value of the <a href="RequestMixin.html#M000132">session</a> cookie;
+either the <a href="RequestMixin.html#M000132">session</a> id or the actual
+encoded data.
+
+</td></tr>
+<tr><td valign="top">options&lt;<a href="../../Hash.html">Hash</a>&gt;:</td><td>Cookie options like domain, path and expired.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000139" class="method-detail">
+        <a name="M000139"></a>
+
+        <div class="method-heading">
+          <span class="method-name">set_session_id_cookie</span><span class="method-args">(value, options = {})</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="RequestMixin.html#M000138">set_session_cookie_value</a>
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

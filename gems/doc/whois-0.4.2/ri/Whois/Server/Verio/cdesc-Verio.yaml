@@ -1,0 +1,18 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: new
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Class for server whois.verio.net
+constants: []
+
+full_name: Whois::Server::Verio
+includes: []
+
+instance_methods: []
+
+name: Verio
+superclass: Server

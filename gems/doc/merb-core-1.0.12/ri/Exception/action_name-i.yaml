@@ -1,0 +1,25 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns the action_name that will be invoked on your Exceptions controller when this exception is raised. Override this method to force a different action to be invoked.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "String:"
+    body: The name of the action in the Exceptions controller which will get invoked
+  type: :NOTE
+- !ruby/struct:SM::Flow::VERB 
+  body: "  when this exception is raised during a request.\n"
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public @overridable"
+full_name: Exception#action_name
+is_singleton: false
+name: action_name
+params: ()
+visibility: public

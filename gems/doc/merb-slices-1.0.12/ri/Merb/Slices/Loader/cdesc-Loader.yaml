@@ -1,0 +1,32 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: app_paths
+- !ruby/object:RI::MethodSummary 
+  name: load_classes
+- !ruby/object:RI::MethodSummary 
+  name: load_file
+- !ruby/object:RI::MethodSummary 
+  name: reload_router!
+- !ruby/object:RI::MethodSummary 
+  name: remove_classes_in_file
+- !ruby/object:RI::MethodSummary 
+  name: run
+- !ruby/object:RI::MethodSummary 
+  name: slice_paths
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Load Slice classes before the app's classes are loaded.
+- !ruby/struct:SM::Flow::P 
+  body: This allows the application to override/merge any slice-level classes.
+constants: []
+
+full_name: Merb::Slices::Loader
+includes: []
+
+instance_methods: []
+
+name: Loader
+superclass: Merb::BootLoader

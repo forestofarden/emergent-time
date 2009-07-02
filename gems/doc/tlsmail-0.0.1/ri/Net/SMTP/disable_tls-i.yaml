@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: Net::SMTP#disable_tls
+is_singleton: false
+name: disable_tls
+params: ()
+visibility: public

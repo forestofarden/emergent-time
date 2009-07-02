@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>grant (RepertoireCore::Mixins::UserAuthorization::InstanceMethods)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/repertoire_core/mixins/user_authorization_mixin.rb, line 100</span>
+        <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">grant</span>(<span class="ruby-identifier">role_name</span>, <span class="ruby-identifier">user</span>, <span class="ruby-identifier">message</span>=<span class="ruby-keyword kw">nil</span>)
+          <span class="ruby-identifier">role</span>    = <span class="ruby-constant">Role</span>[<span class="ruby-identifier">role_name</span>]
+          <span class="ruby-identifier">request</span> = <span class="ruby-keyword kw">nil</span>
+          
+          <span class="ruby-comment cmt"># TODO.  once DataMapper supports passing in entity models to finders, remove _id</span>
+          <span class="ruby-identifier">prior_requests</span> = <span class="ruby-identifier">user</span>.<span class="ruby-identifier">memberships</span>.<span class="ruby-identifier">all</span>(<span class="ruby-identifier">:role_id</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">role</span>.<span class="ruby-identifier">id</span>)
+          
+          <span class="ruby-identifier">transaction</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">t</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">approved</span> = <span class="ruby-identifier">prior_requests</span>.<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-identifier">r</span>.<span class="ruby-identifier">approved?</span> }
+            <span class="ruby-identifier">pending</span>  = <span class="ruby-identifier">prior_requests</span>.<span class="ruby-identifier">find</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">r</span><span class="ruby-operator">|</span> <span class="ruby-operator">!</span><span class="ruby-identifier">r</span>.<span class="ruby-identifier">reviewed?</span> }
+            <span class="ruby-identifier">request</span>  = <span class="ruby-identifier">approved</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">pending</span> <span class="ruby-operator">||</span> <span class="ruby-constant">Membership</span>.<span class="ruby-identifier">create</span>(<span class="ruby-identifier">:user</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">user</span>, <span class="ruby-identifier">:role</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">role</span>)
+            
+            <span class="ruby-identifier">request</span>.<span class="ruby-identifier">review</span>(<span class="ruby-keyword kw">self</span>, <span class="ruby-keyword kw">true</span>, <span class="ruby-identifier">message</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">request</span>.<span class="ruby-identifier">reviewed?</span>
+            <span class="ruby-identifier">request</span>.<span class="ruby-identifier">reload</span>
+          <span class="ruby-keyword kw">end</span>
+          
+          <span class="ruby-identifier">request</span>
+        <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

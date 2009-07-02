@@ -1,0 +1,19 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Enable the configured session container(s); any class that inherits from SessionContainer will be considered by its session_store_type attribute.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/struct:SM::Flow::P 
+  body: nil
+- !ruby/struct:SM::Flow::P 
+  body: ":api: plugin"
+full_name: Merb::BootLoader::SetupSession::run
+is_singleton: true
+name: run
+params: ()
+visibility: public

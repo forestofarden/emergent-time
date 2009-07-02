@@ -1,0 +1,105 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Loads the given string as a gem. Execution is deferred until after the logger has been instantiated and the framework directory structure is defined.
+- !ruby/struct:SM::Flow::P 
+  body: If that has already happened, the gem will be activated immediately, but it will still be registered.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/struct:SM::Flow::P 
+  body: "name&lt;String&gt; The name of the gem to load. *ver&lt;Gem::Requirement, Gem::Version, Array, #to_str&gt;"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Version requirements to be passed to Gem::Dependency.new.\n  If the last argument is a Hash, extract the :immediate option,\n  forcing a dependency to load immediately.\n"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Options
+- !ruby/struct:SM::Flow::P 
+  body: ":immediate when true, gem is loaded immediately even if framework is not yet ready. :require_as file name to require for this gem."
+- !ruby/struct:SM::Flow::P 
+  body: See examples below.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Notes
+- !ruby/struct:SM::Flow::P 
+  body: If block is given, it is called after require is called. If you use a block to require multiple files, require first using :require_as option and the rest in the block.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Examples
+- !ruby/struct:SM::Flow::P 
+  body: "Usage scenario is typically one of the following:"
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "1."
+    body: "Gem name and loaded file names are the same (ex.: amqp gem uses amqp.rb). In this case no extra options needed."
+  type: :NUMBER
+- !ruby/struct:SM::Flow::P 
+  body: dependency &quot;amqp&quot;
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "2."
+    body: "Gem name is different from the file needs to be required (ex.: ParseTree gem uses parse_tree.rb as main file)."
+  type: :NUMBER
+- !ruby/struct:SM::Flow::P 
+  body: dependency &quot;ParseTree&quot;, :require_as =&gt; &quot;parse_tree&quot;
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "3."
+    body: "You need to require a number of files from the library explicitly (ex.: cherry pick features from xmpp4r). Pass an array to :require_as."
+  type: :NUMBER
+- !ruby/struct:SM::Flow::P 
+  body: dependency &quot;xmpp4r&quot;, :require_as =&gt; %w(xmpp4r/client xmpp4r/sasl xmpp4r/vcard)
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "4."
+    body: You need to require a specific version of the gem.
+  type: :NUMBER
+- !ruby/struct:SM::Flow::P 
+  body: dependency &quot;RedCloth&quot;, &quot;3.0.4&quot;
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "5."
+    body: You want to load dependency as soon as the method is called.
+  type: :NUMBER
+- !ruby/struct:SM::Flow::P 
+  body: dependency &quot;syslog&quot;, :immediate =&gt; true
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "6."
+    body: "You need to execute some arbitraty code after dependency is loaded:"
+  type: :NUMBER
+- !ruby/struct:SM::Flow::P 
+  body: dependency &quot;ruby-growl&quot; do
+- !ruby/struct:SM::Flow::VERB 
+  body: "  g = Growl.new &quot;localhost&quot;, &quot;ruby-growl&quot;,\n             [&quot;ruby-growl Notification&quot;]\n  g.notify &quot;ruby-growl Notification&quot;, &quot;Ruby-Growl is set up&quot;,\n        &quot;Ruby-Growl is set up&quot;\n"
+- !ruby/struct:SM::Flow::P 
+  body: end
+- !ruby/struct:SM::Flow::P 
+  body: When specifying a gem version to use, you can use the same syntax RubyGems support, for instance, &gt;= 3.0.2 or &gt;~ 1.2.
+- !ruby/struct:SM::Flow::P 
+  body: See rubygems.org/read/chapter/16 for a complete reference.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "Gem::Dependency:"
+    body: The dependency information.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Kernel#dependency
+is_singleton: false
+name: dependency
+params: (name, *opts, &blk)
+visibility: public

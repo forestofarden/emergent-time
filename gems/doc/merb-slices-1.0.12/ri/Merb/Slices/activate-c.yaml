@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Activate a Slice module at runtime
+- !ruby/struct:SM::Flow::P 
+  body: Looks for previously registered slices; then searches :search_path for matches.
+- !ruby/struct:SM::Flow::P 
+  body: "@param slice_module&lt;#to_s&gt; Usually a string of version of the slice module name."
+full_name: Merb::Slices::activate
+is_singleton: true
+name: activate
+params: (slice_module)
+visibility: public

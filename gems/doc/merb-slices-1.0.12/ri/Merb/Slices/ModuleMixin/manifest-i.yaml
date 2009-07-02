@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Return all slice files mapped from the source to their relative path
+- !ruby/struct:SM::Flow::P 
+  body: "@param type&lt;Symbol&gt; Which type to use; defaults to :root (all) @return &lt;Array[Array]&gt; An array of arrays [abs. source, relative dest.]"
+full_name: Merb::Slices::ModuleMixin#manifest
+is_singleton: false
+name: manifest
+params: (type = :root)
+visibility: public

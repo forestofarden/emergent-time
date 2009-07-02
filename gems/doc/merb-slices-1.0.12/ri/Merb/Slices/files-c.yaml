@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: A lookup for finding a Slice module's slice file path
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Hash&gt; A Hash mapping module names to slice files. @note This is unaffected by deactivating a slice; used to reload slices by name."
+full_name: Merb::Slices::files
+is_singleton: true
+name: files
+params: ()
+visibility: public

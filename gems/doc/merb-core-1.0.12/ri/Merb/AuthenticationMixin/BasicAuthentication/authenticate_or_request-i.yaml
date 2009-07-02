@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::AuthenticationMixin::BasicAuthentication#authenticate_or_request
+is_singleton: false
+name: authenticate_or_request
+params: (&authenticator)
+visibility: protected

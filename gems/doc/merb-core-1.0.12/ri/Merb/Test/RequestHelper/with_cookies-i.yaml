@@ -1,0 +1,26 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Keep track of cookie values in CookieJar within the context of the block; you need to set this up for secific controllers.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "*controller_classes:"
+    body: Controller classes to operate on in the context of the block.
+  - !ruby/struct:SM::Flow::LI 
+    label: "&blk:"
+    body: The context to operate on; optionally accepts the cookie jar as an argument.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public @deprecated"
+full_name: Merb::Test::RequestHelper#with_cookies
+is_singleton: false
+name: with_cookies
+params: (*controller_classes, &blk)
+visibility: public

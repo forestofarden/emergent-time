@@ -1,0 +1,24 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Generate a slice url - takes the slice's :path_prefix into account.
+- !ruby/struct:SM::Flow::P 
+  body: "@param slice_name&lt;Symbol&gt;"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  The name of the slice - in identifier_sym format (underscored).\n"
+- !ruby/struct:SM::Flow::P 
+  body: "@param *args&lt;Array[Symbol,Hash]&gt;"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  There are several possibilities regarding arguments:\n  - when passing a Hash only, the :default route of the current\n    slice will be used\n  - when a Symbol is passed, it's used as the route name\n  - a Hash with additional params can optionally be passed\n"
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;String&gt; A uri based on the requested slice."
+- !ruby/struct:SM::Flow::P 
+  body: "@example slice_url(:awesome, :format =&gt; 'html') @example slice_url(:forum, :posts, :format =&gt; 'xml')"
+full_name: Merb::Slices::Support#slice_url
+is_singleton: false
+name: slice_url
+params: (slice_name, *args)
+visibility: public

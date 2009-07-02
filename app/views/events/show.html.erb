@@ -1,0 +1,90 @@
+<%= css_include_tag 'emt/event.css' %>
+<%= js_include_tag 'ajax-load' %>
+
+<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.form" %>
+<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/rep.ajax-validate" %>
+
+<link type="text/css" media="all" href="<%= ::RepertoireCore.public_path_for(:stylesheet) %>/lib/jquery-ui.css" rel="Stylesheet" charset="utf-8" />
+<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.ui.all"%>
+
+<script language="javascript">
+  $().ready(function() {
+    $("a[alt=ajax-load]").ajaxLoad();
+    
+    $('#create_event_comment_form').ajaxValidate({ 
+  	  url: '<%= url(:validate_create_ec, :event_id => @event.id) %>'
+  	});
+    
+    $('#create_event_comment_form').submit(function() {
+      $(this).ajaxSubmit({
+        success: function() {
+          // reload the list of comments and scroll to the top
+          // TODO.  this duplicates functionality in ajax-load... improve it for reloading (see assemble setContent)
+          $.ajax({
+            type: "GET",
+            url:  "<%= resource(@event, :event_comments) %>",
+            dataType: "html",	
+            beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "text/html"); },
+            success: function(data) { 
+              $("#event_comments .comments").empty().append(data);
+              $("#create_event_comment_form textarea").val('');
+              $("#event_comments").animate({scrollTop:0}, 'slow'); 
+            }, 
+            error: function(e) { alert("error:" + e); }
+          });
+        }
+      });
+      return false;
+    });
+    
+    
+    
+    // select usage tab first
+    var $tabs = $('#event_options').tabs();
+    $tabs.tabs('select', '#event_usage');
+    
+  });
+</script>
+
+<div class="event selected" db_id="<%= @event.id %>" evt_start="<%= @event.start %>">
+  <div class="event_container"> 
+    <div class="event_dates"><%= @event.start.formatted(:long) %><%= @event.end ? " &mdash;#{@event.end.formatted(:long)}" : "" %></div>
+    <div class="event_title"><%= @event.title %></div>
+    <div class="event_description"><%= @event.description %></div>
+  </div> 
+</div>
+<div class="clear"></div>
+
+<div id="event_options">
+  <ul>
+    <li><a href="#event_comments"><span>Source critique</span></a></li>
+    <li><a href="#event_usage"><span>Interpretations</span></a></li>
+  </ul>
+
+  <div id="event_usage">
+    <a href="<%= url(:event_timelines, @event) %>" alt='ajax-load'>Usage</a>
+  </div>
+
+  <div id="event_comments">
+    <div class="comments">
+      <a href="<%= resource(@event, :event_comments) %>" alt='ajax-load'>Source critique</a>
+    </div>
+  
+    <div id="event_create_comment">
+      <%= form_for @event_comment, :id => "create_event_comment_form", :action => resource(@event, :event_comments) do %>
+        <% if session.user %>
+          <p>Logged in as <a href="<%= resource(session.user, :timelines) %>"><%= session.user.full_name %></a>.</p>
+        <% else %>
+          <div class="name"><label for="create_event_comment_user_name">Name (Required)</label>
+            <%= text_field :user_name %><div class="validate"></div>
+          <div class="email"><label for="create_event_comment_user_email">Email (Required) - will not be published</label>
+            <%= text_field :user_email %><div class="validate"></div>
+        <% end %>
+        <div><label for="create_comment_text">Comment</label><%= text_area :text, :rows => 8, :cols => 45 %><br/><div class="validate"></div></div>
+        <div id="submit_buttons"><%= submit "Submit" %></div>
+      <% end =%>
+    </div>
+    
+  </div>
+
+</div>

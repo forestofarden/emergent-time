@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Grant a role to another user, returning the approved membership request.
+- !ruby/struct:SM::Flow::P 
+  body: If the user already has the role, the existing membership request is returned; if the user has an existing request pending, that one is approved.
+- !ruby/struct:SM::Flow::P 
+  body: Raises an exception if this user lacks permission to grant the role.
+full_name: RepertoireCore::Mixins::UserAuthorization::InstanceMethods#grant
+is_singleton: false
+name: grant
+params: (role_name, user, message=nil)
+visibility: public

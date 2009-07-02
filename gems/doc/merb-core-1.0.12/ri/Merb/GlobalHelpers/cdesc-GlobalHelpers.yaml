@@ -1,0 +1,17 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Create stub module for global controller helpers.
+constants: []
+
+full_name: Merb::GlobalHelpers
+includes: []
+
+instance_methods: []
+
+name: GlobalHelpers
+superclass: 

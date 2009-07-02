@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: Merb::Slices::ModuleMixin::extended
+is_singleton: true
+name: extended
+params: (slice_module)
+visibility: public

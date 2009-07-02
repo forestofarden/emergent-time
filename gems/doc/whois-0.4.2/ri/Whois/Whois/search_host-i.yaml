@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Search the host for this IPv4, if the value host_search is true, else host = nil
+full_name: Whois::Whois#search_host
+is_singleton: false
+name: search_host
+params: ()
+visibility: public

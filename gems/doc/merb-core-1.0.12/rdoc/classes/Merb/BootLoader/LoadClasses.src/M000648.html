@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>load_file (Merb::BootLoader::LoadClasses)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/bootloader.rb, line 841</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">load_file</span>(<span class="ruby-identifier">file</span>, <span class="ruby-identifier">reload</span> = <span class="ruby-keyword kw">false</span>)
+      <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">verbose!</span> <span class="ruby-node">&quot;#{reload ? &quot;re&quot; : &quot;&quot;}loading #{file}&quot;</span>
+      
+      <span class="ruby-comment cmt"># If we're going to be reloading via constant remove,</span>
+      <span class="ruby-comment cmt"># keep track of what constants were loaded and what files</span>
+      <span class="ruby-comment cmt"># have been added, so that the constants can be removed</span>
+      <span class="ruby-comment cmt"># and the files can be removed from $LOADED_FEAUTRES</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:fork_for_class_load</span>]
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">FILES_LOADED</span>[<span class="ruby-identifier">file</span>]
+          <span class="ruby-constant">FILES_LOADED</span>[<span class="ruby-identifier">file</span>].<span class="ruby-identifier">each</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">lf</span><span class="ruby-operator">|</span> <span class="ruby-identifier">$LOADED_FEATURES</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">lf</span>)}
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-identifier">klasses</span> = <span class="ruby-constant">ObjectSpace</span>.<span class="ruby-identifier">classes</span>.<span class="ruby-identifier">dup</span>
+        <span class="ruby-identifier">files_loaded</span> = <span class="ruby-identifier">$LOADED_FEATURES</span>.<span class="ruby-identifier">dup</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-comment cmt"># If we're in the midst of a reload, remove the file</span>
+      <span class="ruby-comment cmt"># itself from $LOADED_FEATURES so it will get reloaded</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">reload</span>
+        <span class="ruby-identifier">$LOADED_FEATURES</span>.<span class="ruby-identifier">delete</span>(<span class="ruby-identifier">file</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">reload</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-comment cmt"># Ignore the file for syntax errors. The next time</span>
+      <span class="ruby-comment cmt"># the file is changed, it'll be reloaded again</span>
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">require</span> <span class="ruby-identifier">file</span>
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SyntaxError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">error</span> <span class="ruby-node">&quot;Cannot load #{file} because of syntax error: #{e.message}&quot;</span>
+      <span class="ruby-keyword kw">ensure</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:reload_classes</span>]
+          <span class="ruby-constant">MTIMES</span>[<span class="ruby-identifier">file</span>] = <span class="ruby-constant">File</span>.<span class="ruby-identifier">mtime</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-comment cmt"># If we're reloading via constant remove, store off the details</span>
+      <span class="ruby-comment cmt"># after the file has been loaded</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:fork_for_class_load</span>]
+        <span class="ruby-constant">LOADED_CLASSES</span>[<span class="ruby-identifier">file</span>] = <span class="ruby-constant">ObjectSpace</span>.<span class="ruby-identifier">classes</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">klasses</span>
+        <span class="ruby-constant">FILES_LOADED</span>[<span class="ruby-identifier">file</span>] = <span class="ruby-identifier">$LOADED_FEATURES</span> <span class="ruby-operator">-</span> <span class="ruby-identifier">files_loaded</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

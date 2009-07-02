@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Install a gem from source - builds and packages it first then installs.
+- !ruby/struct:SM::Flow::P 
+  body: "Examples: install_gem_from_source(source_dir, :install_dir =&gt; ...) install_gem_from_source(source_dir, gem_name) install_gem_from_source(source_dir, :skip =&gt; [...])"
+full_name: GemManagement#install_gem_from_source
+is_singleton: false
+name: install_gem_from_source
+params: (source_dir, *args)
+visibility: public

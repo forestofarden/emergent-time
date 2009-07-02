@@ -1,0 +1,17 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: included
+comment: 
+constants: []
+
+full_name: Merb::CookiesMixin
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: cookies
+name: CookiesMixin
+superclass: 

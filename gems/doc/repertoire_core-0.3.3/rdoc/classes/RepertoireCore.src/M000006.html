@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>setup_router (RepertoireCore)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/repertoire_core.rb, line 107</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">setup_router</span>(<span class="ruby-identifier">scope</span>)
+      
+      <span class="ruby-comment cmt"># user profile updates </span>
+      <span class="ruby-comment cmt"># TODO. authenticate</span>
+      <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">identify</span>(<span class="ruby-constant">User</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:shortname</span>) <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">resources</span> <span class="ruby-identifier">:users</span>, <span class="ruby-identifier">:key</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:shortname</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">user</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">user</span>.<span class="ruby-identifier">resources</span> <span class="ruby-identifier">:memberships</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+      
+      <span class="ruby-comment cmt"># TODO.  rework this into a REST style route with its own controller</span>
+      <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/users/:shortname/requests&quot;</span>).<span class="ruby-identifier">to</span>(<span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'requests'</span>, <span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'users'</span>).<span class="ruby-identifier">name</span>(<span class="ruby-identifier">:requests</span>)
+
+      <span class="ruby-comment cmt"># user registration and passwords      </span>
+      <span class="ruby-identifier">scope</span>.<span class="ruby-identifier">to</span>(<span class="ruby-identifier">:controller</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;users&quot;</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span>
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/signup&quot;</span>).<span class="ruby-identifier">to</span>(                   <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;new&quot;</span>).<span class="ruby-identifier">name</span>(                     <span class="ruby-identifier">:signup</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/activate/:activation_code&quot;</span>).<span class="ruby-identifier">to</span>(<span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;activate&quot;</span>).<span class="ruby-identifier">name</span>(                <span class="ruby-identifier">:activate</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/forgot_password&quot;</span>).<span class="ruby-identifier">to</span>(          <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;forgot_password&quot;</span>).<span class="ruby-identifier">name</span>(         <span class="ruby-identifier">:forgot_password</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/password_reset_key&quot;</span>).<span class="ruby-identifier">to</span>(       <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;password_reset_key&quot;</span>).<span class="ruby-identifier">name</span>(      <span class="ruby-identifier">:password_reset_key</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/reset_password&quot;</span>).<span class="ruby-identifier">to</span>(           <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;reset_password&quot;</span>).<span class="ruby-identifier">name</span>(          <span class="ruby-identifier">:reset_password</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/update_password&quot;</span>).<span class="ruby-identifier">to</span>(          <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;update_password&quot;</span>).<span class="ruby-identifier">name</span>(         <span class="ruby-identifier">:update_password</span>)
+        
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/webservice/complete_name&quot;</span>).<span class="ruby-identifier">to</span>(    <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;complete_name&quot;</span>).<span class="ruby-identifier">name</span>(           <span class="ruby-identifier">:complete_name</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/webservice/validate&quot;</span>).<span class="ruby-identifier">to</span>(         <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;validate_user&quot;</span>).<span class="ruby-identifier">name</span>(           <span class="ruby-identifier">:validate_user</span>)
+        <span class="ruby-identifier">c</span>.<span class="ruby-identifier">match</span>(<span class="ruby-value str">&quot;/webservice/validate_reset_password&quot;</span>).<span class="ruby-identifier">to</span>(  <span class="ruby-identifier">:action</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;validate_reset_password&quot;</span>).<span class="ruby-identifier">name</span>( <span class="ruby-identifier">:validate_reset_password</span> )
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

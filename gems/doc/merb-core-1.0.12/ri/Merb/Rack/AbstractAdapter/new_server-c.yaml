@@ -1,0 +1,23 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This method is designed to be overridden in a rack adapter. It will be called to create a new instance of the server for the adapter to start. The adapter should attempt to bind to a port at this point. This is called from the AbstractAdapter start method.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "port<Integer>:"
+    body: The port the server should listen on
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: plugin @overridable"
+full_name: Merb::Rack::AbstractAdapter::new_server
+is_singleton: true
+name: new_server
+params: (port)
+visibility: public

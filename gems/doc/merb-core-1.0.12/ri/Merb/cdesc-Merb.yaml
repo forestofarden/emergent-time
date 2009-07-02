@@ -1,0 +1,224 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: public"
+  name: adapter
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: public"
+  name: environment
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: private"
+  name: environment_info
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  name: exiting
+  rw: R
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Set up default variables under Merb
+  name: klass_hashes
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: private"
+  name: load_paths
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Set up default variables under Merb
+  name: orm
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: private"
+  name: started
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Set up default variables under Merb
+  name: template_engine
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: Set up default variables under Merb
+  name: test_framework
+  rw: RW
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: add_generators
+- !ruby/object:RI::MethodSummary 
+  name: add_mime_type
+- !ruby/object:RI::MethodSummary 
+  name: add_rakefiles
+- !ruby/object:RI::MethodSummary 
+  name: at_exit
+- !ruby/object:RI::MethodSummary 
+  name: at_exit_procs
+- !ruby/object:RI::MethodSummary 
+  name: available_accepts
+- !ruby/object:RI::MethodSummary 
+  name: available_mime_types
+- !ruby/object:RI::MethodSummary 
+  name: bundled?
+- !ruby/object:RI::MethodSummary 
+  name: config
+- !ruby/object:RI::MethodSummary 
+  name: deferred_actions
+- !ruby/object:RI::MethodSummary 
+  name: dir_for
+- !ruby/object:RI::MethodSummary 
+  name: disable
+- !ruby/object:RI::MethodSummary 
+  name: disabled?
+- !ruby/object:RI::MethodSummary 
+  name: disabled_components
+- !ruby/object:RI::MethodSummary 
+  name: disabled_components=
+- !ruby/object:RI::MethodSummary 
+  name: env?
+- !ruby/object:RI::MethodSummary 
+  name: exception
+- !ruby/object:RI::MethodSummary 
+  name: exiting=
+- !ruby/object:RI::MethodSummary 
+  name: fatal!
+- !ruby/object:RI::MethodSummary 
+  name: forking_environment?
+- !ruby/object:RI::MethodSummary 
+  name: framework_root
+- !ruby/object:RI::MethodSummary 
+  name: generators
+- !ruby/object:RI::MethodSummary 
+  name: glob_for
+- !ruby/object:RI::MethodSummary 
+  name: load_config
+- !ruby/object:RI::MethodSummary 
+  name: load_dependencies
+- !ruby/object:RI::MethodSummary 
+  name: log_path
+- !ruby/object:RI::MethodSummary 
+  name: log_stream
+- !ruby/object:RI::MethodSummary 
+  name: logger
+- !ruby/object:RI::MethodSummary 
+  name: merge_env
+- !ruby/object:RI::MethodSummary 
+  name: mime_transform_method
+- !ruby/object:RI::MethodSummary 
+  name: on_jruby?
+- !ruby/object:RI::MethodSummary 
+  name: on_windows?
+- !ruby/object:RI::MethodSummary 
+  name: orm
+- !ruby/object:RI::MethodSummary 
+  name: orm_generator_scope
+- !ruby/object:RI::MethodSummary 
+  name: print_colorized_backtrace
+- !ruby/object:RI::MethodSummary 
+  name: push_path
+- !ruby/object:RI::MethodSummary 
+  name: rakefiles
+- !ruby/object:RI::MethodSummary 
+  name: reload
+- !ruby/object:RI::MethodSummary 
+  name: remove_mime_type
+- !ruby/object:RI::MethodSummary 
+  name: remove_paths
+- !ruby/object:RI::MethodSummary 
+  name: reset_logger!
+- !ruby/object:RI::MethodSummary 
+  name: restart_environment
+- !ruby/object:RI::MethodSummary 
+  name: root
+- !ruby/object:RI::MethodSummary 
+  name: root=
+- !ruby/object:RI::MethodSummary 
+  name: root_path
+- !ruby/object:RI::MethodSummary 
+  name: run_later
+- !ruby/object:RI::MethodSummary 
+  name: start
+- !ruby/object:RI::MethodSummary 
+  name: start_environment
+- !ruby/object:RI::MethodSummary 
+  name: template_engine
+- !ruby/object:RI::MethodSummary 
+  name: test_framework
+- !ruby/object:RI::MethodSummary 
+  name: test_framework_generator_scope
+- !ruby/object:RI::MethodSummary 
+  name: testing?
+- !ruby/object:RI::MethodSummary 
+  name: trap
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "require &quot;time&quot; # httpdate"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Public Merb Logger API
+- !ruby/struct:SM::Flow::P 
+  body: "To replace an existing logger with a new one:"
+- !ruby/struct:SM::Flow::VERB 
+  body: " Merb::Logger.set_log(log{String, IO},level{Symbol, String})\n"
+- !ruby/struct:SM::Flow::P 
+  body: Available logging levels are
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb::Logger::{ Fatal, Error, Warn, Info, Debug }\n"
+- !ruby/struct:SM::Flow::P 
+  body: "Logging via:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb.logger.fatal(message&lt;String&gt;,&amp;block)\n  Merb.logger.error(message&lt;String&gt;,&amp;block)\n  Merb.logger.warn(message&lt;String&gt;,&amp;block)\n  Merb.logger.info(message&lt;String&gt;,&amp;block)\n  Merb.logger.debug(message&lt;String&gt;,&amp;block)\n"
+- !ruby/struct:SM::Flow::P 
+  body: "Logging with autoflush:"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb.logger.fatal!(message&lt;String&gt;,&amp;block)\n  Merb.logger.error!(message&lt;String&gt;,&amp;block)\n  Merb.logger.warn!(message&lt;String&gt;,&amp;block)\n  Merb.logger.info!(message&lt;String&gt;,&amp;block)\n  Merb.logger.debug!(message&lt;String&gt;,&amp;block)\n"
+- !ruby/struct:SM::Flow::P 
+  body: Flush the buffer to
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb.logger.flush\n"
+- !ruby/struct:SM::Flow::P 
+  body: Remove the current log object
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb.logger.close\n"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Private Merb Logger API
+- !ruby/struct:SM::Flow::P 
+  body: To initialize the logger you create a new object, proxies to set_log.
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb::Logger.new(log{String, IO},level{Symbol, String})\n"
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  name: VERSION
+  value: "'1.0.12' unless defined?(Merb::VERSION)"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DM_VERSION
+  value: "'0.9.11' unless defined?(Merb::DM_VERSION)"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DO_VERSION
+  value: "'0.9.11' unless defined?(Merb::DO_VERSION)"
+full_name: Merb
+includes: []
+
+instance_methods: []
+
+name: Merb
+superclass: 

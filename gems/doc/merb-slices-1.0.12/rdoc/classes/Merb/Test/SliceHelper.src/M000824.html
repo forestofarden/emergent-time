@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>standalone? (Merb::Test::SliceHelper)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/generators/templates/full/spec/spec_helper.rb, line 33</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">standalone?</span>
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">root</span> <span class="ruby-operator">==</span> <span class="ruby-operator">::</span><span class="ruby-operator">&lt;</span><span class="ruby-value str">%= module_name %&gt;.root
+      end
+      
+    end
+  end
+end
+
+Spec::Runner.configure do |config|
+  config.include(Merb::Test::ViewHelper)
+  config.include(Merb::Test::RouteHelper)
+  config.include(Merb::Test::ControllerHelper)
+  config.include(Merb::Test::SliceHelper)
+end
+
+# You can add your own helpers here
+#
+Merb::Test.add_helpers do
+  def mount_slice
+    Merb::Router.prepare { add_slice(:&lt;%=</span> <span class="ruby-identifier">module_name</span> <span class="ruby-operator">%</span><span class="ruby-operator">&gt;</span>, <span class="ruby-value str">&quot;&lt;%= base_name %&gt;&quot;</span>) } <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">standalone?</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

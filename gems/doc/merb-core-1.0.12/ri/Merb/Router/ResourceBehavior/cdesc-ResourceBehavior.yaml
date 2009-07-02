@@ -1,0 +1,17 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Adding the collection and member methods to behavior
+constants: []
+
+full_name: Merb::Router::ResourceBehavior
+includes: []
+
+instance_methods: []
+
+name: ResourceBehavior
+superclass: Behavior

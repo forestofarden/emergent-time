@@ -1,0 +1,39 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns session container. Merb is able to handle multiple session stores, hence a parameter to pick it.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "session_store<String>:"
+    body: The type of session store to access,
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: defaults to default_session_store.
+- !ruby/struct:SM::Flow::H 
+  level: 3
+  text: Notes
+- !ruby/struct:SM::Flow::P 
+  body: If no suitable session store type is given, it defaults to cookie-based sessions.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "SessionContainer:"
+    body: an instance of a session store extending Merb::SessionContainer.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::SessionMixin::RequestMixin#session
+is_singleton: false
+name: session
+params: (session_store = nil)
+visibility: public

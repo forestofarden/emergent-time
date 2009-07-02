@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Copies all application files from mirrored_components to their app-level location
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Array[Array]&gt;"
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Array of two arrays, one for all copied files, the other for overrides\n  that may have been preserved to resolve collisions.\n"
+full_name: Merb::Slices::ModuleMixin#mirror_public!
+is_singleton: false
+name: mirror_public!
+params: ()
+visibility: public

@@ -1,0 +1,20 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Performs the meat of check_delete_constraints method for a single resource
+- !ruby/struct:SM::Flow::P 
+  body: "@param rel [DataMapper::Associations::Relationship] the relationship to evaluate"
+- !ruby/struct:SM::Flow::P 
+  body: "@param child [~DataMapper::Model] the model to constrain"
+- !ruby/struct:SM::Flow::P 
+  body: "@see #check_delete_constraints"
+- !ruby/struct:SM::Flow::P 
+  body: "@api semi-public"
+full_name: DataMapper::Constraints::DeleteConstraint#check_resource_delete_constraints
+is_singleton: false
+name: check_resource_delete_constraints
+params: (rel, child)
+visibility: public

@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser#get_match_node
+is_singleton: false
+name: get_match_node
+params: (lhs, rhs
+visibility: public

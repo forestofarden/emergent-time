@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "@return &lt;Hash&gt; The configuration for this slice."
+full_name: Merb::Slices::ModuleMixin#config
+is_singleton: false
+name: config
+params: ()
+visibility: public

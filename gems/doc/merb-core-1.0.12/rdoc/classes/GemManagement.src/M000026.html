@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>ensure_bin_wrapper_for (GemManagement)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/tasks/gem_management.rb, line 280</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ensure_bin_wrapper_for</span>(<span class="ruby-identifier">gem_dir</span>, <span class="ruby-identifier">bin_dir</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">gems</span>)
+    <span class="ruby-identifier">options</span> = <span class="ruby-identifier">gems</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">gems</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">:</span> {}
+    <span class="ruby-identifier">options</span>[<span class="ruby-identifier">:no_minigems</span>] <span class="ruby-operator">||=</span> []
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bin_dir</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">directory?</span>(<span class="ruby-identifier">bin_dir</span>)
+      <span class="ruby-identifier">gems</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">gem</span><span class="ruby-operator">|</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">gemspec_path</span> = <span class="ruby-constant">Dir</span>[<span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">gem_dir</span>, <span class="ruby-value str">'specifications'</span>, <span class="ruby-node">&quot;#{gem}-*.gemspec&quot;</span>)].<span class="ruby-identifier">last</span>
+          <span class="ruby-identifier">spec</span> = <span class="ruby-constant">Gem</span><span class="ruby-operator">::</span><span class="ruby-constant">Specification</span>.<span class="ruby-identifier">load</span>(<span class="ruby-identifier">gemspec_path</span>)
+          <span class="ruby-identifier">enable_minigems</span> = <span class="ruby-operator">!</span><span class="ruby-identifier">options</span>[<span class="ruby-identifier">:no_minigems</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">spec</span>.<span class="ruby-identifier">name</span>)
+          <span class="ruby-identifier">spec</span>.<span class="ruby-identifier">executables</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">exec</span><span class="ruby-operator">|</span>
+            <span class="ruby-identifier">executable</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">join</span>(<span class="ruby-identifier">bin_dir</span>, <span class="ruby-identifier">exec</span>)
+            <span class="ruby-identifier">message</span> <span class="ruby-node">&quot;Writing executable wrapper #{executable}&quot;</span>
+            <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">executable</span>, <span class="ruby-value str">'w'</span>, <span class="ruby-value">0755</span>) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">f</span><span class="ruby-operator">|</span>
+              <span class="ruby-identifier">f</span>.<span class="ruby-identifier">write</span>(<span class="ruby-identifier">executable_wrapper</span>(<span class="ruby-identifier">spec</span>, <span class="ruby-identifier">exec</span>, <span class="ruby-identifier">enable_minigems</span>))
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

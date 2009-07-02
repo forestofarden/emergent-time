@@ -1,0 +1,23 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Handles request routing and action dispatch.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "Merb::Controller:"
+    body: the controller that handled the action dispatch.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Request#handle
+is_singleton: false
+name: handle
+params: ()
+visibility: public

@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Predicate method to check if a file should be taken into account when unpacking files
+- !ruby/struct:SM::Flow::P 
+  body: By default any public component paths and stubs are skipped; additionally you can set the :skip_files in the slice's config for other relative paths to skip.
+- !ruby/struct:SM::Flow::P 
+  body: "@param file&lt;String&gt; The relative path to test. @return &lt;TrueClass,FalseClass&gt; True if the file may be mirrored."
+full_name: Merb::Slices::ModuleMixin#unpack_file?
+is_singleton: false
+name: unpack_file?
+params: (file)
+visibility: protected

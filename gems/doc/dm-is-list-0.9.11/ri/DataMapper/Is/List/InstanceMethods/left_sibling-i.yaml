@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: DataMapper::Is::List::InstanceMethods#left_sibling
+is_singleton: false
+name: left_sibling
+params: ()
+visibility: public

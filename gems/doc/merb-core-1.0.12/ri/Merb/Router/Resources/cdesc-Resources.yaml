@@ -1,0 +1,24 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+constants: []
+
+full_name: Merb::Router::Resources
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: register_resource
+- !ruby/object:RI::MethodSummary 
+  name: resource
+- !ruby/object:RI::MethodSummary 
+  name: resource_block
+- !ruby/object:RI::MethodSummary 
+  name: resource_options
+- !ruby/object:RI::MethodSummary 
+  name: resources
+name: Resources
+superclass: 

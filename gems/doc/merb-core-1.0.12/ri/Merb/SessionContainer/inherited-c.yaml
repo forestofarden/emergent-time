@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Register the subclass as an available session store type.
+full_name: Merb::SessionContainer::inherited
+is_singleton: true
+name: inherited
+params: (klass)
+visibility: public

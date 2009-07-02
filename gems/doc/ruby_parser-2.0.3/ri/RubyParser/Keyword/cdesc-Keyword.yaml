@@ -1,0 +1,19 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: keyword
+comment: 
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  name: WORDLIST
+  value: Hash[*wordlist.map { |o| [o.name, o] }.flatten] unless     defined? WORDLIST
+full_name: RubyParser::Keyword
+includes: []
+
+instance_methods: []
+
+name: Keyword
+superclass: Object

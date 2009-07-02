@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new (Net::POP3)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/net/pop.rb, line 395</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">initialize</span>(<span class="ruby-identifier">addr</span>, <span class="ruby-identifier">port</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">isapop</span> = <span class="ruby-keyword kw">false</span>)
+      <span class="ruby-ivar">@address</span> = <span class="ruby-identifier">addr</span>
+      <span class="ruby-ivar">@use_ssl</span> = <span class="ruby-constant">POP3</span>.<span class="ruby-identifier">use_ssl?</span>
+      <span class="ruby-ivar">@port</span> = <span class="ruby-identifier">port</span> <span class="ruby-operator">||</span> (<span class="ruby-constant">POP3</span>.<span class="ruby-identifier">use_ssl?</span> <span class="ruby-value">? </span><span class="ruby-constant">POP3</span>.<span class="ruby-identifier">default_pop3s_port</span> <span class="ruby-operator">:</span> <span class="ruby-constant">POP3</span>.<span class="ruby-identifier">default_pop3_port</span>)
+      <span class="ruby-ivar">@apop</span> = <span class="ruby-identifier">isapop</span>
+      <span class="ruby-ivar">@certs</span> = <span class="ruby-constant">POP3</span>.<span class="ruby-identifier">certs</span>
+      <span class="ruby-ivar">@verify</span> = <span class="ruby-constant">POP3</span>.<span class="ruby-identifier">verify</span>
+      
+      <span class="ruby-ivar">@command</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-ivar">@socket</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-ivar">@started</span> = <span class="ruby-keyword kw">false</span>
+      <span class="ruby-ivar">@open_timeout</span> = <span class="ruby-value">30</span>
+      <span class="ruby-ivar">@read_timeout</span> = <span class="ruby-value">60</span>
+      <span class="ruby-ivar">@debug_output</span> = <span class="ruby-keyword kw">nil</span>
+
+      <span class="ruby-ivar">@mails</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-ivar">@n_mails</span> = <span class="ruby-keyword kw">nil</span>
+      <span class="ruby-ivar">@n_bytes</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

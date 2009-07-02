@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>do_helo (Net::SMTP)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/net/smtp.rb, line 502</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">do_helo</span>(<span class="ruby-identifier">helodomain</span>)
+       <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@esmtp</span>
+          <span class="ruby-identifier">ehlo</span> <span class="ruby-identifier">helodomain</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">helo</span> <span class="ruby-identifier">helodomain</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">ProtocolError</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@esmtp</span>
+          <span class="ruby-ivar">@esmtp</span> = <span class="ruby-keyword kw">false</span>
+          <span class="ruby-ivar">@error_occured</span> = <span class="ruby-keyword kw">false</span>
+          <span class="ruby-keyword kw">retry</span>
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">raise</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

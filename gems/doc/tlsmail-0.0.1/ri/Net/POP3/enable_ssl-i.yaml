@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Enables SSL for this instance. Must be called before the connection is established to have any effect. <tt>verify</tt> is the type of verification to do on the Server Cert; Defaults to OpenSSL::SSL::VERIFY_PEER. <tt>certs</tt> is a file or directory holding CA certs to use to verify the server cert; Defaults to nil. <tt>port</tt> is port to establish the SSL connection on; Defaults to 995.
+full_name: Net::POP3#enable_ssl
+is_singleton: false
+name: enable_ssl
+params: (verify = OpenSSL::SSL::VERIFY_PEER, certs = nil,  port = POP3.default_pop3s_port)
+visibility: public

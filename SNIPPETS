@@ -1,0 +1,271 @@
+
+
+var elemTop = $(this).offset().top - $("#events").offset().top;
+alert(elemTop);
+if ((elemTop <= docViewTop) || (elemTop >= docViewBottom)) {
+  var centerOffset = (docViewTop - docViewBottom) / 2;
+  alert('scrolling to ' + date);
+  $('#events').scrollTop(elemTop - centerOffset);
+}
+
+
+
+/**
+ * Jquery filter for returning all divs that are showing in their viewports
+ * 
+ * Copyright (c) 2009 MIT Hyperstudio
+ * Christopher York, 05/2009
+ */
+
+jQuery.extend(  
+  jQuery.expr[':'], {
+    showing: function(a, i, m) {
+      // viewport is closest ancestor with an overflow attribute declared
+      var viewport = $(a).parents().filter('[overflow=auto]:first');
+      $(viewport).css("background", "red");
+      
+      var viewport = $("#events");
+      
+      var viewportTop = $(viewport).scrollTop();
+      var viewportBottom = viewportTop + $(viewport).height();
+      
+      var elemTop = $(a).offset().top;
+      var elemBottom = elemTop + $(a).height();
+
+      return elemBottom > viewportTop && elemTop < viewportBottom;
+    }
+  }
+);
+
+
+FOR SYNCING TIMELINE AND EVENTS LIST
+
+// sync timeline to events list
+var eventScrollHandler = function() {
+  var tl = $(".hyt_timeline").data('tl');
+  var elem = null;
+
+  $(this).find('.event').removeClass('focus');
+
+  // if timeline not initialized yet, don't process event
+  if (!tl) { return; }
+
+  // iterate through events to find the topmost visible event element
+  var viewportTop = $("#events").offset().top + 20;
+  $(this).find(".event").each(function() {
+    var thisTop = $(this).offset().top;
+    if (thisTop > viewportTop) {
+      if (elem == null) { elem = this; }
+      else if (thisTop < $(elem).offset().top) { elem = this; }
+    }
+  });
+
+  // center the timeline on that element's date
+  $(elem).addClass('focus');
+  var startDate = Timeline.DateTime.parseIso8601DateTime($(elem).attr('startDate'));
+  $('#events').unbind('scroll');
+  tl.getBand(0).setCenterVisibleDate(startDate);
+  $('#events').bind('scroll', eventScrollHandler);
+};
+
+
+// sync events list to timeline
+var timelineScrollHandler = function() {
+  var tl = $(this).data('tl');
+
+  // if timeline not initialized yet, don't process event
+  if (!tl) { return; }
+
+  var centerDate = tl.getBand(0).getCenterVisibleDate();
+
+  var docViewTop = $("#events").scrollTop();
+  var docViewBottom = docViewTop + $("#events").height();
+
+  // iterate through events and scroll to first one later than the timeline center
+  $('#events .event').each(function() {
+    var date = Timeline.DateTime.parseIso8601DateTime($(this).attr('startDate'));
+    if (date.getTime() > centerDate.getTime()) {
+      $('.hyt_timeline').unbind('scroll');
+      $('#events').scrollTo($(this));
+      $('.hyt_timeline').bind('scroll', timelineScrollHandler);
+      return false;
+    }
+  });
+};
+
+function bindHandlers() {
+  
+}
+
+function unbindHandlers() {
+  
+}
+
+$('#events').bind('scroll', eventScrollHandler);
+var tl = $(".hyt_timeline").data('tl');
+tl.getBand(0).addOnScrollListener(function() {
+  timelineScrollHandler();
+});
+
+
+
+
+
+
+<li class="event" evt_id="evt_<%= te.event.id %>" evt_startDate="<%= te.event.start.to_s %>">
+  <div class="event_remove" removal_id="<%= te.id %>" style="display: block;"></div>
+  <div class="event_title"><%= te.event.title %></div>
+  <div class="event_start"><%= te.event.start.formatted(:long) %></div>
+  <div class="event_end"><%= te.event.end ? te.event.end.formatted(:long) : '' %>
+  <div class="event_description"><%= te.event.description %></div>
+  <div class="event_interpretation"><%= te.interpretation %></div>
+</li>
+
+
+
+
+return '<li class="event" te_id="' + e.id +'" evt_startDate="' + e.startDate +  '">' +
+       '<div class="event_remove"></div>' +
+       '<div class="event_title">' + (e.real_title || '') + '</div>' +
+       '<div class="event_start">' + (e.start ? e.start.format() : '') + '</div>' +
+       '<div class="event_end">' + (e.end ? e.end.format() : '') + '</div>' +
+       '<div class="event_description">' + e.description + '</div>' +
+       '<div class="event_interpretation">' + (e.interpretation || '') + '</div>' +
+       '</li>';
+};
+
+
+TO call partial of timeline:
+
+<%= partial './timeline', :url => resource(@user, @timeline, :format => :json), :scroll => @timeline.events.last.start %>
+
+
+
+<%= form_for @timeline, :id => "create_timeline_form", :action => resource(@user, :timelines) do %>
+  <div><%= text_field :name => "timeline[title]" %><%= submit "Create" %></div>
+<% end =%>
+
+
+<script language="javascript">
+
+$().ready(function() {
+  $("#create_timeline_form").hide();
+  $("#create_timeline_link").click(function() {
+    var form = $("#create_timeline_form");
+    form.show();
+    $(this).replaceWith(form);
+  });
+});
+
+</script>
+
+
+
+  $.post("<%= resource(@user, :timelines) %>", {
+    'timeline[title]': '<%= @new_timeline.title %>'
+  }, function() {
+    window.location.url = '<%= resource(@user, @new_timeline) %>';
+  });
+  
+  
+  // display instructions when empty
+  $('#search_box #term').blur(function() { 
+    if ($(this).value == '') {
+      $(this).addClass('gray');
+      $(this).value = 'Search timelines';
+    }
+  });
+  // clear when starting to enter search term
+  $('#search_box #term').focus(function() { 
+    if ($(this).value == 'Search timelines') {
+      $(this).removeClass('gray');
+      $(this).value = '';
+    }
+  });
+  
+  
+  SELECT user_id, max(date) AS date FROM
+    (SELECT user_id, timeline_id, max(coalesce(timeline_events.modified_at, timeline_events.created_at)) AS date 
+    FROM timeline_events JOIN timelines ON (timeline_id = timelines.id)
+    GROUP BY user_id, timeline_id
+    ORDER BY date DESC) AS recent
+  GROUP BY user_id;
+  
+  SELECT timeline_id, max(coalesce(modified_at, created_at)) AS date 
+  FROM timeline_events
+  GROUP BY timeline_id 
+  ORDER BY date DESC 
+  LIMIT 5
+  
+  
+  
+  
+  
+  def navigation(opts={})
+    tag :div, :class => 'navigation' do
+      html = []
+      if session.user
+        html << link_to('Home', resource(session.user, :timelines))
+        html << link_to('Profile', slice_url(:repertoire_core, :user, :shortname => session.user.shortname))
+        html << link_to('Log off', slice_url(:merb_auth_slice_password, :logout))
+      else
+        html << link_to('Sign in', slice_url(:merb_auth_slice_password, :login))
+        html << link_to('Register', slice_url(:repertoire_core, :signup))
+      end
+      html << search_box(url(:events), opts[:q])
+      html.join
+    end
+  end
+  
+  def search_box(url, q='')
+    <<-END
+    <script language="javascript">$().ready(function() { $('#search_box input:text').hint(); });</script>
+    <div id='search_box'>
+      <form action='#{url}' method='get'>
+        <input id='term' name='q' type='text' title='Search timelines' value='#{q}' />
+        <input src='/images/search.png' type='image' />
+      </form>
+    </div>
+    END
+  end
+  
+  
+  <div class="blurb">
+  Hypertime is a collaborative timelining tool for humanists and social
+  scientists. With it, you can easily create your own timelines, publish them to
+  the web, and browse and comment on other users' timelines. When you 
+  collaborate with others, it helps map your community's shared knowledge about
+  a set of events, highlighting commonalities and contrasting
+  interpretations.  <a href="#">Read more... </a>
+  </div>
+  
+  
+  
+  $.ajax({
+    type: "GET",
+    url:  $this.attr('href'),
+    dataType: "html",	
+    beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "text/html") },
+    success: function(data) {
+      $('#detail_content').html(data);
+      // modify any internal links to load into the dialog
+      $('#detail_content a').click(function() {
+        $('#detail_content').load($(this).attr('href'));
+        return false;
+      });
+    }
+  });
+  
+  
+  
+  <div class="event_usage">
+    <a href="<%= url(:event_timelines, @event) %>" alt='ajax-load'>Usage</a>
+  </div>
+
+  <div class="event_comments">
+    <a href="<%= resource(@event, :event_comments) %>" alt='ajax-load'>Source critique</a>
+  </div>
+
+  <div class="event_create_comment">
+    <a href="<%= url(:new_event_event_comment, @event) %>" alt='ajax-load'>Create comment</a>
+  </div>

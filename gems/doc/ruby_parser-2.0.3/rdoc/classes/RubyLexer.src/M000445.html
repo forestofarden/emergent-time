@@ -1,0 +1,628 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>yylex (RubyLexer)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/ruby_lexer.rb, line 620</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">yylex</span> <span class="ruby-comment cmt"># 826 lines</span>
+
+    <span class="ruby-identifier">c</span> = <span class="ruby-value str">''</span>
+    <span class="ruby-identifier">space_seen</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-identifier">command_state</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-identifier">src</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">src</span>
+
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-keyword kw">nil</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">yylex_string</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_strterm</span>
+
+    <span class="ruby-identifier">command_state</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">command_start</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">command_start</span> = <span class="ruby-keyword kw">false</span>
+
+    <span class="ruby-identifier">last_state</span> = <span class="ruby-identifier">lex_state</span>
+
+    <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span> <span class="ruby-comment cmt"># START OF CASE</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\ |\t|\r|\f|\13/</span>) <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># white spaces, 13 = '\v</span>
+        <span class="ruby-identifier">space_seen</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">next</span>
+      <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/[^a-zA-Z]/</span>) <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\n|#/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lineno</span> = <span class="ruby-keyword kw">nil</span>
+          <span class="ruby-identifier">c</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'#'</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">src</span>.<span class="ruby-identifier">unread</span> <span class="ruby-identifier">c</span> <span class="ruby-comment cmt"># ok</span>
+
+            <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\s*#.*(\n+|\z)/</span>) <span class="ruby-keyword kw">do</span>
+              <span class="ruby-ivar">@comments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>.<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ +#/</span>, <span class="ruby-value str">'#'</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/^ +$/</span>, <span class="ruby-value str">''</span>)
+            <span class="ruby-keyword kw">end</span>
+
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">eos?</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-constant">RubyLexer</span><span class="ruby-operator">::</span><span class="ruby-constant">EOF</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-comment cmt"># Replace a string of newlines with a single one</span>
+          <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\n+/</span>)
+
+          <span class="ruby-keyword kw">if</span> [<span class="ruby-identifier">:expr_beg</span>, <span class="ruby-identifier">:expr_fname</span>,
+              <span class="ruby-identifier">:expr_dot</span>, <span class="ruby-identifier">:expr_class</span>].<span class="ruby-identifier">include?</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">next</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">command_start</span> = <span class="ruby-keyword kw">true</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tNL</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[\]\)\}]/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">cond</span>.<span class="ruby-identifier">lexpop</span>
+          <span class="ruby-identifier">cmdarg</span>.<span class="ruby-identifier">lexpop</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+          <span class="ruby-identifier">result</span> = {
+            <span class="ruby-value str">&quot;)&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:tRPAREN</span>,
+            <span class="ruby-value str">&quot;]&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:tRBRACK</span>,
+            <span class="ruby-value str">&quot;}&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">:tRCURLY</span>
+          }[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>]
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\./</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\.\.\./</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;...&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tDOT3</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\.\./</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;..&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tDOT2</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\.\d/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;no .&lt;digit&gt; floating literal anymore put 0 before dot&quot;</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\./</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_dot</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;.&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tDOT</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\,/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;,&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tCOMMA</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\(/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">result</span> = <span class="ruby-identifier">:tLPAREN2</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">command_start</span> = <span class="ruby-keyword kw">true</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">result</span> = <span class="ruby-identifier">:tLPAREN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_cmdarg</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-identifier">result</span> = <span class="ruby-identifier">:tLPAREN_ARG</span>
+            <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_arg</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-identifier">warning</span>(<span class="ruby-value str">&quot;don't put space before argument parentheses&quot;</span>)
+              <span class="ruby-identifier">result</span> = <span class="ruby-identifier">:tLPAREN2</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">expr_beg_push</span> <span class="ruby-value str">&quot;(&quot;</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\=/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=\=\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;===&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tEQQ</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;==&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tEQ</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=~/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;=~&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tMATCH</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=&gt;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;=&gt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tASSOC</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">was_begin_of_line</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/begin(?=\s)/</span>) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-ivar">@comments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-value str">'='</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+
+              <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/.*?\n=end\s*(\n|\z)/</span><span class="ruby-identifier">m</span>) <span class="ruby-keyword kw">then</span>
+                <span class="ruby-ivar">@comments</span>.<span class="ruby-identifier">clear</span>
+                <span class="ruby-identifier">rb_compile_error</span>(<span class="ruby-value str">&quot;embedded document meets end of file&quot;</span>)
+              <span class="ruby-keyword kw">end</span>
+
+              <span class="ruby-ivar">@comments</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+
+              <span class="ruby-keyword kw">next</span>
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">'='</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tEQL</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-node">/\&quot;(#{ESC_RE}|#(#{ESC_RE}|[^\{\#\@\$\&quot;\\])|[^\&quot;\\\#])*\&quot;/o</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-constant">ESC_RE</span>) { <span class="ruby-identifier">unescape</span> <span class="ruby-identifier">$1</span> }
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSTRING</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&quot;/</span>) <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># FALLBACK</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-constant">STR_DQUOTE</span>, <span class="ruby-value str">'&quot;'</span>, <span class="ruby-value str">&quot;\0&quot;</span>] <span class="ruby-comment cmt"># TODO: question this</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;\&quot;&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSTRING_BEG</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\@\@?\w*/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+
+          <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-node">&quot;`#{token}` is not allowed as a variable name&quot;</span> <span class="ruby-keyword kw">if</span>
+            <span class="ruby-identifier">token</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/\@\d/</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">process_token</span>(<span class="ruby-identifier">command_state</span>)
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\:\:/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span>
+              <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-operator">||</span>
+              <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_class</span> <span class="ruby-operator">||</span>
+              (<span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span>)) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;::&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tCOLON3</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_dot</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;::&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tCOLON2</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">:expr_end</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">:expr_endarg</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/:([a-zA-Z_]\w*(?:[?!]|=(?!&gt;))?)/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>[<span class="ruby-value">1</span>]
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSYMBOL</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\:/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-comment cmt"># ?: / then / when</span>
+          <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_end</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_endarg</span><span class="ruby-operator">||</span>
+              <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\s/</span>)) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;:&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tCOLON</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">case</span>
+          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\'/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-constant">STR_SSYM</span>, <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>, <span class="ruby-value str">&quot;\0&quot;</span>]
+          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&quot;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-constant">STR_DSYM</span>, <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>, <span class="ruby-value str">&quot;\0&quot;</span>]
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_fname</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;:&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSYMBEG</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/[0-9]/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">parse_number</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\[/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">result</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_fname</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_dot</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_arg</span>
+            <span class="ruby-keyword kw">case</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\]\=/</span>) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;[]=&quot;</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tASET</span>
+            <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\]/</span>) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;[]&quot;</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tAREF</span>
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;unexpected '['&quot;</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">result</span> = <span class="ruby-identifier">:tLBRACK</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">result</span> = <span class="ruby-identifier">:tLBRACK</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">expr_beg_push</span> <span class="ruby-value str">&quot;[&quot;</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\'(\\.|[^\'])*\'/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-2</span>].<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\\\\/</span>, <span class="ruby-value str">&quot;\\&quot;</span>).<span class="ruby-identifier">gsub</span>(<span class="ruby-regexp re">/\\'/</span>, <span class="ruby-value str">&quot;'&quot;</span>)
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSTRING</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\|/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\|\|\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;||&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\|\|/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;||&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOROP</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\|\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;|&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\|/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;|&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tPIPE</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\{/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_end</span> <span class="ruby-keyword kw">then</span>
+                     <span class="ruby-identifier">:tLCURLY</span>      <span class="ruby-comment cmt">#  block (primary)</span>
+                   <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_endarg</span> <span class="ruby-keyword kw">then</span>
+                     <span class="ruby-identifier">:tLBRACE_ARG</span>  <span class="ruby-comment cmt">#  block (expr)</span>
+                   <span class="ruby-keyword kw">else</span>
+                     <span class="ruby-identifier">:tLBRACE</span>      <span class="ruby-comment cmt">#  hash</span>
+                   <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">expr_beg_push</span> <span class="ruby-value str">&quot;{&quot;</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[+-]/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">sign</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+          <span class="ruby-identifier">utype</span>, <span class="ruby-identifier">type</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">sign</span> <span class="ruby-operator">==</span> <span class="ruby-value str">&quot;+&quot;</span> <span class="ruby-keyword kw">then</span>
+                          [<span class="ruby-identifier">:tUPLUS</span>, <span class="ruby-identifier">:tPLUS</span>]
+                        <span class="ruby-keyword kw">else</span>
+                          [<span class="ruby-identifier">:tUMINUS</span>, <span class="ruby-identifier">:tMINUS</span>]
+                        <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_fname</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_dot</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_arg</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/@/</span>) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-node">&quot;#{sign}@&quot;</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">utype</span>
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">sign</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">type</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">sign</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> (<span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-operator">||</span>
+              (<span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\s/</span>))) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-identifier">arg_ambiguous</span>
+            <span class="ruby-keyword kw">end</span>
+
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">sign</span>
+
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\d/</span>) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">utype</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:tUPLUS</span> <span class="ruby-keyword kw">then</span>
+                <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">parse_number</span>
+              <span class="ruby-keyword kw">else</span>
+                <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tUMINUS_NUM</span>
+              <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">end</span>
+
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">utype</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">sign</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">type</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\*/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\*\*=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;**&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\*\*/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;**&quot;</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tPOW</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\*\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;*&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\*/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\S/</span>) <span class="ruby-keyword kw">then</span>
+                       <span class="ruby-identifier">warning</span>(<span class="ruby-value str">&quot;`*' interpreted as argument prefix&quot;</span>)
+                       <span class="ruby-identifier">:tSTAR</span>
+                     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-keyword kw">then</span>
+                       <span class="ruby-identifier">:tSTAR</span>
+                     <span class="ruby-keyword kw">else</span>
+                       <span class="ruby-identifier">:tSTAR2</span>
+                     <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;*&quot;</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\!/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\!\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;!=&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tNEQ</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\!~/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;!~&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tNMATCH</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\!/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;!&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tBANG</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\&lt;/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&lt;\=\&gt;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&lt;=&gt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tCMP</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&lt;\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&lt;=&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tLEQ</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&lt;\&lt;\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;\&lt;\&lt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&lt;\&lt;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">if</span> (<span class="ruby-operator">!</span> [<span class="ruby-identifier">:expr_end</span>,    <span class="ruby-identifier">:expr_dot</span>,
+                   <span class="ruby-identifier">:expr_endarg</span>, <span class="ruby-identifier">:expr_class</span>].<span class="ruby-identifier">include?</span>(<span class="ruby-identifier">lex_state</span>) <span class="ruby-operator">&amp;&amp;</span>
+                (<span class="ruby-operator">!</span><span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">space_seen</span>)) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-identifier">tok</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">heredoc_identifier</span>
+              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">tok</span> <span class="ruby-keyword kw">then</span>
+                <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">tok</span>
+              <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">end</span>
+
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;\&lt;\&lt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tLSHFT</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&lt;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&lt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tLT</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\&gt;/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&gt;\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&gt;=&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tGEQ</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&gt;\&gt;=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&gt;&gt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&gt;\&gt;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&gt;&gt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tRSHFT</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&gt;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&gt;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tGT</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\`/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;`&quot;</span>
+          <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">lex_state</span>
+          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:expr_fname</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tBACK_REF2</span>
+          <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:expr_dot</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">command_state</span> <span class="ruby-keyword kw">then</span>
+                               <span class="ruby-identifier">:expr_cmdarg</span>
+                             <span class="ruby-keyword kw">else</span>
+                               <span class="ruby-identifier">:expr_arg</span>
+                             <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tBACK_REF2</span>
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-constant">STR_XQUOTE</span>, <span class="ruby-value str">'`'</span>, <span class="ruby-value str">&quot;\0&quot;</span>]
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tXSTRING_BEG</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\?/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_end</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_endarg</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;?&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tEH</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">eos?</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;incomplete character syntax&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\s|\v/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-identifier">c2</span> = { <span class="ruby-value str">&quot; &quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'s'</span>,
+                    <span class="ruby-value str">&quot;\n&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'n'</span>,
+                    <span class="ruby-value str">&quot;\t&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'t'</span>,
+                    <span class="ruby-value str">&quot;\v&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'v'</span>,
+                    <span class="ruby-value str">&quot;\r&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'r'</span>,
+                    <span class="ruby-value str">&quot;\f&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">'f'</span> }[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>]
+
+              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c2</span> <span class="ruby-keyword kw">then</span>
+                <span class="ruby-identifier">warning</span>(<span class="ruby-value str">&quot;invalid character syntax; use ?\\&quot;</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">c2</span>)
+              <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">end</span>
+
+            <span class="ruby-comment cmt"># ternary</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;?&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tEH</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\w(?=\w)/</span>) <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># ternary, also</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;?&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tEH</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-identifier">c</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\\/</span>) <span class="ruby-keyword kw">then</span>
+                <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">read_escape</span>
+              <span class="ruby-keyword kw">else</span>
+                <span class="ruby-identifier">src</span>.<span class="ruby-identifier">getch</span>
+              <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">ord</span> <span class="ruby-operator">&amp;</span> <span class="ruby-value">0xff</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tINTEGER</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\&amp;/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&amp;\&amp;\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&amp;&amp;&quot;</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&amp;\&amp;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&amp;&amp;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tANDOP</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\&amp;\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&amp;&quot;</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/&amp;/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-operator">&amp;&amp;</span>
+                         <span class="ruby-operator">!</span><span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\s/</span>) <span class="ruby-keyword kw">then</span>
+                       <span class="ruby-identifier">warning</span>(<span class="ruby-value str">&quot;`&amp;' interpreted as argument prefix&quot;</span>)
+                       <span class="ruby-identifier">:tAMPER</span>
+                     <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-keyword kw">then</span>
+                       <span class="ruby-identifier">:tAMPER</span>
+                     <span class="ruby-keyword kw">else</span>
+                       <span class="ruby-identifier">:tAMPER2</span>
+                     <span class="ruby-keyword kw">end</span>
+
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;&amp;&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\//</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-constant">STR_REGEXP</span>, <span class="ruby-value str">'/'</span>, <span class="ruby-value str">&quot;\0&quot;</span>]
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;/&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tREGEXP_BEG</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;/&quot;</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\s/</span>) <span class="ruby-keyword kw">then</span>
+              <span class="ruby-identifier">arg_ambiguous</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-constant">STR_REGEXP</span>, <span class="ruby-value str">'/'</span>, <span class="ruby-value str">&quot;\0&quot;</span>]
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;/&quot;</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tREGEXP_BEG</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;/&quot;</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tDIVIDE</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\^=/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;^&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\^/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;^&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tCARET</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\;/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">command_start</span> = <span class="ruby-keyword kw">true</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;;&quot;</span>
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSEMI</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\~/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_fname</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_dot</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/@/</span>)
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;~&quot;</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tTILDE</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\\/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\n/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lineno</span> = <span class="ruby-keyword kw">nil</span>
+            <span class="ruby-identifier">space_seen</span> = <span class="ruby-keyword kw">true</span>
+            <span class="ruby-keyword kw">next</span>
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;bare backslash only allowed before newline&quot;</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\%/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_beg</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">lex_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_mid</span> <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">parse_quote</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\=/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_beg</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;%&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tOP_ASGN</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lex_state</span>.<span class="ruby-identifier">is_argument</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">space_seen</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\s/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">parse_quote</span>
+          <span class="ruby-keyword kw">end</span>
+
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">fix_arg_lex_state</span>
+          <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;%&quot;</span>
+
+          <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tPERCENT</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\$/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/(\$_)(\w+)/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">process_token</span>(<span class="ruby-identifier">command_state</span>)
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$_/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tGVAR</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$[~*$?!@\/\\;,.=:&lt;&gt;\&quot;]|\$-\w?/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tGVAR</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$([\&amp;\`\'\+])/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-comment cmt"># Explicit reference to these vars as symbols...</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">last_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_fname</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tGVAR</span>
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_sym</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tBACK_REF</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$([1-9]\d*)/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">last_state</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:expr_fname</span> <span class="ruby-keyword kw">then</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tGVAR</span>
+            <span class="ruby-keyword kw">else</span>
+              <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-identifier">src</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_i</span>
+              <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tNTH_REF</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$0/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">process_token</span>(<span class="ruby-identifier">command_state</span>)
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$\W|\$\z/</span>) <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># TODO: remove?</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;$&quot;</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-value str">&quot;$&quot;</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\$\w+/</span>)
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span> = <span class="ruby-identifier">:expr_end</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">process_token</span>(<span class="ruby-identifier">command_state</span>)
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/\_/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">beginning_of_line?</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\__END__(\n|\Z)/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lineno</span> = <span class="ruby-keyword kw">nil</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-constant">RubyLexer</span><span class="ruby-operator">::</span><span class="ruby-constant">EOF</span>
+          <span class="ruby-keyword kw">elsif</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\_\w*/</span>) <span class="ruby-keyword kw">then</span>
+            <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>
+            <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">process_token</span>(<span class="ruby-identifier">command_state</span>)
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span> <span class="ruby-comment cmt"># END OF CASE</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\004|\032|\000/</span>) <span class="ruby-operator">||</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">eos?</span> <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># ^D, ^Z, EOF</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-constant">RubyLexer</span><span class="ruby-operator">::</span><span class="ruby-constant">EOF</span>
+      <span class="ruby-keyword kw">else</span> <span class="ruby-comment cmt"># alpha check</span>
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\W/</span>) <span class="ruby-keyword kw">then</span>
+          <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-node">&quot;Invalid char #{src.matched.inspect} in expression&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">token</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span> <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\w+/</span>)
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">process_token</span>(<span class="ruby-identifier">command_state</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

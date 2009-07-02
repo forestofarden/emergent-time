@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>logop (RubyParser)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/ruby_parser_extras.rb, line 404</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logop</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">left</span>, <span class="ruby-identifier">right</span>) <span class="ruby-comment cmt"># TODO: rename logical_op</span>
+    <span class="ruby-identifier">left</span> = <span class="ruby-identifier">value_expr</span> <span class="ruby-identifier">left</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">left</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">left</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">left</span>.<span class="ruby-identifier">paren</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">node</span>, <span class="ruby-identifier">second</span> = <span class="ruby-identifier">left</span>, <span class="ruby-keyword kw">nil</span>
+
+      <span class="ruby-keyword kw">while</span> (<span class="ruby-identifier">second</span> = <span class="ruby-identifier">node</span>[<span class="ruby-value">2</span>]) <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">second</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">type</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">second</span>.<span class="ruby-identifier">paren</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">node</span> = <span class="ruby-identifier">second</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">2</span>] = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">second</span>, <span class="ruby-identifier">right</span>)
+
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">left</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">type</span>, <span class="ruby-identifier">left</span>, <span class="ruby-identifier">right</span>)
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_aref</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>] <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>)
+    <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>][<span class="ruby-value">0</span>] = <span class="ruby-identifier">:arglist</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>][<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:array</span> <span class="ruby-comment cmt"># REFACTOR</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">node_type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:self</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">new_call</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-value str">&quot;[]&quot;</span><span class="ruby-value str">&quot;[]&quot;</span>, <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">new_call</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>], <span class="ruby-value str">&quot;[]&quot;</span><span class="ruby-value str">&quot;[]&quot;</span>, <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_body</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>]
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>] <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:rescue</span>)
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>]
+
+      <span class="ruby-identifier">resbody</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>]
+
+      <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">resbody</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">resbody</span>
+        <span class="ruby-identifier">resbody</span> = <span class="ruby-identifier">resbody</span>.<span class="ruby-identifier">resbody</span>(<span class="ruby-keyword kw">true</span>)
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+
+      <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = (<span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>]).<span class="ruby-identifier">line</span>
+    <span class="ruby-keyword kw">elsif</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>].<span class="ruby-identifier">nil?</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">warning</span>(<span class="ruby-value str">&quot;else without rescue is useless&quot;</span>)
+      <span class="ruby-identifier">result</span> = <span class="ruby-identifier">block_append</span>(<span class="ruby-identifier">result</span>, <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>])
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:ensure</span>, <span class="ruby-identifier">result</span>, <span class="ruby-identifier">val</span>[<span class="ruby-value">3</span>]).<span class="ruby-identifier">compact</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">val</span>[<span class="ruby-value">3</span>]
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_call</span> <span class="ruby-identifier">recv</span>, <span class="ruby-identifier">meth</span>, <span class="ruby-identifier">args</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:call</span>, <span class="ruby-identifier">recv</span>, <span class="ruby-identifier">meth</span>)
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">recv</span>.<span class="ruby-identifier">line</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">recv</span>
+
+    <span class="ruby-identifier">args</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>)
+    <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:arglist</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:array</span>
+    <span class="ruby-identifier">args</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>, <span class="ruby-identifier">args</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:arglist</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">args</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_case</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">body</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:case</span>, <span class="ruby-identifier">expr</span>)
+    <span class="ruby-identifier">line</span> = (<span class="ruby-identifier">expr</span> <span class="ruby-operator">||</span> <span class="ruby-identifier">body</span>).<span class="ruby-identifier">line</span>
+
+    <span class="ruby-keyword kw">while</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">node_type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:when</span>
+      <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span>
+      <span class="ruby-identifier">body</span> = <span class="ruby-identifier">body</span>.<span class="ruby-identifier">delete_at</span> <span class="ruby-value">3</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt"># else</span>
+    <span class="ruby-identifier">body</span> = <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">body</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:block</span>)
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span>
+
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_class</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">line</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">superclass</span>, <span class="ruby-identifier">body</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">3</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">5</span>]
+    <span class="ruby-identifier">scope</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:scope</span>, <span class="ruby-identifier">body</span>).<span class="ruby-identifier">compact</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:class</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">superclass</span>, <span class="ruby-identifier">scope</span>)
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">comments</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">pop</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_compstmt</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">void_stmts</span>(<span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>])
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">remove_begin</span>(<span class="ruby-identifier">result</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">result</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_defn</span> <span class="ruby-identifier">val</span>
+    (<span class="ruby-identifier">line</span>, <span class="ruby-identifier">bol</span>), <span class="ruby-identifier">name</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">body</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">3</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">4</span>]
+    <span class="ruby-identifier">body</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:nil</span>)
+
+    <span class="ruby-identifier">body</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:block</span>)
+    <span class="ruby-identifier">body</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:block</span>, <span class="ruby-identifier">body</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:block</span>
+
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:defn</span>, <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:scope</span>, <span class="ruby-identifier">body</span>))
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> <span class="ruby-operator">-=</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">bol</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">comments</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">pop</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_defs</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">recv</span>, <span class="ruby-identifier">name</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">body</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">4</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">6</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">7</span>]
+
+    <span class="ruby-identifier">body</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:block</span>)
+    <span class="ruby-identifier">body</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:block</span>, <span class="ruby-identifier">body</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">body</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:block</span>
+
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:defs</span>, <span class="ruby-identifier">recv</span>, <span class="ruby-identifier">name</span>.<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:scope</span>, <span class="ruby-identifier">body</span>))
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">recv</span>.<span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">comments</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">pop</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_for</span> <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">var</span>, <span class="ruby-identifier">body</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:for</span>, <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">var</span>).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">var</span>.<span class="ruby-identifier">line</span>)
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">body</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_if</span> <span class="ruby-identifier">c</span>, <span class="ruby-identifier">t</span>, <span class="ruby-identifier">f</span>
+    <span class="ruby-identifier">l</span> = [<span class="ruby-identifier">c</span>.<span class="ruby-identifier">line</span>, <span class="ruby-identifier">t</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">t</span>.<span class="ruby-identifier">line</span>, <span class="ruby-identifier">f</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">f</span>.<span class="ruby-identifier">line</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">min</span>
+    <span class="ruby-identifier">c</span> = <span class="ruby-identifier">cond</span> <span class="ruby-identifier">c</span>
+    <span class="ruby-identifier">c</span>, <span class="ruby-identifier">t</span>, <span class="ruby-identifier">f</span> = <span class="ruby-identifier">c</span>.<span class="ruby-identifier">last</span>, <span class="ruby-identifier">f</span>, <span class="ruby-identifier">t</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:not</span>
+    <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:if</span>, <span class="ruby-identifier">c</span>, <span class="ruby-identifier">t</span>, <span class="ruby-identifier">f</span>).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">l</span>)
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_iter</span> <span class="ruby-identifier">call</span>, <span class="ruby-identifier">args</span>, <span class="ruby-identifier">body</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:iter</span>)
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">call</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">call</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">args</span>
+    <span class="ruby-identifier">result</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">body</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">body</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_masgn</span> <span class="ruby-identifier">lhs</span>, <span class="ruby-identifier">rhs</span>, <span class="ruby-identifier">wrap</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-identifier">rhs</span> = <span class="ruby-identifier">value_expr</span>(<span class="ruby-identifier">rhs</span>)
+    <span class="ruby-identifier">rhs</span> = <span class="ruby-identifier">lhs</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">?</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:to_ary</span>, <span class="ruby-identifier">rhs</span>) <span class="ruby-operator">:</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:array</span>, <span class="ruby-identifier">rhs</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">wrap</span>
+
+    <span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">delete_at</span> <span class="ruby-value">1</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lhs</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">nil?</span>
+    <span class="ruby-identifier">lhs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rhs</span>
+
+    <span class="ruby-identifier">lhs</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_module</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">line</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">body</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">4</span>]
+    <span class="ruby-identifier">body</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:scope</span>, <span class="ruby-identifier">body</span>).<span class="ruby-identifier">compact</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:module</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">body</span>)
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">comments</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">pop</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_op_asgn</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">lhs</span>, <span class="ruby-identifier">asgn_op</span>, <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">0</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">to_sym</span>, <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+    <span class="ruby-identifier">name</span> = <span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">value</span>
+    <span class="ruby-identifier">arg</span> = <span class="ruby-identifier">remove_begin</span>(<span class="ruby-identifier">arg</span>)
+    <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">asgn_op</span> <span class="ruby-comment cmt"># REFACTOR</span>
+             <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;||&quot;</span><span class="ruby-value str">&quot;||&quot;</span> <span class="ruby-keyword kw">then</span>
+               <span class="ruby-identifier">lhs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">arg</span>
+               <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:op_asgn_or</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gettable</span>(<span class="ruby-identifier">name</span>), <span class="ruby-identifier">lhs</span>)
+             <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;&amp;&amp;&quot;</span><span class="ruby-value str">&quot;&amp;&amp;&quot;</span> <span class="ruby-keyword kw">then</span>
+               <span class="ruby-identifier">lhs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">arg</span>
+               <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:op_asgn_and</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gettable</span>(<span class="ruby-identifier">name</span>), <span class="ruby-identifier">lhs</span>)
+             <span class="ruby-keyword kw">else</span>
+               <span class="ruby-comment cmt"># TODO: why [2] ?</span>
+               <span class="ruby-identifier">lhs</span>[<span class="ruby-value">2</span>] = <span class="ruby-identifier">new_call</span>(<span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">gettable</span>(<span class="ruby-identifier">name</span>), <span class="ruby-identifier">asgn_op</span>,
+                                 <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>, <span class="ruby-identifier">arg</span>))
+               <span class="ruby-identifier">lhs</span>
+             <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_regexp</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">node</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:str</span>, <span class="ruby-value str">''</span>)
+    <span class="ruby-identifier">options</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+
+    <span class="ruby-identifier">o</span>, <span class="ruby-identifier">k</span> = <span class="ruby-value">0</span>, <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-identifier">options</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">//</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-comment cmt"># FIX: this has a better home</span>
+      <span class="ruby-identifier">v</span> = {
+        <span class="ruby-value str">'x'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">EXTENDED</span>,
+        <span class="ruby-value str">'i'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">IGNORECASE</span>,
+        <span class="ruby-value str">'m'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">MULTILINE</span>,
+        <span class="ruby-value str">'o'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ONCE</span>,
+        <span class="ruby-value str">'n'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_NONE</span>,
+        <span class="ruby-value str">'e'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_EUC</span>,
+        <span class="ruby-value str">'s'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_SJIS</span>,
+        <span class="ruby-value str">'u'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_UTF8</span>,
+      }[<span class="ruby-identifier">c</span>]
+      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;unknown regexp option: #{c}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">v</span>
+      <span class="ruby-identifier">o</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">v</span>
+      <span class="ruby-identifier">k</span> = <span class="ruby-identifier">c</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/[esu]/</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:str</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:lit</span>
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>] = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">then</span>
+                  <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">o</span>, <span class="ruby-identifier">k</span>)
+                <span class="ruby-keyword kw">else</span>
+                  <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">o</span>)
+                <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:dstr</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/o/</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dregx_once</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dregx</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">node</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">node</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:dregx</span>, <span class="ruby-value str">''</span>, <span class="ruby-identifier">node</span>);
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dregx_once</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/o/</span>
+      <span class="ruby-identifier">node</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">node</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_sclass</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">recv</span>, <span class="ruby-identifier">in_def</span>, <span class="ruby-identifier">in_single</span>, <span class="ruby-identifier">body</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">3</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">4</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">6</span>], <span class="ruby-identifier">val</span>[<span class="ruby-value">7</span>]
+    <span class="ruby-identifier">scope</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:scope</span>, <span class="ruby-identifier">body</span>).<span class="ruby-identifier">compact</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:sclass</span>, <span class="ruby-identifier">recv</span>, <span class="ruby-identifier">scope</span>)
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">in_def</span> = <span class="ruby-identifier">in_def</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">in_single</span> = <span class="ruby-identifier">in_single</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_super</span> <span class="ruby-identifier">args</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">node_type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:block_pass</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:super</span>, <span class="ruby-identifier">args</span>)
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">args</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>)
+      <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:super</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_undef</span> <span class="ruby-identifier">n</span>, <span class="ruby-identifier">m</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">m</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">block_append</span>(<span class="ruby-identifier">n</span>, <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:undef</span>, <span class="ruby-identifier">m</span>))
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:undef</span>, <span class="ruby-identifier">n</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_until</span> <span class="ruby-identifier">block</span>, <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">pre</span>
+    <span class="ruby-identifier">expr</span> = (<span class="ruby-identifier">expr</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:not</span> <span class="ruby-operator">?</span> <span class="ruby-identifier">expr</span>.<span class="ruby-identifier">last</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:not</span>, <span class="ruby-identifier">expr</span>)).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">expr</span>.<span class="ruby-identifier">line</span>)
+    <span class="ruby-identifier">new_while</span> <span class="ruby-identifier">block</span>, <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">pre</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_while</span> <span class="ruby-identifier">block</span>, <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">pre</span>
+    <span class="ruby-identifier">line</span> = [<span class="ruby-identifier">block</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">block</span>.<span class="ruby-identifier">line</span>, <span class="ruby-identifier">expr</span>.<span class="ruby-identifier">line</span>].<span class="ruby-identifier">compact</span>.<span class="ruby-identifier">min</span>
+    <span class="ruby-identifier">block</span>, <span class="ruby-identifier">pre</span> = <span class="ruby-identifier">block</span>.<span class="ruby-identifier">last</span>, <span class="ruby-keyword kw">false</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">block</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:begin</span>
+
+    <span class="ruby-identifier">expr</span> = <span class="ruby-identifier">cond</span> <span class="ruby-identifier">expr</span>
+    <span class="ruby-identifier">result</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">expr</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:not</span> <span class="ruby-keyword kw">then</span>
+               <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:until</span>, <span class="ruby-identifier">expr</span>.<span class="ruby-identifier">last</span>, <span class="ruby-identifier">block</span>, <span class="ruby-identifier">pre</span>)
+             <span class="ruby-keyword kw">else</span>
+               <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:while</span>, <span class="ruby-identifier">expr</span>, <span class="ruby-identifier">block</span>, <span class="ruby-identifier">pre</span>)
+             <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">line</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_xstring</span> <span class="ruby-identifier">str</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">str</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">str</span>[<span class="ruby-value">0</span>]
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:str</span>
+        <span class="ruby-identifier">str</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:xstr</span>
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:dstr</span>
+        <span class="ruby-identifier">str</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dxstr</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">str</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:dxstr</span>, <span class="ruby-value str">''</span>, <span class="ruby-identifier">str</span>)
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">str</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:xstr</span>, <span class="ruby-value str">''</span>)
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_yield</span> <span class="ruby-identifier">args</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-comment cmt"># TODO: raise args.inspect unless [:arglist].include? args.first # HACK</span>
+    <span class="ruby-identifier">raise</span> <span class="ruby-constant">SyntaxError</span>, <span class="ruby-value str">&quot;Block argument should not be given.&quot;</span> <span class="ruby-keyword kw">if</span>
+      <span class="ruby-identifier">args</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">node_type</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:block_pass</span>
+
+    <span class="ruby-identifier">args</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>)
+
+    <span class="ruby-comment cmt"># TODO: I can prolly clean this up</span>
+    <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:arglist</span>       <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:array</span>
+    <span class="ruby-identifier">args</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>, <span class="ruby-identifier">args</span>) <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">first</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">:arglist</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:yield</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>])
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">next_token</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">advance</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">token</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">yacc_value</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">return</span> [<span class="ruby-keyword kw">false</span>, <span class="ruby-value str">'$end'</span>]
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">node_assign</span>(<span class="ruby-identifier">lhs</span>, <span class="ruby-identifier">rhs</span>) <span class="ruby-comment cmt"># TODO: rename new_assign</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">lhs</span>
+
+    <span class="ruby-identifier">rhs</span> = <span class="ruby-identifier">value_expr</span> <span class="ruby-identifier">rhs</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">lhs</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:gasgn</span>, <span class="ruby-identifier">:iasgn</span>, <span class="ruby-identifier">:lasgn</span>, <span class="ruby-identifier">:dasgn</span>, <span class="ruby-identifier">:dasgn_curr</span>,
+      <span class="ruby-identifier">:masgn</span>, <span class="ruby-identifier">:cdecl</span>, <span class="ruby-identifier">:cvdecl</span>, <span class="ruby-identifier">:cvasgn</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">lhs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rhs</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:attrasgn</span>, <span class="ruby-identifier">:call</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">args</span> = <span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">pop</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">Symbol</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">last</span>
+      <span class="ruby-identifier">lhs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">arg_add</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">rhs</span>)
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:const</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">lhs</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:cdecl</span>
+      <span class="ruby-identifier">lhs</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">rhs</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;unknown lhs #{lhs.inspect}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">lhs</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process</span>(<span class="ruby-identifier">str</span>, <span class="ruby-identifier">file</span> = <span class="ruby-value str">&quot;(string)&quot;</span>)
+    <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;bad val: #{str.inspect}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-constant">String</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">str</span>
+
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">file</span> = <span class="ruby-identifier">file</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">src</span> = <span class="ruby-identifier">str</span>
+
+    <span class="ruby-ivar">@yydebug</span> = <span class="ruby-constant">ENV</span>.<span class="ruby-identifier">has_key?</span> <span class="ruby-value str">'DEBUG'</span>
+
+    <span class="ruby-identifier">do_parse</span>
+  <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">alias</span> <span class="ruby-identifier">:parse</span> <span class="ruby-identifier">:process</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">remove_begin</span> <span class="ruby-identifier">node</span>
+    <span class="ruby-identifier">oldnode</span> = <span class="ruby-identifier">node</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">:begin</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">node</span> = <span class="ruby-identifier">node</span>[<span class="ruby-value">-1</span>]
+      <span class="ruby-identifier">node</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">oldnode</span>.<span class="ruby-identifier">line</span>
+    <span class="ruby-keyword kw">end</span>
+    <span class="ruby-identifier">node</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
+    <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">reset</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">in_def</span> = <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">in_single</span> = <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">env</span>.<span class="ruby-identifier">reset</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">comments</span>.<span class="ruby-identifier">clear</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">ret_args</span> <span class="ruby-identifier">node</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">raise</span> <span class="ruby-constant">SyntaxError</span>, <span class="ruby-value str">&quot;block argument should not be given&quot;</span> <span class="ruby-keyword kw">if</span>
+        <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:block_pass</span>
+
+      <span class="ruby-identifier">node</span> = <span class="ruby-identifier">node</span>.<span class="ruby-identifier">last</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:array</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">size</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span>
+      <span class="ruby-comment cmt"># HACK matz wraps ONE of the FOUR splats in a newline to</span>
+      <span class="ruby-comment cmt"># distinguish. I use paren for now. ugh</span>
+      <span class="ruby-identifier">node</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:svalue</span>, <span class="ruby-identifier">node</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:splat</span> <span class="ruby-keyword kw">and</span> <span class="ruby-keyword kw">not</span> <span class="ruby-identifier">node</span>.<span class="ruby-identifier">paren</span>
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:svalue</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:arglist</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>][<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:splat</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">node</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">s</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">result</span> = <span class="ruby-constant">Sexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">line</span> <span class="ruby-operator">||=</span> <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">lineno</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lexer</span>.<span class="ruby-identifier">src</span>          <span class="ruby-comment cmt"># otherwise...</span>
+    <span class="ruby-identifier">result</span>.<span class="ruby-identifier">file</span> = <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">file</span>
+    <span class="ruby-identifier">result</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">value_expr</span> <span class="ruby-identifier">oldnode</span> <span class="ruby-comment cmt"># HACK</span>
+    <span class="ruby-identifier">node</span> = <span class="ruby-identifier">remove_begin</span> <span class="ruby-identifier">oldnode</span>
+    <span class="ruby-identifier">node</span>.<span class="ruby-identifier">line</span> = <span class="ruby-identifier">oldnode</span>.<span class="ruby-identifier">line</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">oldnode</span>
+    <span class="ruby-identifier">node</span>[<span class="ruby-value">2</span>] = <span class="ruby-identifier">value_expr</span>(<span class="ruby-identifier">node</span>[<span class="ruby-value">2</span>]) <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">node</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:if</span>
+    <span class="ruby-identifier">node</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">void_stmts</span> <span class="ruby-identifier">node</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">node</span>
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">node</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] <span class="ruby-operator">==</span> <span class="ruby-identifier">:block</span>
+
+    <span class="ruby-identifier">node</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>] = <span class="ruby-identifier">node</span>[<span class="ruby-value">1</span><span class="ruby-operator">..</span><span class="ruby-value">-1</span>].<span class="ruby-identifier">map</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">n</span><span class="ruby-operator">|</span> <span class="ruby-identifier">remove_begin</span>(<span class="ruby-identifier">n</span>) }
+    <span class="ruby-identifier">node</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">warning</span> <span class="ruby-identifier">s</span>
+    <span class="ruby-comment cmt"># do nothing for now</span>
+  <span class="ruby-keyword kw">end</span>
+
+  <span class="ruby-keyword kw">alias</span> <span class="ruby-identifier">:old_yyerror</span> <span class="ruby-identifier">:yyerror</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">yyerror</span> <span class="ruby-identifier">msg</span>
+    <span class="ruby-comment cmt"># for now do nothing with the msg</span>
+    <span class="ruby-identifier">old_yyerror</span>
+  <span class="ruby-keyword kw">end</span>
+<span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

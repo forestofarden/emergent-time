@@ -1,0 +1,63 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
+  <head>
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <% require_css "emt.css", "#{::RepertoireCore.public_path_for(:stylesheet)}/core.css" %>
+    <% require_css "assemble" %>
+    <%= include_required_css %>
+    
+    <%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery" %>
+    
+    <% require_js 'jquery.metadata' %>
+    <% require_js 'assemble' %>
+    <% require_js 'jquery.hint' %>
+    
+    <script type="text/javascript">
+      <%# TODO.  does Simile require fully-qualified host name here? %>
+      Timeline_ajax_url="/javascripts/timeline/timeline_ajax/simile-ajax-api.js";
+      Timeline_urlPrefix="/javascripts/timeline/timeline_js/";       
+      Timeline_parameters="bundle=true";
+    </script>
+    <% require_js 'timeline/timeline_js/timeline-api' %>
+    <%= include_required_js %>
+    
+    <script type="text/javascript">
+      $().ready(function() {
+        $('.assemble').assemble();
+      });
+    </script>
+    
+    <title><%= @page_title || 'Emergent Time' %></title>
+  </head>
+  <body class="emt">
+	  <div id="container">
+  	  <div id="header">
+        <div id="projectname">
+          <a href="<%= url(:events) %>"><h1>Emergent Time</h1></a>
+          <div id="byline">A collaborative timelining tool for humanists and social scientists.  <a id="docs" class="assemble" href="/docs/intro.html">Read more...</a></div>
+        </div>
+        <div id="logo"><a href="<%= url(:events) %>"><img src="<%= ::RepertoireCore.public_path_for(:image) %>/hyperstudio.jpg" /></a></div>
+        <div id="navigation">
+          <% if session.user %>
+            <%= link_to('My timelines', resource(session.user, :timelines)) %>
+            <%= link_to('Profile', slice_url(:repertoire_core, :user, :shortname => session.user.shortname)) %>
+            <%= link_to('Log off', slice_url(:merb_auth_slice_password, :logout)) %>
+          <% else %>
+            <%= link_to('Sign in', slice_url(:merb_auth_slice_password, :login)) %>
+            <%= link_to('Register', slice_url(:repertoire_core, :signup)) %>
+          <% end %>
+          <script language="javascript">$().ready(function() { $('#search_box input:text').hint(); });</script>
+          <div id='search_box'>
+            <form action='<%= url(:events) %>' method='get'>
+              <input id='term' name='q' type='text' title='Search' value='<%= @search_term %>' autocomplete=off />
+              <input src='/images/search.png' type='image' />
+            </form>
+          </div>
+        </div>  
+        <div class="clear"></div>
+      </div>  
+      <div id="content"><%= catch_content :for_layout %></div>
+      <div class="clear"></div>
+    </div>
+  </body>
+</html>

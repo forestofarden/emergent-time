@@ -1,0 +1,39 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Removes a MIME-type from the mime-type list.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "key<Symbol>:"
+    body: The key that represents the mime-type to remove.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "(Boolean, Hash{Symbol => Object}):"
+    body: If it was present, the old specification of the MIME-type. Same structure
+  type: :NOTE
+- !ruby/struct:SM::Flow::VERB 
+  body: "  as a value in Merb.available_mime_types. False if the key was not present.\n"
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Notes
+- !ruby/struct:SM::Flow::P 
+  body: ":all is the key for */*; It can't be removed."
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::remove_mime_type
+is_singleton: true
+name: remove_mime_type
+params: (key)
+visibility: public

@@ -1,0 +1,26 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "(Array, Hash):"
+    body: the route params for the matched route.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Notes
+- !ruby/struct:SM::Flow::P 
+  body: If the response is an Array then it is considered a direct Rack response to be sent back as a response. Otherwise, the route_params is a Hash with routing data (controller, action, et al).
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Request#rack_response
+is_singleton: false
+name: rack_response
+params: ()
+visibility: public

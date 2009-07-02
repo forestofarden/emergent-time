@@ -1,0 +1,16 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns list of roles directly marked as grantable by this user
+- !ruby/struct:SM::Flow::P 
+  body: If another user is supplied, the result is pruned by their current and pending roles
+- !ruby/struct:SM::Flow::P 
+  body: "Note: will not include roles this user can grant by implication"
+full_name: RepertoireCore::Mixins::UserAuthorization::InstanceMethods#grantable_roles
+is_singleton: false
+name: grantable_roles
+params: (user = nil)
+visibility: public

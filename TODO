@@ -1,0 +1,133 @@
+TASKS BEFORE INTERNAL RELEASE/INVOICE
+
+- test registration
+- remove database password from public git repository
+
+- check popup on menzinga
+
+- some sample data & timelines
+
+- email to Kurt prompting for contract
+- email to IS&T
+- draft invoice
+
+- throw errors on validate throughout
+- css messages in rep-core pages are misaligned
+- should be able to review event comments in the event suggester
+
+- need ajax spinners throughout
+
+- refactor views to use REST effectively with AJAX (after model of timeline_comments)
+- get rid of merb asset helper usage, move into fragment files
+- add event form should save contents of "create your own" fields
+
+- allow event editing [ by owner ] LATER
+- monitor this timeline LATER
+- compare timelines LATER
+- mail notification for timeline/event commenting LATER
+- comment moderation LATER
+- spam control LATER
+
+- filter number of events (for demos in small networks - 500 250 100 50 25 10)  DONE
+- clear event comment form on submit  DONE
+- fix validation problem with need for tab on final field (eval on click outside form? or deactivated button? or hover over disabled submit?) DONE
+- sizing of bubble popup is wrong because of network lag  DONE
+- add another paragraph on intro for emergent  DONE
+- event adder needs source comment field  DONE
+- on login, should go to user's home DONE
+- email Dave about devtools update  DONE
+- reinstall crontab on menzinga  DONE
+- source comments aren't going through  DONE
+- notfound error page  DONE
+- when timeline is empty, css is UGLY  DONE
+- handle when end < start  DONE
+- timeline popup should have tabs or sections:  Usage, and Source critique  DONE
+- submitting a new event comment should then reload the event comments  DONE
+
+- bubble popups shouldn't include current timeline NOT TO DO
+- divide up css into two columns instead of horizontal bands  DONE
+- submitting a new event comment should reload page in bubble  DONE
+- bubble popups miscalculate size since contents loaded via ajax  PARTIALLY DONE
+- get 'add an event' working again  DONE
+- validation on registration page is gone  DONE
+- you are the author of this timeline is in wrong place  DONE
+- css of timelines vs events is borked  DONE
+- in-place editing: return from intro has header (mime type?).  plus updates not going thru.  DONE
+- need to redirect after a title change since permalink is different  DONE
+  
+- css of event add dialog is fucked up DONE
+- make intro box page  DONE
+- write introductory blurbs  DONE
+- get migrations working  DONE
+- event popup should clearly indicate shared timelines  DONE
+- event comments (for source discussion)  DONE
+- timeline hard codes static simile server?!?  DONE
+- garbage collect events  DONE
+- timeline comments ala blog DONE
+- troubleshoot crontab task for ranking  DONE
+- fix launchd misconfiguration for crontab  DONE
+
+- add event form should update suggestions on blur of each field  NOT NECESSARY
+- clicking on event should show list of mugshot / user name / timeline in bubble  DONE
+- rank events and timelines by pagerank citations  DONE
+- related timelines  DONE
+- related users  DONE
+
+- event suggestions should be pruned by the contents of the current timeline  DONE
+- pencil not showing on intro text area  NOT WRONG
+- intro disappears some times  SAFARI BUG  DONE - intermediate fix
+- ranking counter has syntax error  DONE
+
+- select interpretation field after user chooses an existing event DONE
+- somewhere events are getting duplicated  DONE
+- create timeline is failing  DONE
+- move signon / login links  DONE
+- two versions of jquery are clashing in admin pages: move jquery require out to individ. pages  DONE
+- header acceses wrong navigation method on singup form  DONE
+- links on profile age (layout?) to go back  DONE
+
+- timeline should sync up after a search  DEPENDS ON INSIDE-TIMELINE SEARCH
+- clicking on recent event should cue up timeline page to it  DONE
+
+- some timelines are inaccessible from user page  DONE
+- empty timelines are not showing  DONE
+- new timelines have weird numbers  DONE
+
+- on create event, timeline should load with it in center  DONE
+- dotted lines underneath event entries don't go all the way across page  DONE
+- main timeline is not loading DONE
+
+- suggestions of events should be sorted by distance from new one  DONE
+- login page looks goofy, should have blurb  DONE
+- layout should include navigation  DONE
+- rep core pages should use hypertime layout  DONE
+- renaming a timeline needs to change permalink too  DONE
+
+- pretty up the list of events  DONE
+- allow adding an event by dragging and dropping  NOT TO DO
+- search within a timeline (for events) NOT TO DO
+- full text search  DONE
+- navigation needs link to user timelines  DONE
+- delete timeline  DONE
+- deal with events cycle / timelines  DONE
+- make clicking on an event in the list sync up the timeline [ and vice versa ] DONE
+- form for adding a new event DONE
+- collapsable sections NOT TO DO
+
+- attack plan for collaborative timelines:
+
+(0) finish adding a timeline
+
+(1) allow users to add new events on the main page [ below the events list ]  DONE
+  (a) validate form while they're typing  DONE
+(2) allow users to remove events  DONE
+(3) allow users to include events from other pages by drag and drop  NOT TO DO
+(4) top page that shows top 500 events by rank [ w/ full text search ] [ should ft search also do timelines and users? ]  YES - DONE
+(5) rename timeline  DONE
+(6) delete timeline  DONE
+(7) login/logout  DONE
+
+(8) fix login page  DONE
+(9) event detail - show other timelines it's used in  DONE
+
+(10) permalink urls  DONE

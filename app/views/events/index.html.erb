@@ -1,0 +1,67 @@
+<script language="javascript">
+  $().ready(function() {
+    $("#timeline_graph").hover(function() { $("#events_count").fadeIn(); },
+                               function() { $("#events_count").fadeOut(); });
+  });
+</script>
+
+<div class="events_index">
+  <%= tag :div, message[:error], :class => 'error' if message[:error] %>
+  <%= tag :div, message[:notice], :class => 'notice' if message[:notice] %>
+  <div>
+    <div class="clear"></div>
+    <% if @search_term %>
+      <div class="timelines">
+        <h3>Timelines matching '<%= @search_term %>' (<%= @total_timelines %>)</h3>
+        <% if @timelines.empty? %>
+        <p>No results...</p><p>If you're looking for something you just entered, it takes 5 minutes to index new changes.</p>
+        <% end %>
+        <% @timelines.each do |tl| %>
+        <div class="timeline">
+          <%= partial './timeline_stats', :timeline => tl %>
+          <div class="clear"></div>
+        </div>
+        <% end %>
+      </div>
+    <% else %>
+    <div class="timelines">
+      <h3>Recent additions</h3>
+      <% @timelines.each do |tl| %>
+        <% te = tl.recent_event %>
+        <div class="timeline">
+          <%= partial './timeline_stats', :timeline => tl, :cue_event => te.event %>
+          <div class="event">
+          <a href="<%= resource(tl.user, tl, :cue => te.event) %>">
+            <div class="dates"><%= te.event.start.formatted(:long) %><%= te.event.end.blank? ? '' : " &mdash; #{te.event.end.formatted(:long)}" %></div>
+            <div class="title"><%= te.event.title %></div>
+            <div class="description"><%= te.event.description %></div>
+            <div class="interpretation"><%= te.interpretation %></div>
+            </a>
+          </div>
+          <div class="clear"></div>
+        </div>
+      <% end %>
+    </div>
+    <% end %>
+    <div class="most_cited">
+      <div id="timeline_graph">
+        <h3><div id="timeline_caption">Most cited events<%= " matching '#{@search_term}' (total #{@total_events})" if @search_term %></div></h3>
+        <div id="events_count" style="display:none">
+          <a href="<%= resource(:events, :q => @search_term, :n => 500)%>" class="<%= 'selected' if (251..500).include?(@limit) %>">500</a>
+          <a href="<%= resource(:events, :q => @search_term, :n => 250)%>" class="<%= 'selected' if (101..250).include?(@limit) %>">250</a>
+          <a href="<%= resource(:events, :q => @search_term, :n => 100)%>" class="<%= 'selected' if (51..100).include?(@limit) %>">100</a>
+          <a href="<%= resource(:events, :q => @search_term, :n => 50)%>" class="<%= 'selected' if (26..50).include?(@limit) %>">50</a>
+          <a href="<%= resource(:events, :q => @search_term, :n => 25)%>" class="<%= 'selected' if (1..25).include?(@limit) %>">25</a>
+        </div>
+        <% unless @top_events.empty? %>
+          <%= partial './timeline', :url => url(:events, :format => :json, :q => @search_term), :cue => best_cue(@top_events.first) %>
+        <% else %>
+          <div class="emt_timeline empty">
+            There are no results.
+          </div>
+        <% end %>
+        <div class="clear"></div>
+      </div>
+    </div>
+  </div>
+</div>

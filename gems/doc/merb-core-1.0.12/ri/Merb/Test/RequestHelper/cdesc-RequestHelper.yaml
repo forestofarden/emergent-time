@@ -1,0 +1,51 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+constants: []
+
+full_name: Merb::Test::RequestHelper
+includes: 
+- !ruby/object:RI::IncludedModule 
+  name: MakeRequest
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: build_request
+- !ruby/object:RI::MethodSummary 
+  name: check_request_for_route
+- !ruby/object:RI::MethodSummary 
+  name: delete
+- !ruby/object:RI::MethodSummary 
+  name: describe_input
+- !ruby/object:RI::MethodSummary 
+  name: describe_request
+- !ruby/object:RI::MethodSummary 
+  name: dispatch_request
+- !ruby/object:RI::MethodSummary 
+  name: dispatch_to
+- !ruby/object:RI::MethodSummary 
+  name: dispatch_with_basic_authentication_to
+- !ruby/object:RI::MethodSummary 
+  name: fake_request
+- !ruby/object:RI::MethodSummary 
+  name: get
+- !ruby/object:RI::MethodSummary 
+  name: merge_controller_and_action
+- !ruby/object:RI::MethodSummary 
+  name: mock_request
+- !ruby/object:RI::MethodSummary 
+  name: post
+- !ruby/object:RI::MethodSummary 
+  name: put
+- !ruby/object:RI::MethodSummary 
+  name: requesting
+- !ruby/object:RI::MethodSummary 
+  name: response_for
+- !ruby/object:RI::MethodSummary 
+  name: status_code
+- !ruby/object:RI::MethodSummary 
+  name: with_cookies
+name: RequestHelper
+superclass: 

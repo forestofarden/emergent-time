@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>heredoc_identifier (RubyLexer)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/ruby_lexer.rb, line 156</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">heredoc_identifier</span> <span class="ruby-comment cmt"># 51 lines</span>
+    <span class="ruby-identifier">term</span>, <span class="ruby-identifier">func</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-constant">STR_FUNC_BORING</span>
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">string_buffer</span> = []
+
+    <span class="ruby-keyword kw">case</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/(-?)(['&quot;`])(.*?)\2/</span>) <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">term</span> = <span class="ruby-identifier">src</span>[<span class="ruby-value">2</span>]
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">src</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">empty?</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">func</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">STR_FUNC_INDENT</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">func</span> <span class="ruby-operator">|=</span> <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">term</span>
+              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">&quot;\'&quot;</span> <span class="ruby-keyword kw">then</span>
+                <span class="ruby-constant">STR_SQUOTE</span>
+              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'&quot;'</span> <span class="ruby-keyword kw">then</span>
+                <span class="ruby-constant">STR_DQUOTE</span>
+              <span class="ruby-keyword kw">else</span>
+                <span class="ruby-constant">STR_XQUOTE</span>
+              <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">string_buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">src</span>[<span class="ruby-value">3</span>]
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/-?(['&quot;`])(?!\1*\Z)/</span>) <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;unterminated here document identifier&quot;</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/(-?)(\w+)/</span>) <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">term</span> = <span class="ruby-value str">'&quot;'</span>
+      <span class="ruby-identifier">func</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">STR_DQUOTE</span>
+      <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">src</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">empty?</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">func</span> <span class="ruby-operator">|=</span> <span class="ruby-constant">STR_FUNC_INDENT</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">string_buffer</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">src</span>[<span class="ruby-value">2</span>]
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">check</span>(<span class="ruby-regexp re">/.*\n/</span>) <span class="ruby-keyword kw">then</span>
+      <span class="ruby-comment cmt"># TODO: think about storing off the char range instead</span>
+      <span class="ruby-identifier">line</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">string</span>[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">pos</span>, <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched_size</span>]
+      <span class="ruby-identifier">src</span>.<span class="ruby-identifier">string</span>[<span class="ruby-identifier">src</span>.<span class="ruby-identifier">pos</span>, <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched_size</span>] = <span class="ruby-value str">&quot;\n&quot;</span>
+      <span class="ruby-identifier">src</span>.<span class="ruby-identifier">pos</span> <span class="ruby-operator">+=</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">line</span> = <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:heredoc</span>, <span class="ruby-identifier">string_buffer</span>.<span class="ruby-identifier">join</span>, <span class="ruby-identifier">func</span>, <span class="ruby-identifier">line</span>]
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">term</span> <span class="ruby-operator">==</span> <span class="ruby-value str">'`'</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;`&quot;</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tXSTRING_BEG</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-value str">&quot;\&quot;&quot;</span>
+      <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">:tSTRING_BEG</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

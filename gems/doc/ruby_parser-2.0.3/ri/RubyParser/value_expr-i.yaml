@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser#value_expr
+is_singleton: false
+name: value_expr
+params: (oldnode
+visibility: public

@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: the whole nested set this node belongs to. served flat like a pancake!
+full_name: DataMapper::Is::NestedSet::InstanceMethods#nested_set
+is_singleton: false
+name: nested_set
+params: ()
+visibility: public

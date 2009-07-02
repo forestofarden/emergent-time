@@ -1,0 +1,318 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DEFAULT_SEND_FILE_OPTIONS
+  value: "{       :type         => 'application/octet-stream'.freeze,       :disposition  => 'attachment'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: RACK_INPUT
+  value: "'rack.input'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SET_COOKIE
+  value: "\" %s=%s; path=/; expires=%s\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: COOKIE_EXPIRATION_FORMAT
+  value: "\"%a, %d-%b-%Y %H:%M:%S GMT\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: COOKIE_SPLIT
+  value: /[;,] */n.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: COOKIE_REGEXP
+  value: /\s*(.+)=(.*)\s*/.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: COOKIE_EXPIRED_TIME
+  value: Time.at(0).freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: ACCEPT_SPLIT
+  value: /,/.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SLASH_SPLIT
+  value: "%r{/}.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: MEDIA_RANGE
+  value: /\s*([^;\s]*)\s*(;\s*q=\s*(.*))?/.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HOUR
+  value: 60 * 60
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DAY
+  value: HOUR * 24
+- !ruby/object:RI::Constant 
+  comment: 
+  name: WEEK
+  value: DAY * 7
+- !ruby/object:RI::Constant 
+  comment: 
+  name: MULTIPART_REGEXP
+  value: /\Amultipart\/form-data.*boundary=\"?([^\";,]+)/n.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_COOKIE
+  value: "'HTTP_COOKIE'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: QUERY_STRING
+  value: "'QUERY_STRING'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: JSON_MIME_TYPE_REGEXP
+  value: "%r{^application/json|^text/x-json}.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: XML_MIME_TYPE_REGEXP
+  value: "%r{^application/xml|^text/xml}.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: FORM_URL_ENCODED_REGEXP
+  value: "%r{^application/x-www-form-urlencoded}.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: LOCAL_IP_REGEXP
+  value: /^unknown$|^(127|10|172\.16|192\.168)\.|^(172\.(1[6-9]|2[0-9]|3[0-1]))\.|^(169\.254)\./i.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: XML_HTTP_REQUEST_REGEXP
+  value: /XMLHttpRequest/i.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: UPCASE_CONTENT_TYPE
+  value: "'CONTENT_TYPE'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: CONTENT_TYPE
+  value: "\"Content-Type\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DATE
+  value: "'Date'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: UPCASE_HTTPS
+  value: "'HTTPS'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTPS
+  value: "'https'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP
+  value: "'http'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: ETAG
+  value: "'ETag'.freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: LAST_MODIFIED
+  value: "\"Last-Modified\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: GET
+  value: "\"GET\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: POST
+  value: "\"POST\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HEAD
+  value: "\"HEAD\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: CONTENT_LENGTH
+  value: "\"CONTENT_LENGTH\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_CLIENT_IP
+  value: "\"HTTP_CLIENT_IP\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_X_REQUESTED_WITH
+  value: "\"HTTP_X_REQUESTED_WITH\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_X_FORWARDED_FOR
+  value: "\"HTTP_X_FORWARDED_FOR\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_X_FORWARDED_PROTO
+  value: "\"HTTP_X_FORWARDED_PROTO\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_X_FORWARDED_HOST
+  value: "\"HTTP_X_FORWARDED_HOST\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_IF_MODIFIED_SINCE
+  value: "\"HTTP_IF_MODIFIED_SINCE\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_IF_NONE_MATCH
+  value: "\"HTTP_IF_NONE_MATCH\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_CONTENT_TYPE
+  value: "\"HTTP_CONTENT_TYPE\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_CONTENT_LENGTH
+  value: "\"HTTP_CONTENT_LENGTH\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_REFERER
+  value: "\"HTTP_REFERER\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_USER_AGENT
+  value: "\"HTTP_USER_AGENT\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_HOST
+  value: "\"HTTP_HOST\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_CONNECTION
+  value: "\"HTTP_CONNECTION\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_KEEP_ALIVE
+  value: "\"HTTP_KEEP_ALIVE\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_ACCEPT
+  value: "\"HTTP_ACCEPT\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_ACCEPT_ENCODING
+  value: "\"HTTP_ACCEPT_ENCODING\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_ACCEPT_LANGUAGE
+  value: "\"HTTP_ACCEPT_LANGUAGE\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_ACCEPT_CHARSET
+  value: "\"HTTP_ACCEPT_CHARSET\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_CACHE_CONTROL
+  value: "\"HTTP_CACHE_CONTROL\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: UPLOAD_ID
+  value: "\"upload_id\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: PATH_INFO
+  value: "\"PATH_INFO\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: HTTP_VERSION
+  value: "\"HTTP_VERSION\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: GATEWAY_INTERFACE
+  value: "\"GATEWAY_INTERFACE\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SCRIPT_NAME
+  value: "\"SCRIPT_NAME\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SERVER_NAME
+  value: "\"SERVER_NAME\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SERVER_SOFTWARE
+  value: "\"SERVER_SOFTWARE\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SERVER_PROTOCOL
+  value: "\"SERVER_PROTOCOL\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SERVER_PORT
+  value: "\"SERVER_PORT\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: REQUEST_URI
+  value: "\"REQUEST_URI\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: REQUEST_PATH
+  value: "\"REQUEST_PATH\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: REQUEST_METHOD
+  value: "\"REQUEST_METHOD\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: REMOTE_ADDR
+  value: "\"REMOTE_ADDR\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: BREAK_TAG
+  value: "\"<br/>\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: EMPTY_STRING
+  value: "\"\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: NEWLINE
+  value: "\"\\n\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: SLASH
+  value: "\"/\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DOT
+  value: "\".\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: QUESTION_MARK
+  value: "\"?\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: DOUBLE_NEWLINE
+  value: "\"\\n\\n\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: LOCATION
+  value: "\"Location\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: TEXT_SLASH_HTML
+  value: "\"text/html\".freeze"
+- !ruby/object:RI::Constant 
+  comment: 
+  name: WIN_PLATFORM_REGEXP
+  value: /(:?mswin|mingw)/.freeze
+- !ruby/object:RI::Constant 
+  comment: 
+  name: JAVA_PLATFORM_REGEXP
+  value: /java/.freeze
+full_name: Merb::Const
+includes: []
+
+instance_methods: []
+
+name: Const
+superclass: 

@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::Router::Resources#register_resource
+is_singleton: false
+name: register_resource
+params: (*key)
+visibility: protected

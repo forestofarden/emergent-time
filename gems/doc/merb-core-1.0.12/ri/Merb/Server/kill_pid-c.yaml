@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "Sends the provided signal to the process pointed at by the provided pid file. :api: private"
+full_name: Merb::Server::kill_pid
+is_singleton: true
+name: kill_pid
+params: (sig, file)
+visibility: public

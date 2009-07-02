@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyLexer#expr_beg_push
+is_singleton: false
+name: expr_beg_push
+params: (val)
+visibility: public

@@ -1,0 +1,61 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: "[]"
+- !ruby/object:RI::MethodSummary 
+  name: activate
+- !ruby/object:RI::MethodSummary 
+  name: activate_by_file
+- !ruby/object:RI::MethodSummary 
+  name: config
+- !ruby/object:RI::MethodSummary 
+  name: deactivate
+- !ruby/object:RI::MethodSummary 
+  name: deactivate_by_file
+- !ruby/object:RI::MethodSummary 
+  name: each_slice
+- !ruby/object:RI::MethodSummary 
+  name: exists?
+- !ruby/object:RI::MethodSummary 
+  name: filename2module
+- !ruby/object:RI::MethodSummary 
+  name: files
+- !ruby/object:RI::MethodSummary 
+  name: named_routes
+- !ruby/object:RI::MethodSummary 
+  name: paths
+- !ruby/object:RI::MethodSummary 
+  name: register
+- !ruby/object:RI::MethodSummary 
+  name: register_slices_from_search_path!
+- !ruby/object:RI::MethodSummary 
+  name: reload
+- !ruby/object:RI::MethodSummary 
+  name: reload_by_file
+- !ruby/object:RI::MethodSummary 
+  name: slice_files_from_search_path
+- !ruby/object:RI::MethodSummary 
+  name: slice_names
+- !ruby/object:RI::MethodSummary 
+  name: slices
+- !ruby/object:RI::MethodSummary 
+  name: start_dynamic_loader!
+- !ruby/object:RI::MethodSummary 
+  name: stop_dynamic_loader!
+- !ruby/object:RI::MethodSummary 
+  name: unregister
+comment: 
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  name: VERSION
+  value: "\"0.9.8\""
+full_name: Merb::Slices
+includes: []
+
+instance_methods: []
+
+name: Slices
+superclass: 

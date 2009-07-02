@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: Merb::Router::Resources#resource_options
+is_singleton: false
+name: resource_options
+params: ()
+visibility: protected

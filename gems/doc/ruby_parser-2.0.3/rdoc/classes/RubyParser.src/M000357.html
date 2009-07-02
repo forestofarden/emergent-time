@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>get_match_node (RubyParser)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/ruby_parser_extras.rb, line 279</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">get_match_node</span> <span class="ruby-identifier">lhs</span>, <span class="ruby-identifier">rhs</span> <span class="ruby-comment cmt"># TODO: rename to new_match</span>
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">lhs</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">lhs</span>[<span class="ruby-value">0</span>]
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:dregx</span>, <span class="ruby-identifier">:dregx_once</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:match2</span>, <span class="ruby-identifier">lhs</span>, <span class="ruby-identifier">rhs</span>).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:lit</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:match2</span>, <span class="ruby-identifier">lhs</span>, <span class="ruby-identifier">rhs</span>).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">line</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Regexp</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">last</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">rhs</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">rhs</span>[<span class="ruby-value">0</span>]
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:dregx</span>, <span class="ruby-identifier">:dregx_once</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:match3</span>, <span class="ruby-identifier">rhs</span>, <span class="ruby-identifier">lhs</span>).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">line</span>)
+      <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:lit</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:match3</span>, <span class="ruby-identifier">rhs</span>, <span class="ruby-identifier">lhs</span>).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">line</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Regexp</span> <span class="ruby-operator">===</span> <span class="ruby-identifier">rhs</span>.<span class="ruby-identifier">last</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:call</span>, <span class="ruby-identifier">lhs</span>, <span class="ruby-value str">&quot;=~&quot;</span><span class="ruby-value str">&quot;=~&quot;</span>, <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:arglist</span>, <span class="ruby-identifier">rhs</span>)).<span class="ruby-identifier">line</span>(<span class="ruby-identifier">lhs</span>.<span class="ruby-identifier">line</span>)
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

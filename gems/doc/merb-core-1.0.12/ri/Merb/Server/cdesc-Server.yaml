@@ -1,0 +1,50 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: _change_privilege
+- !ruby/object:RI::MethodSummary 
+  name: add_irb_trap
+- !ruby/object:RI::MethodSummary 
+  name: alive?
+- !ruby/object:RI::MethodSummary 
+  name: bootup
+- !ruby/object:RI::MethodSummary 
+  name: change_privilege
+- !ruby/object:RI::MethodSummary 
+  name: daemonize
+- !ruby/object:RI::MethodSummary 
+  name: kill
+- !ruby/object:RI::MethodSummary 
+  name: kill_pid
+- !ruby/object:RI::MethodSummary 
+  name: pid_file
+- !ruby/object:RI::MethodSummary 
+  name: pid_files
+- !ruby/object:RI::MethodSummary 
+  name: pid_in_file
+- !ruby/object:RI::MethodSummary 
+  name: remove_pid
+- !ruby/object:RI::MethodSummary 
+  name: remove_pid_file
+- !ruby/object:RI::MethodSummary 
+  name: shutdown
+- !ruby/object:RI::MethodSummary 
+  name: start
+- !ruby/object:RI::MethodSummary 
+  name: store_details
+- !ruby/object:RI::MethodSummary 
+  name: store_pid
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Server encapsulates the management of Merb daemons.
+constants: []
+
+full_name: Merb::Server
+includes: []
+
+instance_methods: []
+
+name: Server
+superclass: Object

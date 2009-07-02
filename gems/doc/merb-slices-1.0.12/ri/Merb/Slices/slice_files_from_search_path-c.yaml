@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Slice file locations from all search paths; this default to host-app/slices.
+- !ruby/struct:SM::Flow::P 
+  body: Look for any slices in those default locations or if given, Merb::Plugins.config[:merb_slices][:search_path] (String/Array). Specify files, glob patterns or paths containing slices.
+full_name: Merb::Slices::slice_files_from_search_path
+is_singleton: true
+name: slice_files_from_search_path
+params: ()
+visibility: public

@@ -1,0 +1,28 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: expected_value
+- !ruby/object:RI::MethodSummary 
+  name: failure_message
+- !ruby/object:RI::MethodSummary 
+  name: matches
+- !ruby/object:RI::MethodSummary 
+  name: message
+- !ruby/object:RI::MethodSummary 
+  name: negative_failure_message
+comment: 
+constants: []
+
+full_name: Spec::Matchers::MatcherDSL
+includes: 
+- !ruby/object:RI::IncludedModule 
+  name: Merb::Test::RouteHelper
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: failure_message
+- !ruby/object:RI::MethodSummary 
+  name: negative_failure_message
+name: MatcherDSL
+superclass: Object

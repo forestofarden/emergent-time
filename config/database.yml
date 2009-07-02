@@ -1,0 +1,28 @@
+development: &defaults
+  # These are the settings for repository :default
+  adapter:  postgresql
+  database: hyperstudio_development
+  username: emt
+  password: 
+  host:     localhost
+ 
+test:
+  <<:       *defaults
+  database: hyperstudio_test
+ 
+production:
+  <<:       *defaults
+  password: 
+  database: hyperstudio_production
+  host: menzinga.mit.edu
+ 
+rake:
+  <<: *defaults
+  repositories:
+    core:
+      # admin access to public repertoire core tables
+      adapter:  postgresql
+      database: hyperstudio_development
+      username: postgres
+      password: 
+      host:     localhost

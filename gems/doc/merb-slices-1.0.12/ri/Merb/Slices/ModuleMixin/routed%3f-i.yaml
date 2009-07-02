@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Check if there have been any routes setup.
+full_name: Merb::Slices::ModuleMixin#routed?
+is_singleton: false
+name: routed?
+params: ()
+visibility: public

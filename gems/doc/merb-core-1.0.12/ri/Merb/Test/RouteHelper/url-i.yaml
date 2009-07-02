@@ -1,0 +1,89 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: There are three possible ways to use this method. First, if you have a named route, you can specify the route as the first parameter as a symbol and any paramters in a hash. Second, you can generate the default route by just passing the params hash, just passing the params hash. Finally, you can use the anonymous parameters. This allows you to specify the parameters to a named route in the order they appear in the router.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters(Named Route)
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "name<Symbol>:"
+    body: The name of the route.
+  - !ruby/struct:SM::Flow::LI 
+    label: "args<Hash>:"
+    body: Parameters for the route generation.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters(Default Route)
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "args<Hash>:"
+    body: Parameters for the route generation. This route will use the default route.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters(Anonymous Parameters)
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "name<Symbol>:"
+    body: The name of the route.
+  - !ruby/struct:SM::Flow::LI 
+    label: "args<Array>:"
+    body: An array of anonymous parameters to generate the route with. These parameters are assigned to the route parameters in the order that they are passed.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "String:"
+    body: The generated URL.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Examples
+- !ruby/struct:SM::Flow::P 
+  body: Named Route
+- !ruby/struct:SM::Flow::P 
+  body: Merb::Router.prepare do
+- !ruby/struct:SM::Flow::VERB 
+  body: "  match(&quot;/articles/:title&quot;).to(:controller =&gt; :articles, :action =&gt; :show).name(&quot;articles&quot;)\n"
+- !ruby/struct:SM::Flow::P 
+  body: end
+- !ruby/struct:SM::Flow::P 
+  body: url(:articles, :title =&gt; &quot;new_article&quot;)
+- !ruby/struct:SM::Flow::P 
+  body: Default Route
+- !ruby/struct:SM::Flow::P 
+  body: Merb::Router.prepare do
+- !ruby/struct:SM::Flow::VERB 
+  body: "  default_routes\n"
+- !ruby/struct:SM::Flow::P 
+  body: end
+- !ruby/struct:SM::Flow::P 
+  body: url(:controller =&gt; &quot;articles&quot;, :action =&gt; &quot;new&quot;)
+- !ruby/struct:SM::Flow::P 
+  body: Anonymous Paramters
+- !ruby/struct:SM::Flow::P 
+  body: Merb::Router.prepare do
+- !ruby/struct:SM::Flow::VERB 
+  body: "  match(&quot;/articles/:year/:month/:title&quot;).to(:controller =&gt; :articles, :action =&gt; :show).name(&quot;articles&quot;)\n"
+- !ruby/struct:SM::Flow::P 
+  body: end
+- !ruby/struct:SM::Flow::P 
+  body: url(:articles, 2008, 10, &quot;test_article&quot;)
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::Test::RouteHelper#url
+is_singleton: false
+name: url
+params: (*args)
+visibility: public

@@ -1,0 +1,32 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Returns the value of self for each argument and deletes those entries.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "*args:"
+    body: the keys whose values should be extracted and deleted.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "Array[Object]:"
+    body: The values of the provided arguments in corresponding order.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Hash#extract!
+is_singleton: false
+name: extract!
+params: (*args)
+visibility: public

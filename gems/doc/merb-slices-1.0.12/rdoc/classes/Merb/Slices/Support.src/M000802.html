@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>slice_url (Merb::Slices::Support)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-slices/controller_mixin.rb, line 25</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">slice_url</span>(<span class="ruby-identifier">slice_name</span>, <span class="ruby-operator">*</span><span class="ruby-identifier">args</span>)
+        <span class="ruby-identifier">opts</span> = <span class="ruby-identifier">args</span>.<span class="ruby-identifier">last</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Hash</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">pop</span> <span class="ruby-operator">:</span> {}
+        <span class="ruby-identifier">route_name</span> = <span class="ruby-identifier">args</span>[<span class="ruby-value">0</span>].<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">Symbol</span>) <span class="ruby-operator">?</span> <span class="ruby-identifier">args</span>.<span class="ruby-identifier">shift</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">:default</span>
+        
+        <span class="ruby-identifier">routes</span> = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Slices</span>.<span class="ruby-identifier">named_routes</span>[<span class="ruby-identifier">slice_name</span>]
+        <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">routes</span> <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">route</span> = <span class="ruby-identifier">routes</span>[<span class="ruby-identifier">route_name</span>]
+          <span class="ruby-identifier">raise</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Router</span><span class="ruby-operator">::</span><span class="ruby-constant">GenerationError</span>, <span class="ruby-node">&quot;Named route not found: #{route_name}&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-identifier">args</span>.<span class="ruby-identifier">push</span>(<span class="ruby-identifier">opts</span>)
+        <span class="ruby-identifier">route</span>.<span class="ruby-identifier">generate</span>(<span class="ruby-identifier">args</span>, <span class="ruby-identifier">params</span>)
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

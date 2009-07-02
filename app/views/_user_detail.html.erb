@@ -1,0 +1,12 @@
+<% #outputs info about user
+%>
+
+<div class="user_detail">
+<a class="picture" href="<%= resource(user_detail, :timelines) %>"><img src="<%= gravatar_image_url(user_detail.email) %>"/></a>   
+<div class="stats">
+  <a href="<%= resource(user_detail, :timelines) %>" class="name"><%= user_detail.full_name %></a>
+  <div class="email"><%= user_detail.email %></div>
+  <div class="institution"><%= user_detail.institution %></div>
+</div>
+<div style="clear:both"></div>
+</div>

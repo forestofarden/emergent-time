@@ -1,0 +1,39 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Add functionality to the router. This can be in the form of including a new module or directly defining new methods.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "&block<Block>:"
+    body: A block of code used to extend the route builder with. This can be including a module or directly defining some new methods that should be available to building routes.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Returns
+- !ruby/struct:SM::Flow::P 
+  body: nil
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Example
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb::Router.extensions do\n    def domain(name, domain, options={}, &amp;block)\n      match(:domain =&gt; domain).namespace(name, :path =&gt; nil, &amp;block)\n    end\n  end\n"
+- !ruby/struct:SM::Flow::P 
+  body: In this case, a method 'domain' will be available to the route builder which will create namespaces around domains instead of path prefixes.
+- !ruby/struct:SM::Flow::P 
+  body: This can then be used as follows.
+- !ruby/struct:SM::Flow::VERB 
+  body: "  Merb::Router.prepare do\n    domain(:admin, &quot;my-admin.com&quot;) do\n      # ... routes come here ...\n    end\n  end\n"
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::Router::extensions
+is_singleton: true
+name: extensions
+params: (&block)
+visibility: public

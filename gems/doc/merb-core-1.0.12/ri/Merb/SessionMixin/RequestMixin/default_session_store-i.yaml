@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: The default session store type.
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::SessionMixin::RequestMixin#default_session_store
+is_singleton: false
+name: default_session_store
+params: ()
+visibility: public

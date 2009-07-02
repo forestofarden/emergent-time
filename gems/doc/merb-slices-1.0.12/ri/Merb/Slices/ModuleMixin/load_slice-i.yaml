@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Load slice and it's classes located in the slice-level load paths.
+- !ruby/struct:SM::Flow::P 
+  body: "Assigns collected_slice_paths and collected_app_paths, then loads the collected_slice_paths and triggers the #loaded hook method."
+full_name: Merb::Slices::ModuleMixin#load_slice
+is_singleton: false
+name: load_slice
+params: ()
+visibility: public

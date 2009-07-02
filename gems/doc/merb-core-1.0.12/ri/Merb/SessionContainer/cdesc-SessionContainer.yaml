@@ -1,0 +1,40 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: private"
+  name: needs_new_cookie
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: private"
+  name: session_id
+  rw: R
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: generate
+- !ruby/object:RI::MethodSummary 
+  name: inherited
+- !ruby/object:RI::MethodSummary 
+  name: new
+- !ruby/object:RI::MethodSummary 
+  name: setup
+comment: 
+constants: []
+
+full_name: Merb::SessionContainer
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: clear!
+- !ruby/object:RI::MethodSummary 
+  name: finalize
+- !ruby/object:RI::MethodSummary 
+  name: regenerate
+- !ruby/object:RI::MethodSummary 
+  name: session_id=
+name: SessionContainer
+superclass: Mash

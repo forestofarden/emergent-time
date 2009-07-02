@@ -1,0 +1,17 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Raised when parameters given to generation method do not match route parameters.
+constants: []
+
+full_name: Merb::Router::GenerationError
+includes: []
+
+instance_methods: []
+
+name: GenerationError
+superclass: StandardError

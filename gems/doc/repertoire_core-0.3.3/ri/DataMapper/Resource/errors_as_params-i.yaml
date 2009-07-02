@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: For use with incremental ajax form validation (see public/javascripts/rep.ajax-validate.js) Convenience method to wrap DataMapper errors object in a hash with keys formatted as in merb_helper forms
+full_name: DataMapper::Resource#errors_as_params
+is_singleton: false
+name: errors_as_params
+params: (name = nil)
+visibility: public

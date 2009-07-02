@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Retrieve a slice module by name
+- !ruby/struct:SM::Flow::P 
+  body: "@param &lt;#to_s&gt; The slice module to check for. @return &lt;Module&gt; The slice module itself."
+full_name: Merb::Slices::[]
+is_singleton: true
+name: "[]"
+params: (module_name)
+visibility: public

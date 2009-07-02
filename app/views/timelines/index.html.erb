@@ -1,0 +1,42 @@
+<% @page_title = "Emergent Time - #{@user.full_name}" %>
+
+<script language="javascript">
+
+$().ready(function() {
+  $('#create_timeline_form').hide();
+  $("#create_timeline_link").click(function() {
+    $('#create_timeline_submit').click();
+  });
+});
+
+</script>
+
+<div class="emt timeline_index">
+  <div class="pageinfo">
+    <%= partial './user_detail', :with => @user %>
+  </div>
+  <div class="timelines">
+    <h3>Timelines</h3>
+    <%= messages %>
+    <ul id="timelines">
+      <% @user.timelines.each do |timeline| %>
+        <li class="timeline"><a href="<%= resource(@user, timeline) %>"><%= timeline.title %></a></li>
+      <% end %>
+      <% if session.user == @user %>
+        <a id="create_timeline_link" href='#'>[+] Create a new timeline</a>
+      <% end %>
+    </ul>
+  </div>
+  <div class="related_users">
+    <h3>Users with related work</h3>
+    <% @user.related(5, 1).each do |user| %>
+      <%= partial './user_detail', :with => user %>
+    <% end %>
+  </div>
+</div>
+
+<!-- form submitted via javascript so we can use REST -->
+<%= form_for @new_timeline, :id => 'create_timeline_form', :action => resource(@user, :timelines) do %>
+  <%= text_field :title %>
+  <%= submit 'Create', :id => 'create_timeline_submit' %>
+<% end =%>

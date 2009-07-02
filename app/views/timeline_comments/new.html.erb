@@ -1,0 +1,27 @@
+<%= css_include_tag 'emt/event.css' %>
+<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.form" %>
+<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/rep.ajax-validate" %>
+
+<script language='javascript'>
+  $(document).ready(function() { 
+    $('#create_timeline_comment_form').ajaxValidate({ 
+  	  url: '<%= url(:validate_create_tc, :shortname => @user.shortname, :permalink => @timeline.permalink) %>'
+  	});
+  });
+</script>
+
+<%= form_for @timeline_comment, :id => "create_timeline_comment_form", :action => resource(@user, @timeline, :timeline_comments) do %>
+  <% if session.user %>
+    <p>Logged in as <a href="<%= resource(session.user, :timelines) %>"><%= session.user.full_name %></a>.</p>
+    <% if session.user == @user %>
+      <p>You are the author of this timeline.</p>
+    <% end %>
+  <% else %>
+    <div class="name"><label for="create_timeline_comment_user_name">Name (Required)</label>
+      <%= text_field :user_name %><div class="validate"></div>
+    <div class="email"><label for="create_timeline_comment_user_email">Email (Required) - will not be published</label>
+      <%= text_field :user_email %><div class="validate"></div>
+  <% end %>
+  <div><label for="create_comment_text">Comment</label><%= text_area :text, :rows => 8, :cols => 55 %><div class="validate"></div></div>
+  <div id="submit_buttons"><%= submit "Submit" %></div>
+<% end =%>

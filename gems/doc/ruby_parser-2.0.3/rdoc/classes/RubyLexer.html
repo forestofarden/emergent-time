@@ -1,0 +1,709 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: RubyLexer</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href=".././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">RubyLexer</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../files/lib/ruby_lexer_rb.html">
+                lib/ruby_lexer.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Object
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000422">advance</a>&nbsp;&nbsp;
+      <a href="#M000423">arg_ambiguous</a>&nbsp;&nbsp;
+      <a href="#M000424">comments</a>&nbsp;&nbsp;
+      <a href="#M000425">expr_beg_push</a>&nbsp;&nbsp;
+      <a href="#M000426">fix_arg_lex_state</a>&nbsp;&nbsp;
+      <a href="#M000427">heredoc</a>&nbsp;&nbsp;
+      <a href="#M000428">heredoc_identifier</a>&nbsp;&nbsp;
+      <a href="#M000430">int_with_base</a>&nbsp;&nbsp;
+      <a href="#M000431">lex_state=</a>&nbsp;&nbsp;
+      <a href="#M000432">lineno</a>&nbsp;&nbsp;
+      <a href="#M000429">new</a>&nbsp;&nbsp;
+      <a href="#M000433">parse_number</a>&nbsp;&nbsp;
+      <a href="#M000434">parse_quote</a>&nbsp;&nbsp;
+      <a href="#M000435">parse_string</a>&nbsp;&nbsp;
+      <a href="#M000446">process_token</a>&nbsp;&nbsp;
+      <a href="#M000436">rb_compile_error</a>&nbsp;&nbsp;
+      <a href="#M000437">read_escape</a>&nbsp;&nbsp;
+      <a href="#M000438">regx_options</a>&nbsp;&nbsp;
+      <a href="#M000439">reset</a>&nbsp;&nbsp;
+      <a href="#M000440">src=</a>&nbsp;&nbsp;
+      <a href="#M000441">tokadd_escape</a>&nbsp;&nbsp;
+      <a href="#M000442">tokadd_string</a>&nbsp;&nbsp;
+      <a href="#M000443">unescape</a>&nbsp;&nbsp;
+      <a href="#M000444">warning</a>&nbsp;&nbsp;
+      <a href="#M000445">yylex</a>&nbsp;&nbsp;
+      <a href="#M000447">yylex_string</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">ESC_RE</td>
+          <td>=</td>
+          <td class="context-item-value">/\\([0-7]{1,3}|x[0-9a-fA-F]{1,2}|M-.|(C-|c)\?|(C-|c).|[^0-7xMCc])/</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">EOF</td>
+          <td>=</td>
+          <td class="context-item-value">:eof_haha!</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_BORING</td>
+          <td>=</td>
+          <td class="context-item-value">0x00</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+ruby constants for strings (should this be moved somewhere else?)
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_ESCAPE</td>
+          <td>=</td>
+          <td class="context-item-value">0x01</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_EXPAND</td>
+          <td>=</td>
+          <td class="context-item-value">0x02</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_REGEXP</td>
+          <td>=</td>
+          <td class="context-item-value">0x04</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_AWORDS</td>
+          <td>=</td>
+          <td class="context-item-value">0x08</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_SYMBOL</td>
+          <td>=</td>
+          <td class="context-item-value">0x10</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_FUNC_INDENT</td>
+          <td>=</td>
+          <td class="context-item-value">0x20</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_SQUOTE</td>
+          <td>=</td>
+          <td class="context-item-value">STR_FUNC_BORING</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_DQUOTE</td>
+          <td>=</td>
+          <td class="context-item-value">STR_FUNC_BORING | STR_FUNC_EXPAND</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_XQUOTE</td>
+          <td>=</td>
+          <td class="context-item-value">STR_FUNC_BORING | STR_FUNC_EXPAND</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_REGEXP</td>
+          <td>=</td>
+          <td class="context-item-value">STR_FUNC_REGEXP | STR_FUNC_ESCAPE | STR_FUNC_EXPAND</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_SSYM</td>
+          <td>=</td>
+          <td class="context-item-value">STR_FUNC_SYMBOL</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">STR_DSYM</td>
+          <td>=</td>
+          <td class="context-item-value">STR_FUNC_SYMBOL | STR_FUNC_EXPAND</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">cmdarg</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">command_start</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">cond</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">lex_state</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Additional context surrounding tokens that both the lexer and grammar use.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">lex_strterm</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">lineno</td>
+          <td class="context-item-value">&nbsp;[W]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">nest</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">parser</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">src</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Stream of data that <a href="RubyLexer.html#M000445">yylex</a> examines.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">string_buffer</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc"></td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">token</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Last token read via <a href="RubyLexer.html#M000445">yylex</a>.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">warnings</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+What handles warnings
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">yacc_value</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Value of last token which had a value associated with it.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000429" class="method-detail">
+        <a name="M000429"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000429.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000429.html');return false;">
+          <span class="method-name">new</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000422" class="method-detail">
+        <a name="M000422"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000422.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000422.html');return false;">
+          <span class="method-name">advance</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+How the parser advances to the next token.
+</p>
+<p>
+@return true if not at end of file (EOF).
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000423" class="method-detail">
+        <a name="M000423"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000423.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000423.html');return false;">
+          <span class="method-name">arg_ambiguous</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000424" class="method-detail">
+        <a name="M000424"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000424.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000424.html');return false;">
+          <span class="method-name">comments</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000425" class="method-detail">
+        <a name="M000425"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000425.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000425.html');return false;">
+          <span class="method-name">expr_beg_push</span><span class="method-args">(val)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000426" class="method-detail">
+        <a name="M000426"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000426.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000426.html');return false;">
+          <span class="method-name">fix_arg_lex_state</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000427" class="method-detail">
+        <a name="M000427"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000427.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000427.html');return false;">
+          <span class="method-name">heredoc</span><span class="method-args">(here</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000428" class="method-detail">
+        <a name="M000428"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000428.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000428.html');return false;">
+          <span class="method-name">heredoc_identifier</span><span class="method-args">(</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000430" class="method-detail">
+        <a name="M000430"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000430.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000430.html');return false;">
+          <span class="method-name">int_with_base</span><span class="method-args">(base)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000431" class="method-detail">
+        <a name="M000431"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000431.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000431.html');return false;">
+          <span class="method-name">lex_state=</span><span class="method-args">(o)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000432" class="method-detail">
+        <a name="M000432"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000432.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000432.html');return false;">
+          <span class="method-name">lineno</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000433" class="method-detail">
+        <a name="M000433"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000433.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000433.html');return false;">
+          <span class="method-name">parse_number</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <pre>
+ Parse a number from the input stream.
+</pre>
+<p>
+@param c The first character of the number. @return A int constant wich
+represents a token.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000434" class="method-detail">
+        <a name="M000434"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000434.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000434.html');return false;">
+          <span class="method-name">parse_quote</span><span class="method-args">(</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000435" class="method-detail">
+        <a name="M000435"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000435.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000435.html');return false;">
+          <span class="method-name">parse_string</span><span class="method-args">(quote)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000446" class="method-detail">
+        <a name="M000446"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000446.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000446.html');return false;">
+          <span class="method-name">process_token</span><span class="method-args">(command_state)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000436" class="method-detail">
+        <a name="M000436"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000436.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000436.html');return false;">
+          <span class="method-name">rb_compile_error</span><span class="method-args">(msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000437" class="method-detail">
+        <a name="M000437"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000437.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000437.html');return false;">
+          <span class="method-name">read_escape</span><span class="method-args">(</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000438" class="method-detail">
+        <a name="M000438"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000438.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000438.html');return false;">
+          <span class="method-name">regx_options</span><span class="method-args">(</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000439" class="method-detail">
+        <a name="M000439"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000439.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000439.html');return false;">
+          <span class="method-name">reset</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000440" class="method-detail">
+        <a name="M000440"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000440.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000440.html');return false;">
+          <span class="method-name">src=</span><span class="method-args">(src)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000441" class="method-detail">
+        <a name="M000441"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000441.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000441.html');return false;">
+          <span class="method-name">tokadd_escape</span><span class="method-args">(term</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000442" class="method-detail">
+        <a name="M000442"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000442.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000442.html');return false;">
+          <span class="method-name">tokadd_string</span><span class="method-args">(func, term, paren)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000443" class="method-detail">
+        <a name="M000443"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000443.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000443.html');return false;">
+          <span class="method-name">unescape</span><span class="method-args">(s)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000444" class="method-detail">
+        <a name="M000444"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000444.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000444.html');return false;">
+          <span class="method-name">warning</span><span class="method-args">(s)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000445" class="method-detail">
+        <a name="M000445"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000445.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000445.html');return false;">
+          <span class="method-name">yylex</span><span class="method-args">(</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the next token. Also sets yy_val is needed.
+</p>
+<p>
+@return Description of the Returned Value
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000447" class="method-detail">
+        <a name="M000447"></a>
+
+        <div class="method-heading">
+          <a href="RubyLexer.src/M000447.html" target="Code" class="method-signature"
+            onclick="popupCode('RubyLexer.src/M000447.html');return false;">
+          <span class="method-name">yylex_string</span><span class="method-args">(</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

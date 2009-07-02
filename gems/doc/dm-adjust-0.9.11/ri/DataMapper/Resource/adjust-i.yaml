@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: DataMapper::Resource#adjust
+is_singleton: false
+name: adjust
+params: (attributes = {}, reload = false)
+visibility: public

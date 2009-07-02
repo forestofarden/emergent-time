@@ -1,0 +1,1180 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Net::POP3</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Net::POP3</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/net/pop_rb.html">
+                lib/net/pop.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                Protocol
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+    <div id="description">
+      <h1><a href="POP3.html">Net::POP3</a></h1>
+<h2>What is This Library?</h2>
+<p>
+This library provides functionality for retrieving email via <a
+href="POP3.html">POP3</a>, the Post Office Protocol version 3. For details
+of <a href="POP3.html">POP3</a>, see [RFC1939] (<a
+href="http://www.ietf.org/rfc/rfc1939.txt">www.ietf.org/rfc/rfc1939.txt</a>).
+</p>
+<h2>Examples</h2>
+<h3>Retrieving Messages</h3>
+<p>
+This example retrieves messages from the server and deletes them on the
+server.
+</p>
+<p>
+Messages are written to files named &#8216;inbox/1&#8217;,
+&#8216;inbox/2&#8217;, .&#8230; Replace &#8216;pop.example.com&#8217; with
+your <a href="POP3.html">POP3</a> server address, and
+&#8216;YourAccount&#8217; and &#8216;YourPassword&#8217; with the
+appropriate account details.
+</p>
+<pre>
+    require 'net/pop'
+
+    pop = Net::POP3.new('pop.example.com')
+    pop.start('YourAccount', 'YourPassword')             # (1)
+    if pop.mails.empty?
+      puts 'No mail.'
+    else
+      i = 0
+      pop.each_mail do |m|   # or &quot;pop.mails.each ...&quot;   # (2)
+        File.open(&quot;inbox/#{i}&quot;, 'w') do |f|
+          f.write m.pop
+        end
+        m.delete
+        i += 1
+      end
+      puts &quot;#{pop.mails.size} mails popped.&quot;
+    end
+    pop.finish                                           # (3)
+</pre>
+<ol>
+<li>Call <a href="POP3.html#M000120">Net::POP3#start</a> and <a
+href="POP3.html#M000120">start</a> POP session.
+
+</li>
+<li>Access messages by using <a href="POP3.html#M000137">POP3#each_mail</a>
+and/or <a href="POP3.html#M000136">POP3#mails</a>.
+
+</li>
+<li>Close POP session by calling <a href="POP3.html#M000132">POP3#finish</a> or
+use the block form of <a href="POP3.html#M000120">start</a>.
+
+</li>
+</ol>
+<h3>Shortened Code</h3>
+<p>
+The example above is very verbose. You can shorten the code by using some
+utility methods. First, the block form of <a
+href="POP3.html#M000120">Net::POP3.start</a> can be used instead of <a
+href="POP3.html#M000121">POP3.new</a>, <a
+href="POP3.html#M000120">POP3#start</a> and <a
+href="POP3.html#M000132">POP3#finish</a>.
+</p>
+<pre>
+    require 'net/pop'
+
+    Net::POP3.start('pop.example.com', 110,
+                    'YourAccount', 'YourPassword') do |pop|
+      if pop.mails.empty?
+        puts 'No mail.'
+      else
+        i = 0
+        pop.each_mail do |m|   # or &quot;pop.mails.each ...&quot;
+          File.open(&quot;inbox/#{i}&quot;, 'w') do |f|
+            f.write m.pop
+          end
+          m.delete
+          i += 1
+        end
+        puts &quot;#{pop.mails.size} mails popped.&quot;
+      end
+    end
+</pre>
+<p>
+<a href="POP3.html#M000112">POP3#delete_all</a> is an alternative for <a
+href="POP3.html#M000137">each_mail</a> and delete.
+</p>
+<pre>
+    require 'net/pop'
+
+    Net::POP3.start('pop.example.com', 110,
+                    'YourAccount', 'YourPassword') do |pop|
+      if pop.mails.empty?
+        puts 'No mail.'
+      else
+        i = 1
+        pop.delete_all do |m|
+          File.open(&quot;inbox/#{i}&quot;, 'w') do |f|
+            f.write m.pop
+          end
+          i += 1
+        end
+      end
+    end
+</pre>
+<p>
+And here is an even shorter example.
+</p>
+<pre>
+    require 'net/pop'
+
+    i = 0
+    Net::POP3.delete_all('pop.example.com', 110,
+                         'YourAccount', 'YourPassword') do |m|
+      File.open(&quot;inbox/#{i}&quot;, 'w') do |f|
+        f.write m.pop
+      end
+      i += 1
+    end
+</pre>
+<h3>Memory Space Issues</h3>
+<p>
+All the examples above get <a href="POP3.html#M000138">each</a> message as
+one big string. This example avoids this.
+</p>
+<pre>
+    require 'net/pop'
+
+    i = 1
+    Net::POP3.delete_all('pop.example.com', 110,
+                         'YourAccount', 'YourPassword') do |m|
+      File.open(&quot;inbox/#{i}&quot;, 'w') do |f|
+        m.pop do |chunk|    # get a message little by little.
+          f.write chunk
+        end
+        i += 1
+      end
+    end
+</pre>
+<h3>Using <a href="POP3.html#M000110">APOP</a></h3>
+<p>
+The net/pop library supports <a href="POP3.html#M000110">APOP</a>
+authentication. To use <a href="POP3.html#M000110">APOP</a>, use the
+Net::APOP class instead of the <a href="POP3.html">Net::POP3</a> class. You
+can use the utility method, <a
+href="POP3.html#M000110">Net::POP3.APOP</a>(). For example:
+</p>
+<pre>
+    require 'net/pop'
+
+    # Use APOP authentication if $isapop == true
+    pop = Net::POP3.APOP($is_apop).new('apop.example.com', 110)
+    pop.start(YourAccount', 'YourPassword') do |pop|
+      # Rest of the code is the same.
+    end
+</pre>
+<h3>Fetch Only Selected Mail Using &#8216;UIDL&#8217; POP Command</h3>
+<p>
+If your POP server provides UIDL functionality, you can grab only selected
+<a href="POP3.html#M000136">mails</a> from the POP server. e.g.
+</p>
+<pre>
+    def need_pop?( id )
+      # determine if we need pop this mail...
+    end
+
+    Net::POP3.start('pop.example.com', 110,
+                    'Your account', 'Your password') do |pop|
+      pop.mails.select { |m| need_pop?(m.unique_id) }.each do |m|
+        do_something(m.pop)
+      end
+    end
+</pre>
+<p>
+The <a href="POP3/POPMail.html#M000151">POPMail#unique_id</a>() method
+returns the unique-id of the message as a String. Normally the unique-id is
+a hash of the message.
+</p>
+
+    </div>
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000110">APOP</a>&nbsp;&nbsp;
+      <a href="#M000130">active?</a>&nbsp;&nbsp;
+      <a href="#M000122">apop?</a>&nbsp;&nbsp;
+      <a href="#M000113">auth_only</a>&nbsp;&nbsp;
+      <a href="#M000114">auth_only</a>&nbsp;&nbsp;
+      <a href="#M000119">certs</a>&nbsp;&nbsp;
+      <a href="#M000133">command</a>&nbsp;&nbsp;
+      <a href="#M000108">default_pop3_port</a>&nbsp;&nbsp;
+      <a href="#M000109">default_pop3s_port</a>&nbsp;&nbsp;
+      <a href="#M000107">default_port</a>&nbsp;&nbsp;
+      <a href="#M000139">delete_all</a>&nbsp;&nbsp;
+      <a href="#M000112">delete_all</a>&nbsp;&nbsp;
+      <a href="#M000116">disable_ssl</a>&nbsp;&nbsp;
+      <a href="#M000125">disable_ssl</a>&nbsp;&nbsp;
+      <a href="#M000138">each</a>&nbsp;&nbsp;
+      <a href="#M000137">each_mail</a>&nbsp;&nbsp;
+      <a href="#M000115">enable_ssl</a>&nbsp;&nbsp;
+      <a href="#M000124">enable_ssl</a>&nbsp;&nbsp;
+      <a href="#M000132">finish</a>&nbsp;&nbsp;
+      <a href="#M000111">foreach</a>&nbsp;&nbsp;
+      <a href="#M000126">inspect</a>&nbsp;&nbsp;
+      <a href="#M000141">logging</a>&nbsp;&nbsp;
+      <a href="#M000136">mails</a>&nbsp;&nbsp;
+      <a href="#M000135">n_bytes</a>&nbsp;&nbsp;
+      <a href="#M000134">n_mails</a>&nbsp;&nbsp;
+      <a href="#M000121">new</a>&nbsp;&nbsp;
+      <a href="#M000128">read_timeout=</a>&nbsp;&nbsp;
+      <a href="#M000140">reset</a>&nbsp;&nbsp;
+      <a href="#M000127">set_debug_output</a>&nbsp;&nbsp;
+      <a href="#M000131">start</a>&nbsp;&nbsp;
+      <a href="#M000120">start</a>&nbsp;&nbsp;
+      <a href="#M000129">started?</a>&nbsp;&nbsp;
+      <a href="#M000117">use_ssl?</a>&nbsp;&nbsp;
+      <a href="#M000123">use_ssl?</a>&nbsp;&nbsp;
+      <a href="#M000118">verify</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+    <div id="class-list">
+      <h3 class="section-bar">Classes and Modules</h3>
+
+      Class <a href="POP3/APOP.html" class="link">Net::POP3::APOP</a><br />
+Class <a href="POP3/POPMail.html" class="link">Net::POP3::POPMail</a><br />
+
+    </div>
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">Revision</td>
+          <td>=</td>
+          <td class="context-item-value">%q$Revision: 6285 $.split[1]</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">POP</td>
+          <td>=</td>
+          <td class="context-item-value">POP3</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+class aliases
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">POPSession</td>
+          <td>=</td>
+          <td class="context-item-value">POP3</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">POP3Session</td>
+          <td>=</td>
+          <td class="context-item-value">POP3</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">APOPSession</td>
+          <td>=</td>
+          <td class="context-item-value">APOP</td>
+          <td width="3em">&nbsp;</td>
+          <td class="context-item-desc">
+class aliases
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">address</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The address to connect to.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">open_timeout</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+Seconds to wait until a connection is opened. If the <a
+href="POP3.html">POP3</a> object cannot open a connection within this time,
+it raises a TimeoutError exception.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">port</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+The port number to connect to.
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">read_timeout</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+Seconds to wait until reading one block (by one read(1) call). If the <a
+href="POP3.html">POP3</a> object cannot complete a read() within this time,
+it raises a TimeoutError exception.
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000110" class="method-detail">
+        <a name="M000110"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000110.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000110.html');return false;">
+          <span class="method-name">APOP</span><span class="method-args">(isapop)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="POP3.html#M000110">APOP</a> class if <tt>isapop</tt>
+is true; otherwise, returns the POP class. For example:
+</p>
+<pre>
+    # Example 1
+    pop = Net::POP3::APOP($is_apop).new(addr, port)
+
+    # Example 2
+    Net::POP3::APOP($is_apop).start(addr, port) do |pop|
+      ....
+    end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000113" class="method-detail">
+        <a name="M000113"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000113.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000113.html');return false;">
+          <span class="method-name">auth_only</span><span class="method-args">(address, port = nil, account = nil, password = nil, isapop = false)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Opens a <a href="POP3.html">POP3</a> session, attempts authentication, and
+quits.
+</p>
+<p>
+This method raises <a
+href="POPAuthenticationError.html">POPAuthenticationError</a> if
+authentication fails.
+</p>
+<h3>Example: normal <a href="POP3.html">POP3</a></h3>
+<pre>
+    Net::POP3.auth_only('pop.example.com', 110,
+                        'YourAccount', 'YourPassword')
+</pre>
+<h3>Example: <a href="POP3.html#M000110">APOP</a></h3>
+<pre>
+    Net::POP3.auth_only('pop.example.com', 110,
+                        'YourAccount', 'YourPassword', true)
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000119" class="method-detail">
+        <a name="M000119"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000119.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000119.html');return false;">
+          <span class="method-name">certs</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000108" class="method-detail">
+        <a name="M000108"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000108.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000108.html');return false;">
+          <span class="method-name">default_pop3_port</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The default port for <a href="POP3.html">POP3</a> connections, port 110
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000109" class="method-detail">
+        <a name="M000109"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000109.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000109.html');return false;">
+          <span class="method-name">default_pop3s_port</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+The default port for POP3S connections, port 995
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000107" class="method-detail">
+        <a name="M000107"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000107.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000107.html');return false;">
+          <span class="method-name">default_port</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Class Parameters
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000112" class="method-detail">
+        <a name="M000112"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000112.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000112.html');return false;">
+          <span class="method-name">delete_all</span><span class="method-args">(address, port = nil, account = nil, password = nil, isapop = false, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Starts a <a href="POP3.html">POP3</a> session and deletes all messages on
+the server. If a block is given, <a href="POP3.html#M000138">each</a> <a
+href="POP3/POPMail.html">POPMail</a> object is yielded to it before being
+deleted.
+</p>
+<p>
+This method raises a <a
+href="POPAuthenticationError.html">POPAuthenticationError</a> if
+authentication fails.
+</p>
+<h3>Example</h3>
+<pre>
+    Net::POP3.delete_all('pop.example.com', 110,
+                         'YourAccount', 'YourPassword') do |m|
+      file.write m.pop
+    end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000116" class="method-detail">
+        <a name="M000116"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000116.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000116.html');return false;">
+          <span class="method-name">disable_ssl</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Disable SSL for all <a href="POP3.html#M000121">new</a> instances.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000115" class="method-detail">
+        <a name="M000115"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000115.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000115.html');return false;">
+          <span class="method-name">enable_ssl</span><span class="method-args">(verify = OpenSSL::SSL::VERIFY_PEER, certs = nil)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Enable SSL for all <a href="POP3.html#M000121">new</a> instances. <tt><a
+href="POP3.html#M000118">verify</a></tt> is the type of verification to do
+on the Server Cert; Defaults to OpenSSL::SSL::VERIFY_PEER. <tt><a
+href="POP3.html#M000119">certs</a></tt> is a file or directory holding CA
+<a href="POP3.html#M000119">certs</a> to use to <a
+href="POP3.html#M000118">verify</a> the server cert; Defaults to nil.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000111" class="method-detail">
+        <a name="M000111"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000111.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000111.html');return false;">
+          <span class="method-name">foreach</span><span class="method-args">(address, port = nil, account = nil, password = nil, isapop = false) {|message| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Starts a <a href="POP3.html">POP3</a> session and iterates over <a
+href="POP3.html#M000138">each</a> <a href="POP3/POPMail.html">POPMail</a>
+object, yielding it to the <tt>block</tt>. This method is equivalent to:
+</p>
+<pre>
+    Net::POP3.start(address, port, account, password) do |pop|
+      pop.each_mail do |m|
+        yield m
+      end
+    end
+</pre>
+<p>
+This method raises a <a
+href="POPAuthenticationError.html">POPAuthenticationError</a> if
+authentication fails.
+</p>
+<h3>Example</h3>
+<pre>
+    Net::POP3.foreach('pop.example.com', 110,
+                      'YourAccount', 'YourPassword') do |m|
+      file.write m.pop
+      m.delete if $DELETE
+    end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000121" class="method-detail">
+        <a name="M000121"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000121.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000121.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(addr, port = nil, isapop = false)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="POP3.html#M000121">new</a> <a href="POP3.html">POP3</a>
+object.
+</p>
+<p>
+<tt>address</tt> is the hostname or ip address of your <a
+href="POP3.html">POP3</a> server.
+</p>
+<p>
+The optional <tt>port</tt> is the port to connect to.
+</p>
+<p>
+The optional <tt>isapop</tt> specifies whether this connection is going to
+use <a href="POP3.html#M000110">APOP</a> authentication; it defaults to
+<tt>false</tt>.
+</p>
+<p>
+This method does <b>not</b> open the TCP connection.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000120" class="method-detail">
+        <a name="M000120"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000120.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000120.html');return false;">
+          <span class="method-name">start</span><span class="method-args">(address, port = nil, account = nil, password = nil, isapop = false) {|pop| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Creates a <a href="POP3.html#M000121">new</a> <a href="POP3.html">POP3</a>
+object and open the connection. Equivalent to
+</p>
+<pre>
+  Net::POP3.new(address, port, isapop).start(account, password)
+</pre>
+<p>
+If <tt>block</tt> is provided, yields the newly-opened <a
+href="POP3.html">POP3</a> object to it, and automatically closes it at the
+end of the session.
+</p>
+<h3>Example</h3>
+<pre>
+   Net::POP3.start(addr, port, account, password) do |pop|
+     pop.each_mail do |m|
+       file.write m.pop
+       m.delete
+     end
+   end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000117" class="method-detail">
+        <a name="M000117"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000117.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000117.html');return false;">
+          <span class="method-name">use_ssl?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000118" class="method-detail">
+        <a name="M000118"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000118.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000118.html');return false;">
+          <span class="method-name">verify</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000130" class="method-detail">
+        <a name="M000130"></a>
+
+        <div class="method-heading">
+          <span class="method-name">active?</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for started?
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000122" class="method-detail">
+        <a name="M000122"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000122.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000122.html');return false;">
+          <span class="method-name">apop?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Does this instance use <a href="POP3.html#M000110">APOP</a> authentication?
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000114" class="method-detail">
+        <a name="M000114"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000114.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000114.html');return false;">
+          <span class="method-name">auth_only</span><span class="method-args">(account, password)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Starts a pop3 session, attempts authentication, and quits. This method must
+not be called while <a href="POP3.html">POP3</a> session is opened. This
+method raises <a
+href="POPAuthenticationError.html">POPAuthenticationError</a> if
+authentication fails.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000133" class="method-detail">
+        <a name="M000133"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000133.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000133.html');return false;">
+          <span class="method-name">command</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000139" class="method-detail">
+        <a name="M000139"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000139.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000139.html');return false;">
+          <span class="method-name">delete_all</span><span class="method-args">( {|message| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Deletes all messages on the server.
+</p>
+<p>
+If called with a block, yields <a href="POP3.html#M000138">each</a> message
+in turn before deleting it.
+</p>
+<h3>Example</h3>
+<pre>
+    n = 1
+    pop.delete_all do |m|
+      File.open(&quot;inbox/#{n}&quot;) do |f|
+        f.write m.pop
+      end
+      n += 1
+    end
+</pre>
+<p>
+This method raises a <a href="POPError.html">POPError</a> if an error
+occurs.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000125" class="method-detail">
+        <a name="M000125"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000125.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000125.html');return false;">
+          <span class="method-name">disable_ssl</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000138" class="method-detail">
+        <a name="M000138"></a>
+
+        <div class="method-heading">
+          <span class="method-name">each</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="POP3.html#M000137">each_mail</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000137" class="method-detail">
+        <a name="M000137"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000137.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000137.html');return false;">
+          <span class="method-name">each_mail</span><span class="method-args">() {|message| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Yields <a href="POP3.html#M000138">each</a> message to the passed-in block
+in turn. Equivalent to:
+</p>
+<pre>
+  pop3.mails.each do |popmail|
+    ....
+  end
+</pre>
+<p>
+This method raises a <a href="POPError.html">POPError</a> if an error
+occurs.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000124" class="method-detail">
+        <a name="M000124"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000124.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000124.html');return false;">
+          <span class="method-name">enable_ssl</span><span class="method-args">(verify = OpenSSL::SSL::VERIFY_PEER, certs = nil,  port = POP3.default_pop3s_port)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Enables SSL for this instance. Must be called before the connection is
+established to have any effect. <tt><a
+href="POP3.html#M000118">verify</a></tt> is the type of verification to do
+on the Server Cert; Defaults to OpenSSL::SSL::VERIFY_PEER. <tt><a
+href="POP3.html#M000119">certs</a></tt> is a file or directory holding CA
+<a href="POP3.html#M000119">certs</a> to use to <a
+href="POP3.html#M000118">verify</a> the server cert; Defaults to nil.
+<tt>port</tt> is port to establish the SSL connection on; Defaults to 995.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000132" class="method-detail">
+        <a name="M000132"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000132.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000132.html');return false;">
+          <span class="method-name">finish</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Finishes a <a href="POP3.html">POP3</a> session and closes TCP connection.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000126" class="method-detail">
+        <a name="M000126"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000126.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000126.html');return false;">
+          <span class="method-name">inspect</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Provide human-readable stringification of class state.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000141" class="method-detail">
+        <a name="M000141"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000141.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000141.html');return false;">
+          <span class="method-name">logging</span><span class="method-args">(msg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+        </div>
+      </div>
+
+      <div id="method-M000136" class="method-detail">
+        <a name="M000136"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000136.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000136.html');return false;">
+          <span class="method-name">mails</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns an array of Net::POPMail objects, representing all the messages on
+the server. This array is renewed when the session restarts; otherwise, it
+is fetched from the server the first time this method is called (directly
+or indirectly) and cached.
+</p>
+<p>
+This method raises a <a href="POPError.html">POPError</a> if an error
+occurs.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000135" class="method-detail">
+        <a name="M000135"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000135.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000135.html');return false;">
+          <span class="method-name">n_bytes</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the total size in bytes of all the messages on the POP server.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000134" class="method-detail">
+        <a name="M000134"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000134.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000134.html');return false;">
+          <span class="method-name">n_mails</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the number of messages on the POP server.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000128" class="method-detail">
+        <a name="M000128"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000128.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000128.html');return false;">
+          <span class="method-name">read_timeout=</span><span class="method-args">(sec)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Set the read timeout.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000140" class="method-detail">
+        <a name="M000140"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000140.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000140.html');return false;">
+          <span class="method-name">reset</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Resets the session. This clears all &quot;deleted&quot; marks from
+messages.
+</p>
+<p>
+This method raises a <a href="POPError.html">POPError</a> if an error
+occurs.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000127" class="method-detail">
+        <a name="M000127"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000127.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000127.html');return false;">
+          <span class="method-name">set_debug_output</span><span class="method-args">(arg)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<b>WARNING</b>: This method causes a serious security hole. Use this method
+only for debugging.
+</p>
+<p>
+Set an output stream for debugging.
+</p>
+<h3>Example</h3>
+<pre>
+  pop = Net::POP.new(addr, port)
+  pop.set_debug_output $stderr
+  pop.start(account, passwd) do |pop|
+    ....
+  end
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000131" class="method-detail">
+        <a name="M000131"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000131.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000131.html');return false;">
+          <span class="method-name">start</span><span class="method-args">(account, password) {|pop| ...}</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Starts a <a href="POP3.html">POP3</a> session.
+</p>
+<p>
+When called with block, gives a <a href="POP3.html">POP3</a> object to the
+block and closes the session after block call finishes.
+</p>
+<p>
+This method raises a <a
+href="POPAuthenticationError.html">POPAuthenticationError</a> if
+authentication fails.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000129" class="method-detail">
+        <a name="M000129"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000129.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000129.html');return false;">
+          <span class="method-name">started?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+<tt>true</tt> if the <a href="POP3.html">POP3</a> session has started.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000123" class="method-detail">
+        <a name="M000123"></a>
+
+        <div class="method-heading">
+          <a href="POP3.src/M000123.html" target="Code" class="method-signature"
+            onclick="popupCode('POP3.src/M000123.html');return false;">
+          <span class="method-name">use_ssl?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+does this instance use SSL?
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

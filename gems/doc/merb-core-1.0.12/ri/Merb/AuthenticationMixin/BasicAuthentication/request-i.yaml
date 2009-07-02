@@ -1,0 +1,19 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Request basic authentication and halt the filter chain. This is for use in a before filter.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Throws
+- !ruby/struct:SM::Flow::P 
+  body: ":halt with an &quot;HTTP Basic: Access denied.&quot; message with no layout, and sets the status to Unauthorized."
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::AuthenticationMixin::BasicAuthentication#request
+is_singleton: false
+name: request
+params: ()
+visibility: public

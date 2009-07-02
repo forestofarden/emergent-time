@@ -1,0 +1,18 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Initialize with a request. The request must be an IPv4, or a host string
+- !ruby/struct:SM::Flow::P 
+  body: "The first params now is :"
+- !ruby/struct:SM::Flow::VERB 
+  body: " * a string which a Ipv4, Ipv6 or a host.\n * A IPAddr instance\n"
+- !ruby/struct:SM::Flow::P 
+  body: A second param, host_search is optionnal. By default he is false. If this value is true, a resolv host is made for know the host to this IPv4
+full_name: Whois::Whois::new
+is_singleton: true
+name: new
+params: (request, host_search=false)
+visibility: public

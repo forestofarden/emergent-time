@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new_server (Merb::Rack::WEBrick)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/rack/adapter/webrick.rb, line 15</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">new_server</span>(<span class="ruby-identifier">port</span>)
+        <span class="ruby-identifier">options</span> = {
+          <span class="ruby-identifier">:Port</span>        =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">port</span>,
+          <span class="ruby-identifier">:BindAddress</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-ivar">@opts</span>[<span class="ruby-identifier">:host</span>],
+          <span class="ruby-identifier">:Logger</span>      =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>,
+          <span class="ruby-identifier">:AccessLog</span>   =<span class="ruby-operator">&gt;</span> [
+            [<span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>, <span class="ruby-operator">::</span><span class="ruby-constant">WEBrick</span><span class="ruby-operator">::</span><span class="ruby-constant">AccessLog</span><span class="ruby-operator">::</span><span class="ruby-constant">COMMON_LOG_FORMAT</span>],
+            [<span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>, <span class="ruby-operator">::</span><span class="ruby-constant">WEBrick</span><span class="ruby-operator">::</span><span class="ruby-constant">AccessLog</span><span class="ruby-operator">::</span><span class="ruby-constant">REFERER_LOG_FORMAT</span>]
+          ]
+        }
+
+        <span class="ruby-identifier">sockets</span> = <span class="ruby-operator">::</span><span class="ruby-constant">WEBrick</span><span class="ruby-operator">::</span><span class="ruby-constant">Utils</span>.<span class="ruby-identifier">create_listeners</span> <span class="ruby-keyword kw">nil</span>, <span class="ruby-identifier">port</span>
+        <span class="ruby-ivar">@server</span> = <span class="ruby-operator">::</span><span class="ruby-constant">WEBrick</span><span class="ruby-operator">::</span><span class="ruby-constant">HTTPServer</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">options</span>.<span class="ruby-identifier">merge</span>(<span class="ruby-identifier">:DoNotListen</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-keyword kw">true</span>))
+        <span class="ruby-ivar">@server</span>.<span class="ruby-identifier">listeners</span>.<span class="ruby-identifier">replace</span> <span class="ruby-identifier">sockets</span>
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

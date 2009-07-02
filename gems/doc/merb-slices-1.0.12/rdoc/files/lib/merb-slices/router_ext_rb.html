@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>File: router_ext.rb</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+  <div id="fileHeader">
+    <h1>router_ext.rb</h1>
+    <table class="header-table">
+    <tr class="top-aligned-row">
+      <td><strong>Path:</strong></td>
+      <td>lib/merb-slices/router_ext.rb
+      </td>
+    </tr>
+    <tr class="top-aligned-row">
+      <td><strong>Last Update:</strong></td>
+      <td>Thu Jul 02 13:49:47 +0100 2009</td>
+    </tr>
+    </table>
+  </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000712">add_slice</a>&nbsp;&nbsp;
+      <a href="#M000711">add_slices</a>&nbsp;&nbsp;
+      <a href="#M000710">all_slices</a>&nbsp;&nbsp;
+      <a href="#M000713">slice</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+
+    <div id="section">
+
+
+
+
+
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000712" class="method-detail">
+        <a name="M000712"></a>
+
+        <div class="method-heading">
+          <a href="router_ext_rb.src/M000712.html" target="Code" class="method-signature"
+            onclick="popupCode('router_ext_rb.src/M000712.html');return false;">
+          <span class="method-name">add_slice</span><span class="method-args">(slice_module, options = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Add a Slice in a router namespace
+</p>
+<p>
+@param slice_module&lt;String, Symbol, Module&gt; A Slice module to mount.
+@param options&lt;Hash, String&gt; Optional hash, set :path if you want to
+override what appears on the url.
+</p>
+<p>
+@yield A new Behavior instance is yielded in the block for nested routes -
+runs before the <a href="router_ext_rb.html#M000713">slice</a> routes are
+setup. @yieldparam ns&lt;Behavior&gt; The namespace behavior object.
+</p>
+<p>
+@return &lt;Behaviour&gt; The current router context.
+</p>
+<p>
+@note If a <a href="router_ext_rb.html#M000713">slice</a> has no routes at
+all, the activate hook won&#8216;t be executed.
+</p>
+<p>
+@note Normally you should specify the slice_module using a String or Symbol
+</p>
+<pre>
+      this ensures that your module can be removed from the router at runtime.
+</pre>
+        </div>
+      </div>
+
+      <div id="method-M000711" class="method-detail">
+        <a name="M000711"></a>
+
+        <div class="method-heading">
+          <span class="method-name">add_slices</span><span class="method-args">(config = {}, &amp;block)</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for <a href="router_ext_rb.html#M000710">all_slices</a>
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000710" class="method-detail">
+        <a name="M000710"></a>
+
+        <div class="method-heading">
+          <a href="router_ext_rb.src/M000710.html" target="Code" class="method-signature"
+            onclick="popupCode('router_ext_rb.src/M000710.html');return false;">
+          <span class="method-name">all_slices</span><span class="method-args">(config = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Add all known slices to the router
+</p>
+<p>
+By combining this with Merb::Slices.activate_by_file and
+Merb::Slices.deactivate one can enable/disable slices at runtime, without
+restarting your app.
+</p>
+<p>
+@param config&lt;Hash&gt;
+</p>
+<pre>
+ Optional hash, mapping slice module names to their settings;
+ set :path (or use a string) if you want to override what appears on the url.
+</pre>
+<p>
+@yield A new Behavior instance is yielded in the block for nested routes.
+@yieldparam ns&lt;Behavior&gt; The namespace behavior object.
+</p>
+<p>
+@example <a
+href="router_ext_rb.html#M000710">all_slices</a>(&#8216;BlogSlice&#8217;
+=&gt; &#8216;blog&#8217;, &#8216;ForumSlice&#8217; =&gt; { :path =&gt;
+&#8216;forum&#8217; })
+</p>
+<p>
+@note The block is yielded for each <a
+href="router_ext_rb.html#M000713">slice</a> individually.
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000713" class="method-detail">
+        <a name="M000713"></a>
+
+        <div class="method-heading">
+          <a href="router_ext_rb.src/M000713.html" target="Code" class="method-signature"
+            onclick="popupCode('router_ext_rb.src/M000713.html');return false;">
+          <span class="method-name">slice</span><span class="method-args">(slice_module, options = {}, &amp;block)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Insert a <a href="router_ext_rb.html#M000713">slice</a> directly into the
+current router context.
+</p>
+<p>
+This will still setup a namespace, but doesn&#8216;t set a path prefix.
+Only for special cases.
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

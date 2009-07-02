@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyLexer#src=
+is_singleton: false
+name: src=
+params: (src)
+visibility: public

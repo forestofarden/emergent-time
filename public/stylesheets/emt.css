@@ -1,0 +1,201 @@
+/* global definitions */
+
+* { font-family: arial; font-size: 10pt; }
+ul { list-style-type: none; border: 5px; }
+
+.disabled { color: gray; }
+.notice { color: red; }
+.error { color: red; }
+
+a:link,
+a:active,
+a:visited { font-size: 9pt; text-decoration: none; color: #3875D7;}
+a:hover   { font-size: 9pt; text-decoration: underline; color: #3875D7;}
+
+textarea { resize: none; min-height:40px;}  /* workaround for Safari bug with jgrowable */
+
+.clear              { clear: both; }
+label               { float: left; clear: both; margin-top: 5px; }
+input               { float: left; clear: left; }
+textarea            { float: left; clear: both; resize:none;}   // no resize to avoid safari bugs
+.institution,
+.byline             { float: left; clear: both; color: gray; }
+#submit_buttons     { float: left; clear: both; margin-top: 8px; margin-bottom: 8px; }
+form                { float:left; clear: left;}
+a:link img, a:active img, a:visited img, a:hover img { display: block; border: 0; padding: 0; margin: 0; }
+
+#search_box .blur { color: gray; }
+#search_box input { float: none; clear: none; }
+
+.emt_timeline {
+  font-size: 10pt; 
+  padding: 8px;
+  float: left;
+  clear: both;
+  width: 100%;                 /* TODO.  only works at full window */
+  height: 350px;  
+  border: 1px solid #aaa; 
+  background-color: white;
+/*  position:absolute; */
+}
+.emt_timeline.empty { text-align: center; }
+
+/* overridden from repertoire core */
+.core fieldset { width: 600px; }
+
+/* login page changes */
+.emt .login #login { width: 200px; float:left; clear: none; margin-top: 40px;}
+.emt .login form div { clear: both; }
+.emt .login .panel { display: block; float: left; clear: none; margin-left: 20px; padding: 8px; width: 600px; font-size:9pt;}
+
+body { margin: 0; padding: 0; }
+
+#container { float: left; clear: both; margin: 8px; padding; 0; width: 100%; height: 100%; }
+
+#header { width: 100%; margin-bottom: 30px;}
+#header a:hover { text-decoration: underline; color: orange; }
+#header #projectname { float: left; clear: none; margin-left: 4pt;}
+#header #projectname h1 { float:left; font-size: 27pt; color: orange; margin-top:8px; margin-bottom:8px;}
+#header #projectname #byline { float: left; clear: left; font-size: 9pt; color: gray;}
+#header #projectname #byline a { font-size: 9pt;}
+#header #navigation   { float: right; clear: none; margin-top: 5px; }
+#header #navigation #search_box { float: right; clear: both; }
+#header #navigation a { float: left; clear: none; margin: 4px; }
+#header #logo         { width: 35%; float: right; }
+#header #logo img     { float: right; clear: none; margin-right: 20px; margin-top: 10px;}
+
+.events_index .timelines { float: right; clear: right; width: 35%; margin-right: 5px; height: 500px; overflow: auto; }
+.events_index .timelines .timeline { margin-top: 14px; border-bottom: 1px gray dotted; }
+.events_index .timelines .picture { float:left; clear: left; margin: 2px; }
+.events_index .timelines .stats { float:left; clear: right; }
+.events_index .timelines .stats .title { font-size: 16pt; float: left; clear: both; margin: 2px; }
+.events_index .timelines .stats .name { float: left; clear: both; margin: 2px; }
+.events_index .timelines .event { float: left; clear: both; }
+.events_index .timelines .event .dates { color: gray; font-size: 9pt; }
+.events_index .timelines .event .title { font-weight: bold; display: inline; } 
+.events_index .timelines .event .description { display: inline; }
+.events_index .timelines .event .interpretation { display: inline; font-weight: italics; }
+.events_index .timelines .event a { color: black; }
+.events_index .timelines .event a:hover { text-decoration: none; }
+
+.events_index .most_cited { width: 60%; float:left; clear:left; }
+.events_index .most_cited #timeline_caption { float: left; clear:left; margin-bottom:15px; }
+.events_index .most_cited #events_count { float:left; clear:right; margin-left:10px; }
+.events_index .most_cited #events_count a { margin-left: 10px; }
+.events_index .most_cited #events_count a.selected { text-decoration: underline; }
+
+.pageinfo .picture          { float: left; clear:left; margin: 5px; }
+.pageinfo .stats            { float: left; }
+.pageinfo .stats a.current  { text-decoration: underline;}
+
+.timeline_index h3 { font-size: 16pt; }
+.timeline_index #timelines li a { font-size: 14pt; }
+.timeline_index #create_timeline_form input { clear: none; float: none; }
+
+.timeline_index .timelines { float: left; clear: left; }
+.timeline_index .related_users { float: right; clear: right; width: 40%; }
+.timeline_index .related_users .user_detail { margin-top: 5px; }
+.timeline_index .related_users .user_detail .picture { float:left; clear: left; margin: 2px; }
+.timeline_index .related_users .user_detail .stats { float:left; clear: right; }
+.timeline_index .related_users .user_detail .name { float: left; clear: both; margin: 1px; }
+.timeline_index .related_users .user_detail .email { float: left; clear: both; margin: 1px; }
+.timeline_index .related_users .user_detail .institution { float: left; clear: both; margin: 1px; }
+
+.timeline_show #title_bar { clear:both; float: left; margin-top: 8px; }
+.timeline_show #title_bar #title { font-size: 16pt; clear:left; float:left; margin-right:6px; }
+.timeline_show #title_bar .timeline_opts { float:left; z-index: 181; display: none; }
+.timeline_show #title_bar .timeline_opts .rename { float:left; height: 20px; width: 20px; background: url('lib/pencil_sm.png') top left no-repeat; cursor: pointer; }
+.timeline_show #title_bar .timeline_opts .remove { float:left; height: 20px; width: 20px; background: url('lib/remove_sm.png') top left no-repeat; cursor: pointer; }
+
+.timeline_show #timeline_intro #intro { max-width:65%; }
+.timeline_show #timeline_intro #intro { float: left; margin-right:6px; min-height:20px; }
+.timeline_show #timeline_intro .edit { float:left; height: 20px; width: 20px; background: url('lib/pencil_sm.png') top left no-repeat; cursor: pointer; display: none; }
+
+.timeline_show .pageinfo { float: left; clear: left; width: 65%;}
+
+.timeline_show .title { float: left; clear: left; }
+.timeline_show #timeinfo { float:left; clear: both; width: 100%;}
+.timeline_show #timeline_widgets { float: left; clear: both; width: 100%;}
+
+.timeline_show #related_timelines { float:left; clear: right; width: 30%; margin-left: 15px;}
+
+.timeline_show #related_timelines h3 { margin-top: 0; }
+.timeline_show #related_timelines .timeline { margin-top: 4px; }
+.timeline_show #related_timelines .picture { float:left; clear: left; margin: 2px; }
+.timeline_show #related_timelines .stats { float:left; clear: right; }
+.timeline_show #related_timelines .stats .title { font-size: 9pt; float: left; clear: both; margin: 1px; }
+.timeline_show #related_timelines .stats .name { font-size: 9pt; float: left; clear: both; margin: 1px; }
+
+
+.timeline_show #timeline_graph {
+  width: 65%;
+  float: left;
+  clear: left;
+  overflow: hidden;
+}
+
+.timeline_show #timeline_graph h3 { margin-top: 10px; float: left; clear: none;}
+
+.timeline_show #timeline_events {
+  width: 30%;
+  float: left;
+  clear: right;
+  font-size: 10pt;
+  margin-left: 15px;
+}
+
+.timeline_show #timeline_events h3 { float: left; clear: left; margin-top: 10px;}
+.timeline_show #timeline_events #create_event_toggle { float: right; clear: right; margin-top: 10px;}
+
+
+.timeline_show #timeline_events ul {
+  height: 350px;  
+  border: 1px solid #aaa; 
+  padding: 8px;
+  background-color: white;
+  overflow: auto;
+}
+
+.timeline_show #create_timeline_comment_form { margin-left: 40px; }
+
+.timeline_container {
+  margin: 0 24px 0 0; position:relative;
+}
+
+/* same for source suggestion list and timeline events list */
+.event { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
+
+.event .event_container { padding: 7px; border: 1px white solid; min-height:30px; }
+.event.selected .event_container { background: #ffe666; }
+
+.event .event_dates { color: gray; }
+.event .event_title { font-weight: bold; display: inline; }
+.event .event_description { display: inline; }
+.event .event_interpretation { display: inline; }
+
+#events { margin: 0; }
+
+#events .event {  border-bottom: 1px gray dotted; }
+#events .event .event_remove { float:right; height: 20px; width: 20px; background: url('lib/remove_sm.png') top left no-repeat; cursor: pointer; z-index: 181; display: none;}
+
+.timeline_show #timeline_comments { float:left; width: 45%; margin-top: 10px;}
+
+.timeline_show #timeline_comments .comment { margin-top: 14px; border-bottom: 1px gray dotted; clear: both;}
+.timeline_show #timeline_comments .comment .name { float:left; clear: none; }
+.timeline_show #timeline_comments .comment .date { float:left; clear: left; font-size: 9pt; color: gray;}
+.timeline_show #timeline_comments .comment img { float:right; clear: right; }
+.timeline_show #timeline_comments .comment p { float:left; clear: both; }
+
+#detail_content #create_event_sources { float:left; clear: none; width: 300px; height: 440px;}
+#detail_content #create_event_sources label { padding: 4px; }
+#detail_content #create_event_sources #source_list { float:left; clear: both; overflow:auto; border: 0; padding: 0; margin: 0; width: 100%; height: 100%;}
+
+#detail_content #create_event_form { float:left; clear: none; margin-left: 15px; width: 490px; }
+#detail_content #create_event_form .entry { float: left; clear: none; }
+#detail_content #create_event_form .instructions { width: 150px; font-size: 8pt; color: orange; float: right; border-top: 1px dotted;}
+#detail_content #create_event_form .error { float: left; clear: none; }
+#detail_content #create_event_form .error li { font-size: 8pt; }
+#detail_content #create_event_form .validate { font-size: 8pt; }
+
+#detail_content #create_event_form .core_event { float:left; clear: right; width: 100%;}
+#detail_content #create_event_form .interpretation { float:left; clear: right; border-top: 1px dotted gray; margin-top: 10px; width: 100%;}

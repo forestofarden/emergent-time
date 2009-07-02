@@ -1,0 +1,18 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: start
+- !ruby/object:RI::MethodSummary 
+  name: stop
+comment: 
+constants: []
+
+full_name: Merb::Slices::DynamicLoader
+includes: []
+
+instance_methods: []
+
+name: DynamicLoader
+superclass: Object

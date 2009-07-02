@@ -1,0 +1,36 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: 
+- !ruby/object:RI::AliasName 
+  name: defaults
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Sets default values for route parameters. If no value for the key can be extracted from the request, then the value provided here will be used.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "defaults<Hash>:"
+    body: The default values for named segments.
+  - !ruby/struct:SM::Flow::LI 
+    label: "&block:"
+    body: "All routes defined in the block will be scoped to the defaults defined by the #default method."
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Block parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "r<Behavior>:"
+    body: <tt>optional</tt> - The defaults behavior object.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::Router::Behavior#default
+is_singleton: false
+name: default
+params: (defaults = {}, &block)
+visibility: public

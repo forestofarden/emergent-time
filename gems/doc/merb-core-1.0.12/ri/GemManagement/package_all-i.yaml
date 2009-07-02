@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: GemManagement#package_all
+is_singleton: false
+name: package_all
+params: (source_dir, skip = [], packages = [])
+visibility: public

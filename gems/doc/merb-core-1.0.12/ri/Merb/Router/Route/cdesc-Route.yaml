@@ -1,0 +1,17 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: []
+
+class_methods: []
+
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: This entire class is private and should never be accessed outside of Merb::Router and Behavior
+constants: []
+
+full_name: Merb::Router::Route
+includes: []
+
+instance_methods: []
+
+name: Route
+superclass: Object

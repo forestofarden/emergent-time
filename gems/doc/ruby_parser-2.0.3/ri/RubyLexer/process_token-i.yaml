@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyLexer#process_token
+is_singleton: false
+name: process_token
+params: (command_state)
+visibility: public

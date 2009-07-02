@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Define if the module has or not the Class in this module
+full_name: Whois::Server::class_exist?
+is_singleton: true
+name: class_exist?
+params: (str)
+visibility: public

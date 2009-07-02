@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: GemManagement#ensure_bin_wrapper_for_installed_gems
+is_singleton: false
+name: ensure_bin_wrapper_for_installed_gems
+params: (gemspecs, options)
+visibility: public

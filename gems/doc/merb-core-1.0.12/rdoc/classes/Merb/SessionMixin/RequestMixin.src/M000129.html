@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>included (Merb::SessionMixin::RequestMixin)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/dispatch/session.rb, line 115</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">included</span>(<span class="ruby-identifier">base</span>)
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">extend</span> <span class="ruby-constant">ClassMethods</span>
+        
+        <span class="ruby-comment cmt"># Keep track of all known session store types.</span>
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">cattr_accessor</span> <span class="ruby-identifier">:registered_session_types</span>
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">registered_session_types</span> = <span class="ruby-constant">Dictionary</span>.<span class="ruby-identifier">new</span>
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">class_inheritable_accessor</span> <span class="ruby-identifier">:_session_id_key</span>, <span class="ruby-identifier">:_session_secret_key</span>,
+                                        <span class="ruby-identifier">:_session_expiry</span>
+        
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">_session_id_key</span>        = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:session_id_key</span>] <span class="ruby-operator">||</span> <span class="ruby-value str">'_session_id'</span>
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">_session_expiry</span>        = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:session_expiry</span>] <span class="ruby-operator">||</span> <span class="ruby-value">0</span>
+        <span class="ruby-identifier">base</span>.<span class="ruby-identifier">_session_secret_key</span>    = <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:session_secret_key</span>]
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

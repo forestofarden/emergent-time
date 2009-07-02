@@ -1,0 +1,116 @@
+<script language="javascript">
+
+$().ready(function() {
+  // return currently selected source event for event form
+  var selectedSourceEvent = function() {
+    return $('#source_list .event.selected').attr('db_id');
+  };
+
+  var setSourceEvents = function(evts) {
+    $('#source_list .event[db_id!=]').remove();   // remove all generated sources
+    $.each(evts, function() {
+      var $html = $(formatEvent(this));
+      $('#source_list').append($html);
+      $html.data('evt_json', this);
+    });
+  };
+
+  var selectSource = function(id) {
+    var $source = $('#source_list .event[db_id=' + id + ']');
+    var data = $source.data('evt_json');
+  
+    $('#source_list .event.selected').removeClass('selected');
+    $source.addClass('selected');
+  
+    // set event id for created timeline_event
+    $('#create_event_form #event_id').val(id);
+  
+    // activating form again for new event
+    if (id == '') {
+      $('#create_event_form .disabled').removeClass('disabled');
+      $('#create_event_form :input').removeAttr('readonly');
+      $('#create_event_form #timeline_event_event_id').val(''); // hidden event ids
+    } else {
+      // and copy values into it from existing event
+      $('#create_event_form #timeline_event_event_id').val(data['id']); // hidden event ids
+      $('#create_event_form input[id=event\[start\]]').val(formatDate(data['start'])).blur();
+      $('#create_event_form input[id=event\[end\]]').val(formatDate(data['end'])).blur();
+      $('#create_event_form input[id=event\[title\]]').val(data['real_title']).blur();
+      $('#create_event_form textarea[id=event\[description\]]').val(data['description']).blur();
+      $('#create_event_form textarea[id=event_comment\[text\]]').val('').blur();
+    
+      // using existing event, so disable form
+      $('#create_event_form .core_event :input').addClass('disabled').attr('readonly', 'readonly');
+      $('#create_event_form .core_event label').addClass('disabled');
+    
+      // prompt for final field
+      $('#create_event_form input[id=event\[interpretation\]]').focus();
+    }
+  }
+  // if user selects a source event, copy it over
+  $('#source_list .event').live('click', function() {
+    selectSource($(this).attr('db_id'));
+  });
+
+  // event form validation
+  $('#create_event_form').ajaxValidate({ 
+    url: '<%= url(:validate_create_te) %>'
+  });
+  // event suggestion list based on changing fields in form
+  $('#create_event_form .core_event :input').input_listen({
+    min_chars: 4,
+    changed: function(s) {
+      if (selectedSourceEvent() == '') {             // don't suggest when user has already made a choice
+        $('#create_event_form').ajaxSubmit({
+      	  type: 'POST', 
+      	  url: '<%= url(:suggest_event) %>',
+      	  dataType: 'json',
+        	beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "application/json") }, /* JQuery uses wrong content type header */
+          success: function(data) {
+            setSourceEvents(data.events);
+          }
+        }); 
+      }
+    }
+  });
+});
+</script>
+
+<div id="create_event_sources">
+  <label>Build on an existing event</label>
+  <ul id="source_list">
+    <li class="event selected" db_id=""><div class="event_container">[ Or create your own ]</div></li>
+  </ul>
+</div>
+<%= form_for @timeline_event, :id => "create_event_form", :action => resource(:timeline_events) do %>
+    <%= hidden_field :timeline_id, :value => @timeline.id %>
+    <%= hidden_field :event_id, :value => nil %>
+    <div class="core_event">
+      <div><label for="create_event_start">Start</label>
+           <%= text_field :name => "event[start]"%><div class='validate'></div>
+           <div class='instructions'>Required: e.g. "11/22/1963"</div></div>
+      <div><label for="create_event_end">End</label>
+           <%= text_field :name => "event[end]" %><div class='validate'></div>
+           <div class='instructions'>Optional</div></div>
+      <div><label for="create_event_title">Title</label>
+          <%= text_field :name => "event[title]" %><div class='validate'></div>
+          <div class='instructions'>2-5 optional words: e.g. "Kennedy shot"</div></div>
+      <div><label for="create_event_description">Description</label>
+           <%= text_area :name => "event[description]", :id => 'event[description]', :rows => 4, :cols => 40  %><div class='validate'></div>
+           <div class='instructions'>A short factual description of the event.<br/><br/>
+                                     "President Kennedy shot in Dallas."</div></div>
+     <div><label for="create_event_source">Source</label>
+          <%= text_area :name => "event_comment[text]", :id => 'event_comment[text]', :rows => 2, :cols => 40  %><div class='validate'></div>
+          <div class='instructions'>Optional source for this information.<br/><br/>
+                                    A URL or footnote-style reference.</div></div>                               
+                                     
+    </div>
+    <div class="interpretation"><label for="create_event_interpretation">Interpretation</label>
+         <%= text_area :interpretation, :rows => 8, :cols => 40 %></textarea><div class='validate'></div>
+         <div class='instructions'>Your interpretation of the event in the context of this timeline.<br/><br/>
+                                   "Since Oswald was sighted 15mins before in the TSBD lunch room, he would have just had time to get to the 6th floor and set his gun sights."<br/><br/>
+                                   Optional</div></div> 
+    <div id="submit_buttons"><%= submit "Submit" %></div>
+<% end =%>
+</div>
+</div>

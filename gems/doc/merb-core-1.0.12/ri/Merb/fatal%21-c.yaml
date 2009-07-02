@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Perform a hard Exit. Print a backtrace to the merb logger before exiting if verbose is enabled.
+- !ruby/struct:SM::Flow::P 
+  body: ":api: private"
+full_name: Merb::fatal!
+is_singleton: true
+name: fatal!
+params: (str, e = nil)
+visibility: public

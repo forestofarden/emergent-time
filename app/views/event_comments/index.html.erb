@@ -1,0 +1,20 @@
+<%# TODO.  combine this file with timeline_events/index.html.erb 
+%>
+<%= "No comments" if @event.event_comments.empty? %>
+<ul class="comment_list">
+  <% @event.event_comments.each do |comment| %>
+    <li class="comment">
+      <a href="<%= comment.user ? resource(comment.user, :timelines) : '#' %>">
+  	    <img src='<%= gravatar_image_url comment.user_email %>'/>
+  	  </a>
+  	  <div class='name'>
+  	    <a href="<%= comment.user ? resource(comment.user, :timelines) : '#' %>">
+  	      <%= comment.user_name %>
+  	    </a>
+  	  </div>
+  	  <small class='date'><%= comment.created_at.formatted(:long) %></small>
+  	  <%= textilize(comment.text) %>
+  	  <div class="clear"></div>
+  	</li>
+	<% end %>
+</ul>

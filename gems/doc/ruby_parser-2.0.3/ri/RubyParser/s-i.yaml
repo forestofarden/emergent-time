@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser#s
+is_singleton: false
+name: s
+params: (*args)
+visibility: public

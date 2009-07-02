@@ -1,0 +1,19 @@
+<h3 id="comments"><%= numerize(@timeline.timeline_comments.size, 'Response')
+%> to "<%= @timeline.title%>"</h3>
+<ul class="comment_list">
+  <% @timeline.timeline_comments.each do |comment| %>
+    <li class="comment">
+      <a href="<%= comment.user ? resource(comment.user, :timelines) : '#' %>">
+  	    <img src='<%= gravatar_image_url comment.user_email %>'/>
+  	  </a>
+  	  <div class='name'>
+  	    <a href="<%= comment.user ? resource(comment.user, :timelines) : '#' %>">
+  	      <%= comment.user_name %>
+  	    </a>
+  	  </div>
+  	  <small class='date'><%= comment.created_at.formatted(:long) %></small>
+  	  <%= textilize(comment.text) %>
+  	  <div class="clear"></div>
+  	</li>
+	<% end %>
+</ul>

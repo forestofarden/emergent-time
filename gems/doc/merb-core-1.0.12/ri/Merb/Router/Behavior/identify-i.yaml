@@ -1,0 +1,37 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "Sets a method for instances of specified Classes to be called before insertion into a route. This is useful when using models and want a specific method to be called on it (For example, for ActiveRecord::Base it would be #to_param)."
+- !ruby/struct:SM::Flow::P 
+  body: "The default method called on objects is #to_s."
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Paramters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "identifiers<Hash>:"
+    body: The keys are Classes and the values are the method that instances of the specified class should have called on.
+  - !ruby/struct:SM::Flow::LI 
+    label: "&block:"
+    body: All routes defined in the block will be call the specified methods during generation.
+  type: :NOTE
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Block parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "r<Behavior>:"
+    body: The identify behavior object. This is optional
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::Router::Behavior#identify
+is_singleton: false
+name: identify
+params: (identifiers = {}, &block)
+visibility: public

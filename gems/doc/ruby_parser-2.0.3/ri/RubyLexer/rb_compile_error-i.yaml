@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyLexer#rb_compile_error
+is_singleton: false
+name: rb_compile_error
+params: (msg)
+visibility: public

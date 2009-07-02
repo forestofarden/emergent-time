@@ -1,0 +1,23 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Removes a filter from the after filter chain. This removes the filter from the filter chain for the whole controller and does not take any options.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Parameters
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "filter<Symbol, String>:"
+    body: A filter name to skip.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::AbstractController::skip_after
+is_singleton: true
+name: skip_after
+params: (filter)
+visibility: public

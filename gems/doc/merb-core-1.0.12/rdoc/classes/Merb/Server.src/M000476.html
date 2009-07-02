@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>kill_pid (Merb::Server)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/server.rb, line 108</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">kill_pid</span>(<span class="ruby-identifier">sig</span>, <span class="ruby-identifier">file</span>)
+        <span class="ruby-keyword kw">begin</span>
+          <span class="ruby-identifier">pid</span> = <span class="ruby-identifier">pid_in_file</span>(<span class="ruby-identifier">file</span>)
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;Killing pid #{pid} with #{sig}&quot;</span>
+          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">kill</span>(<span class="ruby-identifier">sig</span>, <span class="ruby-identifier">pid</span>)
+          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span>(<span class="ruby-identifier">file</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">file</span>)
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EINVAL</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;Failed to kill PID #{pid} with #{sig}: '#{sig}' is an invalid &quot;</span> \
+            <span class="ruby-value str">&quot;or unsupported signal number.&quot;</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EPERM</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;Failed to kill PID #{pid} with #{sig}: Insufficient permissions.&quot;</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ESRCH</span>
+          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">rm</span> <span class="ruby-identifier">file</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;Failed to kill PID #{pid} with #{sig}: Process is &quot;</span> \
+            <span class="ruby-value str">&quot;deceased or zombie.&quot;</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EACCES</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-identifier">e</span>.<span class="ruby-identifier">message</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">ENOENT</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+          <span class="ruby-comment cmt"># This should not cause abnormal exit, which is why </span>
+          <span class="ruby-comment cmt"># we do not use Merb.fatal but instead just log with max level.</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;Could not find a PID file at #{file}. &quot;</span> \
+            <span class="ruby-value str">&quot;Most likely the process is no longer running and the pid file was not cleaned up.&quot;</span>
+        <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-operator">!</span><span class="ruby-identifier">e</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">SystemExit</span>)
+            <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;Failed to kill PID #{pid.inspect} with #{sig.inspect}: #{e.message}&quot;</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

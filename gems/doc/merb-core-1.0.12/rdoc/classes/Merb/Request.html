@@ -1,0 +1,1351 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+  <title>Class: Merb::Request</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <meta http-equiv="Content-Script-Type" content="text/javascript" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+  <script type="text/javascript">
+  // <![CDATA[
+
+  function popupCode( url ) {
+    window.open(url, "Code", "resizable=yes,scrollbars=yes,toolbar=no,status=no,height=150,width=400")
+  }
+
+  function toggleCode( id ) {
+    if ( document.getElementById )
+      elem = document.getElementById( id );
+    else if ( document.all )
+      elem = eval( "document.all." + id );
+    else
+      return false;
+
+    elemStyle = elem.style;
+    
+    if ( elemStyle.display != "block" ) {
+      elemStyle.display = "block"
+    } else {
+      elemStyle.display = "none"
+    }
+
+    return true;
+  }
+  
+  // Make codeblocks hidden by default
+  document.writeln( "<style type=\"text/css\">div.method-source-code { display: none }</style>" )
+  
+  // ]]>
+  </script>
+
+</head>
+<body>
+
+
+
+    <div id="classHeader">
+        <table class="header-table">
+        <tr class="top-aligned-row">
+          <td><strong>Class</strong></td>
+          <td class="class-name-in-header">Merb::Request</td>
+        </tr>
+        <tr class="top-aligned-row">
+            <td><strong>In:</strong></td>
+            <td>
+                <a href="../../files/lib/merb-core/dispatch/dispatcher_rb.html">
+                lib/merb-core/dispatch/dispatcher.rb
+                </a>
+        <br />
+                <a href="../../files/lib/merb-core/dispatch/request_rb.html">
+                lib/merb-core/dispatch/request.rb
+                </a>
+        <br />
+            </td>
+        </tr>
+
+        <tr class="top-aligned-row">
+            <td><strong>Parent:</strong></td>
+            <td>
+                <a href="../Object.html">
+                Object
+               </a>
+            </td>
+        </tr>
+        </table>
+    </div>
+  <!-- banner header -->
+
+  <div id="bodyContent">
+
+
+
+  <div id="contextContent">
+
+
+
+   </div>
+
+    <div id="method-list">
+      <h3 class="section-bar">Methods</h3>
+
+      <div class="name-list">
+      <a href="#M000506">_process_block_return</a>&nbsp;&nbsp;
+      <a href="#M000535">accept</a>&nbsp;&nbsp;
+      <a href="#M000532">accept_charset</a>&nbsp;&nbsp;
+      <a href="#M000526">accept_encoding</a>&nbsp;&nbsp;
+      <a href="#M000529">accept_language</a>&nbsp;&nbsp;
+      <a href="#M000517">ajax?</a>&nbsp;&nbsp;
+      <a href="#M000528">cache_control</a>&nbsp;&nbsp;
+      <a href="#M000536">connection</a>&nbsp;&nbsp;
+      <a href="#M000539">content_length</a>&nbsp;&nbsp;
+      <a href="#M000538">content_type</a>&nbsp;&nbsp;
+      <a href="#M000503">controller</a>&nbsp;&nbsp;
+      <a href="#M000545">domain</a>&nbsp;&nbsp;
+      <a href="#M000505">find_route!</a>&nbsp;&nbsp;
+      <a href="#M000522">full_uri</a>&nbsp;&nbsp;
+      <a href="#M000534">gateway</a>&nbsp;&nbsp;
+      <a href="#M000501">handle</a>&nbsp;&nbsp;
+      <a href="#M000510">handled?</a>&nbsp;&nbsp;
+      <a href="#M000543">host</a>&nbsp;&nbsp;
+      <a href="#M000547">if_modified_since</a>&nbsp;&nbsp;
+      <a href="#M000546">if_none_match</a>&nbsp;&nbsp;
+      <a href="#M000531">keep_alive</a>&nbsp;&nbsp;
+      <a href="#M000507">matched!</a>&nbsp;&nbsp;
+      <a href="#M000508">matched?</a>&nbsp;&nbsp;
+      <a href="#M000512">message</a>&nbsp;&nbsp;
+      <a href="#M000504">method</a>&nbsp;&nbsp;
+      <a href="#M000502">new</a>&nbsp;&nbsp;
+      <a href="#M000511">params</a>&nbsp;&nbsp;
+      <a href="#M000540">path</a>&nbsp;&nbsp;
+      <a href="#M000541">path_info</a>&nbsp;&nbsp;
+      <a href="#M000542">port</a>&nbsp;&nbsp;
+      <a href="#M000519">protocol</a>&nbsp;&nbsp;
+      <a href="#M000537">query_string</a>&nbsp;&nbsp;
+      <a href="#M000509">rack_response</a>&nbsp;&nbsp;
+      <a href="#M000514">raw_post</a>&nbsp;&nbsp;
+      <a href="#M000521">referer</a>&nbsp;&nbsp;
+      <a href="#M000518">remote_ip</a>&nbsp;&nbsp;
+      <a href="#M000513">reset_params!</a>&nbsp;&nbsp;
+      <a href="#M000527">script_name</a>&nbsp;&nbsp;
+      <a href="#M000525">server_name</a>&nbsp;&nbsp;
+      <a href="#M000530">server_software</a>&nbsp;&nbsp;
+      <a href="#M000520">ssl?</a>&nbsp;&nbsp;
+      <a href="#M000544">subdomains</a>&nbsp;&nbsp;
+      <a href="#M000523">uri</a>&nbsp;&nbsp;
+      <a href="#M000524">user_agent</a>&nbsp;&nbsp;
+      <a href="#M000533">version</a>&nbsp;&nbsp;
+      <a href="#M000516">xhr?</a>&nbsp;&nbsp;
+      <a href="#M000515">xml_http_request?</a>&nbsp;&nbsp;
+      </div>
+    </div>
+
+  </div>
+
+
+    <!-- if includes -->
+    <div id="includes">
+      <h3 class="section-bar">Included Modules</h3>
+
+      <div id="includes-list">
+        <span class="include-name"><a href="ControllerExceptions.html">Merb::ControllerExceptions</a></span>
+      </div>
+    </div>
+
+    <div id="section">
+
+
+    <div id="constants-list">
+      <h3 class="section-bar">Constants</h3>
+
+      <div class="name-list">
+        <table summary="Constants">
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">METHODS</td>
+          <td>=</td>
+          <td class="context-item-value">%w{get post put delete head options}</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+
+
+
+    <div id="attribute-list">
+      <h3 class="section-bar">Attributes</h3>
+
+      <div class="name-list">
+        <table>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">env</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+:api: private
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">exceptions</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+:api: public
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">route</td>
+          <td class="context-item-value">&nbsp;[RW]&nbsp;</td>
+          <td class="context-item-desc">
+:api: private
+
+</td>
+        </tr>
+        <tr class="top-aligned-row context-row">
+          <td class="context-item-name">route_params</td>
+          <td class="context-item-value">&nbsp;[R]&nbsp;</td>
+          <td class="context-item-desc">
+:api: private
+
+</td>
+        </tr>
+        </table>
+      </div>
+    </div>
+      
+
+
+    <!-- if method_list -->
+    <div id="methods">
+      <h3 class="section-bar">Public Class methods</h3>
+
+      <div id="method-M000502" class="method-detail">
+        <a name="M000502"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000502.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000502.html');return false;">
+          <span class="method-name">new</span><span class="method-args">(rack_env)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Initialize the request object.
+</p>
+<h4>Parameters</h4>
+<table>
+<tr><td valign="top">http_request&lt;~<a href="Request.html#M000511">params</a>:~[], ~body:IO&gt;:</td><td>An object like an HTTP <a href="Request.html">Request</a>.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <h3 class="section-bar">Public Instance methods</h3>
+
+      <div id="method-M000506" class="method-detail">
+        <a name="M000506"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000506.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000506.html');return false;">
+          <span class="method-name">_process_block_return</span><span class="method-args">(retval)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Notes</h4>
+<p>
+Processes the return value of a deferred router block and returns the
+current route <a href="Request.html#M000511">params</a> for the current
+request evaluation
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000535" class="method-detail">
+        <a name="M000535"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000535.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000535.html');return false;">
+          <span class="method-name">accept</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The accepted response types. Defaults to &quot;*/*&quot;.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000532" class="method-detail">
+        <a name="M000532"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000532.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000532.html');return false;">
+          <span class="method-name">accept_charset</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The accepted character sets.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000526" class="method-detail">
+        <a name="M000526"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000526.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000526.html');return false;">
+          <span class="method-name">accept_encoding</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The accepted encodings.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000529" class="method-detail">
+        <a name="M000529"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000529.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000529.html');return false;">
+          <span class="method-name">accept_language</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The accepted language.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000517" class="method-detail">
+        <a name="M000517"></a>
+
+        <div class="method-heading">
+          <span class="method-name">ajax?</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for xml_http_request?
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000528" class="method-detail">
+        <a name="M000528"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000528.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000528.html');return false;">
+          <span class="method-name">cache_control</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>HTTP cache control.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000536" class="method-detail">
+        <a name="M000536"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000536.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000536.html');return false;">
+          <span class="method-name">connection</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The HTTP <a href="Request.html#M000536">connection</a>.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000539" class="method-detail">
+        <a name="M000539"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000539.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000539.html');return false;">
+          <span class="method-name">content_length</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">Fixnum:</td><td>The request content length.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000538" class="method-detail">
+        <a name="M000538"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000538.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000538.html');return false;">
+          <span class="method-name">content_type</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The request content type.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000503" class="method-detail">
+        <a name="M000503"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000503.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000503.html');return false;">
+          <span class="method-name">controller</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Returns the <a href="Request.html#M000503">controller</a> object for
+initialization and dispatching the request.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../Class.html">Class</a>:</td><td>The <a href="Request.html#M000503">controller</a> class matching the routed
+request,
+
+</td></tr>
+</table>
+<pre>
+  e.g. Posts.
+</pre>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000545" class="method-detail">
+        <a name="M000545"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000545.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000545.html');return false;">
+          <span class="method-name">domain</span><span class="method-args">(tld_length = 1)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Parameters</h4>
+<table>
+<tr><td valign="top">tld_length&lt;Fixnum&gt;:</td><td>Number of domains levels to inlclude in the top level <a
+href="Request.html#M000545">domain</a>. Defaults to 1.
+
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The full <a href="Request.html#M000545">domain</a> name without the <a
+href="Request.html#M000542">port</a> number.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000505" class="method-detail">
+        <a name="M000505"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000505.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000505.html');return false;">
+          <span class="method-name">find_route!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Notes</h4>
+<p>
+Find route using requested URI and merges route parameters (:action, :<a
+href="Request.html#M000503">controller</a> and named segments) into request
+<a href="Request.html#M000511">params</a> hash.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000522" class="method-detail">
+        <a name="M000522"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000522.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000522.html');return false;">
+          <span class="method-name">full_uri</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The full URI, including <a href="Request.html#M000519">protocol</a> and <a
+href="Request.html#M000543">host</a>
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000534" class="method-detail">
+        <a name="M000534"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000534.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000534.html');return false;">
+          <span class="method-name">gateway</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The <a href="Request.html#M000534">gateway</a>.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000501" class="method-detail">
+        <a name="M000501"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000501.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000501.html');return false;">
+          <span class="method-name">handle</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Handles request routing and action dispatch.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="Controller.html">Merb::Controller</a>:</td><td>the <a href="Request.html#M000503">controller</a> that handled the action
+dispatch.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000510" class="method-detail">
+        <a name="M000510"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000510.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000510.html');return false;">
+          <span class="method-name">handled?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+If @route_params is an Array, then it will be the rack response. In this
+case, the request is considered handled.
+</p>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean:</td><td>true if @route_params is an Array, false otherwise.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000543" class="method-detail">
+        <a name="M000543"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000543.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000543.html');return false;">
+          <span class="method-name">host</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The full hostname including the <a href="Request.html#M000542">port</a>.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000547" class="method-detail">
+        <a name="M000547"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000547.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000547.html');return false;">
+          <span class="method-name">if_modified_since</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<p>
+Value of If-Modified-Since request header.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000546" class="method-detail">
+        <a name="M000546"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000546.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000546.html');return false;">
+          <span class="method-name">if_none_match</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<p>
+Value of If-None-Match request header.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000531" class="method-detail">
+        <a name="M000531"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000531.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000531.html');return false;">
+          <span class="method-name">keep_alive</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>Value of HTTP_KEEP_ALIVE.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000507" class="method-detail">
+        <a name="M000507"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000507.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000507.html');return false;">
+          <span class="method-name">matched!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Sets the request as matched. This will abort evaluating any further
+deferred procs.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000508" class="method-detail">
+        <a name="M000508"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000508.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000508.html');return false;">
+          <span class="method-name">matched?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Checks whether or not the request has been matched to a route.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000512" class="method-detail">
+        <a name="M000512"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000512.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000512.html');return false;">
+          <span class="method-name">message</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>Returns the redirect <a href="Request.html#M000512">message</a> Base64
+unencoded.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000504" class="method-detail">
+        <a name="M000504"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000504.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000504.html');return false;">
+          <span class="method-name">method</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">Symbol:</td><td>The name of the request <a href="Request.html#M000504">method</a>, e.g.
+:get.
+
+</td></tr>
+</table>
+<h4>Notes</h4>
+<p>
+If the <a href="Request.html#M000504">method</a> is post, then the blocks
+specified in http_method_overrides will be checked for the masquerading <a
+href="Request.html#M000504">method</a>. The block will get the <a
+href="Request.html#M000503">controller</a> yielded to it. The first
+matching workaround wins. To disable this behavior, set
+http_method_overrides = []
+</p>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000511" class="method-detail">
+        <a name="M000511"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000511.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000511.html');return false;">
+          <span class="method-name">params</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">Mash:</td><td>All request parameters.
+
+</td></tr>
+</table>
+<h4>Notes</h4>
+<p>
+The order of precedence for the <a href="Request.html#M000511">params</a>
+is XML, <a href="../JSON.html">JSON</a>, multipart, body and request
+string.
+</p>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000540" class="method-detail">
+        <a name="M000540"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000540.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000540.html');return false;">
+          <span class="method-name">path</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The URI without the query string. Strips trailing &quot;/&quot; and reduces
+duplicate &quot;/&quot; to a single &quot;/&quot;.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000541" class="method-detail">
+        <a name="M000541"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000541.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000541.html');return false;">
+          <span class="method-name">path_info</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The <a href="Request.html#M000540">path</a> info.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000542" class="method-detail">
+        <a name="M000542"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000542.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000542.html');return false;">
+          <span class="method-name">port</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">Fixnum:</td><td>The server <a href="Request.html#M000542">port</a>.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000519" class="method-detail">
+        <a name="M000519"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000519.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000519.html');return false;">
+          <span class="method-name">protocol</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The <a href="Request.html#M000519">protocol</a>, i.e. either
+&quot;https&quot; or &quot;http&quot; depending on the HTTPS header.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000537" class="method-detail">
+        <a name="M000537"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000537.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000537.html');return false;">
+          <span class="method-name">query_string</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The query string.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000509" class="method-detail">
+        <a name="M000509"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000509.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000509.html');return false;">
+          <span class="method-name">rack_response</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">(Array, <a href="../Hash.html">Hash</a>):</td><td>the route <a href="Request.html#M000511">params</a> for the matched route.
+
+</td></tr>
+</table>
+<h4>Notes</h4>
+<p>
+If the response is an Array then it is considered a direct <a
+href="Rack.html">Rack</a> response to be sent back as a response.
+Otherwise, the route_params is a <a href="../Hash.html">Hash</a> with
+routing data (<a href="Request.html#M000503">controller</a>, action, et
+al).
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000514" class="method-detail">
+        <a name="M000514"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000514.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000514.html');return false;">
+          <span class="method-name">raw_post</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The raw post.
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000521" class="method-detail">
+        <a name="M000521"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000521.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000521.html');return false;">
+          <span class="method-name">referer</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The HTTP <a href="Request.html#M000521">referer</a>.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000518" class="method-detail">
+        <a name="M000518"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000518.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000518.html');return false;">
+          <span class="method-name">remote_ip</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The remote IP address.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000513" class="method-detail">
+        <a name="M000513"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000513.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000513.html');return false;">
+          <span class="method-name">reset_params!</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Notes</h4>
+<p>
+Resets the <a href="Request.html#M000511">params</a> to a nil value.
+</p>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000527" class="method-detail">
+        <a name="M000527"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000527.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000527.html');return false;">
+          <span class="method-name">script_name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The script name.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000525" class="method-detail">
+        <a name="M000525"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000525.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000525.html');return false;">
+          <span class="method-name">server_name</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The server name.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000530" class="method-detail">
+        <a name="M000530"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000530.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000530.html');return false;">
+          <span class="method-name">server_software</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The server software.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000520" class="method-detail">
+        <a name="M000520"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000520.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000520.html');return false;">
+          <span class="method-name">ssl?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean::</td><td>True if the request is an SSL request.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000544" class="method-detail">
+        <a name="M000544"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000544.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000544.html');return false;">
+          <span class="method-name">subdomains</span><span class="method-args">(tld_length = 1)</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Parameters</h4>
+<table>
+<tr><td valign="top">tld_length&lt;Fixnum&gt;:</td><td>Number of domains levels to inlclude in the top level <a
+href="Request.html#M000545">domain</a>. Defaults to 1.
+
+</td></tr>
+</table>
+<h4>Returns</h4>
+<table>
+<tr><td valign="top">Array:</td><td>All the subdomain parts of the <a href="Request.html#M000543">host</a>.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000523" class="method-detail">
+        <a name="M000523"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000523.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000523.html');return false;">
+          <span class="method-name">uri</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The request URI.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000524" class="method-detail">
+        <a name="M000524"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000524.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000524.html');return false;">
+          <span class="method-name">user_agent</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The HTTP user agent.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000533" class="method-detail">
+        <a name="M000533"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000533.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000533.html');return false;">
+          <span class="method-name">version</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top"><a href="../String.html">String</a>:</td><td>The HTTP <a href="Request.html#M000533">version</a>
+
+</td></tr>
+</table>
+<p>
+:api: private
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000516" class="method-detail">
+        <a name="M000516"></a>
+
+        <div class="method-heading">
+          <span class="method-name">xhr?</span><span class="method-args">()</span>
+        </div>
+      
+        <div class="method-description">
+          <p>
+Alias for xml_http_request?
+</p>
+        </div>
+      </div>
+
+      <div id="method-M000515" class="method-detail">
+        <a name="M000515"></a>
+
+        <div class="method-heading">
+          <a href="Request.src/M000515.html" target="Code" class="method-signature"
+            onclick="popupCode('Request.src/M000515.html');return false;">
+          <span class="method-name">xml_http_request?</span><span class="method-args">()</span>
+          </a>
+        </div>
+      
+        <div class="method-description">
+          <h4>Returns</h4>
+<table>
+<tr><td valign="top">Boolean:</td><td>If the request is an XML HTTP request.
+
+</td></tr>
+</table>
+<p>
+:api: public
+</p>
+        </div>
+      </div>
+
+
+    </div>
+
+
+  </div>
+
+
+<div id="validator-badges">
+  <p><small><a href="http://validator.w3.org/check/referer">[Validate]</a></small></p>
+</div>
+
+</body>
+</html>

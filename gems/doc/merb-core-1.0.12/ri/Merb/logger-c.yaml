@@ -1,0 +1,14 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Return the Merb Logger object for the current thread. Set it up if it does not exist.
+- !ruby/struct:SM::Flow::P 
+  body: ":api: public"
+full_name: Merb::logger
+is_singleton: true
+name: logger
+params: ()
+visibility: public

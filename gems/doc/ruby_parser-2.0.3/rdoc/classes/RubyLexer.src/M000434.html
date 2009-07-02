@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>parse_quote (RubyLexer)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/ruby_lexer.rb, line 273</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">parse_quote</span> <span class="ruby-comment cmt"># 58 lines</span>
+    <span class="ruby-identifier">beg</span>, <span class="ruby-identifier">nnd</span>, <span class="ruby-identifier">short_hand</span>, <span class="ruby-identifier">c</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">false</span>, <span class="ruby-keyword kw">nil</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/[a-z0-9]{1,2}/i</span>) <span class="ruby-keyword kw">then</span> <span class="ruby-comment cmt"># Long-hand (e.g. %Q{}).</span>
+      <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;unknown type of %string&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched_size</span> <span class="ruby-operator">==</span> <span class="ruby-value">2</span>
+      <span class="ruby-identifier">c</span>, <span class="ruby-identifier">beg</span>, <span class="ruby-identifier">short_hand</span> = <span class="ruby-identifier">src</span>.<span class="ruby-identifier">matched</span>, <span class="ruby-identifier">src</span>.<span class="ruby-identifier">getch</span>, <span class="ruby-keyword kw">false</span>
+    <span class="ruby-keyword kw">else</span>                               <span class="ruby-comment cmt"># Short-hand (e.g. %{, %., %!, etc)</span>
+      <span class="ruby-identifier">c</span>, <span class="ruby-identifier">beg</span>, <span class="ruby-identifier">short_hand</span> = <span class="ruby-value str">'Q'</span>, <span class="ruby-identifier">src</span>.<span class="ruby-identifier">getch</span>, <span class="ruby-keyword kw">true</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">src</span>.<span class="ruby-identifier">eos?</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">==</span> <span class="ruby-constant">RubyLexer</span><span class="ruby-operator">::</span><span class="ruby-constant">EOF</span> <span class="ruby-keyword kw">or</span> <span class="ruby-identifier">beg</span> <span class="ruby-operator">==</span> <span class="ruby-constant">RubyLexer</span><span class="ruby-operator">::</span><span class="ruby-constant">EOF</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-value str">&quot;unterminated quoted string meets end of file&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-comment cmt"># Figure nnd-char.  &quot;\0&quot; is special to indicate beg=nnd and that no nesting?</span>
+    <span class="ruby-identifier">nnd</span> = { <span class="ruby-value str">&quot;(&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;)&quot;</span>, <span class="ruby-value str">&quot;[&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;]&quot;</span>, <span class="ruby-value str">&quot;{&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;}&quot;</span>, <span class="ruby-value str">&quot;&lt;&quot;</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-value str">&quot;&gt;&quot;</span> }[<span class="ruby-identifier">beg</span>]
+    <span class="ruby-identifier">nnd</span>, <span class="ruby-identifier">beg</span> = <span class="ruby-identifier">beg</span>, <span class="ruby-value str">&quot;\0&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">nnd</span>.<span class="ruby-identifier">nil?</span>
+
+    <span class="ruby-identifier">token_type</span>, <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-node">&quot;%#{c}#{beg}&quot;</span>
+    <span class="ruby-identifier">token_type</span>, <span class="ruby-identifier">string_type</span> = <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">c</span>
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'Q'</span> <span class="ruby-keyword kw">then</span>
+                                <span class="ruby-identifier">ch</span> = <span class="ruby-identifier">short_hand</span> <span class="ruby-value">? </span><span class="ruby-identifier">nnd</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">+</span> <span class="ruby-identifier">beg</span>
+                                <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">yacc_value</span> = <span class="ruby-node">&quot;%#{ch}&quot;</span>
+                                [<span class="ruby-identifier">:tSTRING_BEG</span>,   <span class="ruby-constant">STR_DQUOTE</span>]
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'q'</span> <span class="ruby-keyword kw">then</span>
+                                [<span class="ruby-identifier">:tSTRING_BEG</span>,   <span class="ruby-constant">STR_SQUOTE</span>]
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'W'</span> <span class="ruby-keyword kw">then</span>
+                                <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\s*/</span>)
+                                [<span class="ruby-identifier">:tWORDS_BEG</span>,    <span class="ruby-constant">STR_DQUOTE</span> <span class="ruby-operator">|</span> <span class="ruby-constant">STR_FUNC_AWORDS</span>]
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'w'</span> <span class="ruby-keyword kw">then</span>
+                                <span class="ruby-identifier">src</span>.<span class="ruby-identifier">scan</span>(<span class="ruby-regexp re">/\s*/</span>)
+                                [<span class="ruby-identifier">:tAWORDS_BEG</span>,   <span class="ruby-constant">STR_SQUOTE</span> <span class="ruby-operator">|</span> <span class="ruby-constant">STR_FUNC_AWORDS</span>]
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'x'</span> <span class="ruby-keyword kw">then</span>
+                                [<span class="ruby-identifier">:tXSTRING_BEG</span>,  <span class="ruby-constant">STR_XQUOTE</span>]
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'r'</span> <span class="ruby-keyword kw">then</span>
+                                [<span class="ruby-identifier">:tREGEXP_BEG</span>,   <span class="ruby-constant">STR_REGEXP</span>]
+                              <span class="ruby-keyword kw">when</span> <span class="ruby-value str">'s'</span> <span class="ruby-keyword kw">then</span>
+                                <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_state</span>  = <span class="ruby-identifier">:expr_fname</span>
+                                [<span class="ruby-identifier">:tSYMBEG</span>,       <span class="ruby-constant">STR_SSYM</span>]
+                              <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">rb_compile_error</span> <span class="ruby-node">&quot;Bad %string type. Expected [Qqwxr\W], found '#{c}'.&quot;</span> <span class="ruby-keyword kw">if</span>
+      <span class="ruby-identifier">token_type</span>.<span class="ruby-identifier">nil?</span>
+
+    <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">lex_strterm</span> = [<span class="ruby-identifier">:strterm</span>, <span class="ruby-identifier">string_type</span>, <span class="ruby-identifier">nnd</span>, <span class="ruby-identifier">beg</span>]
+
+    <span class="ruby-keyword kw">return</span> <span class="ruby-identifier">token_type</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

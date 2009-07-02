@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>loadable_files (Merb::Slices::ModuleMixin)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-slices/module_mixin.rb, line 246</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">loadable_files</span>
+        <span class="ruby-identifier">app_components</span>.<span class="ruby-identifier">inject</span>([]) <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">paths</span>, <span class="ruby-identifier">type</span><span class="ruby-operator">|</span>
+          <span class="ruby-identifier">paths</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">dir_for</span>(<span class="ruby-identifier">type</span>) <span class="ruby-operator">/</span> <span class="ruby-value str">'**/*.rb'</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">slice_paths</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">type</span>)
+          <span class="ruby-identifier">paths</span> <span class="ruby-operator">+=</span> <span class="ruby-constant">Dir</span>[<span class="ruby-identifier">app_dir_for</span>(<span class="ruby-identifier">type</span>) <span class="ruby-operator">/</span> <span class="ruby-value str">'**/*.rb'</span>] <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">app_paths</span>.<span class="ruby-identifier">key?</span>(<span class="ruby-identifier">type</span>)
+          <span class="ruby-identifier">paths</span>
+        <span class="ruby-keyword kw">end</span>        
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Predicate method to check if the :application component is a file
+full_name: Merb::Slices::ModuleMixin#application_file?
+is_singleton: false
+name: application_file?
+params: ()
+visibility: protected

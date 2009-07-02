@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>process (RubyParserGauntlet)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/gauntlet_rubyparser.rb, line 58</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">process</span> <span class="ruby-identifier">path</span>, <span class="ruby-identifier">name</span>
+    <span class="ruby-keyword kw">begin</span>
+      <span class="ruby-identifier">$stderr</span>.<span class="ruby-identifier">print</span> <span class="ruby-node">&quot;  #{path}: &quot;</span>
+      <span class="ruby-identifier">rp</span> = <span class="ruby-constant">RubyParser</span>.<span class="ruby-identifier">new</span>
+      <span class="ruby-identifier">r2r</span> = <span class="ruby-constant">Ruby2Ruby</span>.<span class="ruby-identifier">new</span>
+
+      <span class="ruby-identifier">old_ruby</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">read</span>(<span class="ruby-identifier">path</span>)
+
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">old_sexp</span> = <span class="ruby-identifier">rp</span>.<span class="ruby-identifier">process</span> <span class="ruby-identifier">old_ruby</span>
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Racc</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data</span>[<span class="ruby-identifier">name</span>][<span class="ruby-identifier">path</span>] = <span class="ruby-identifier">:unparsable</span>
+        <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dirty</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-keyword kw">return</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">new_ruby</span> = <span class="ruby-identifier">r2r</span>.<span class="ruby-identifier">process</span> <span class="ruby-identifier">old_sexp</span>.<span class="ruby-identifier">deep_clone</span>
+
+      <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">new_sexp</span> = <span class="ruby-identifier">rp</span>.<span class="ruby-identifier">process</span> <span class="ruby-identifier">new_ruby</span>
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Racc</span><span class="ruby-operator">::</span><span class="ruby-constant">ParseError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-identifier">broke</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">path</span>, <span class="ruby-node">&quot;couldn't parse new_ruby: #{e.message.strip}&quot;</span>
+        <span class="ruby-keyword kw">return</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">old_sexp</span> <span class="ruby-operator">!=</span> <span class="ruby-identifier">new_sexp</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">broke</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">path</span>, <span class="ruby-identifier">diff_pp</span>(<span class="ruby-identifier">old_sexp</span>, <span class="ruby-identifier">new_sexp</span>)
+        <span class="ruby-keyword kw">return</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">data</span>[<span class="ruby-identifier">name</span>][<span class="ruby-identifier">path</span>] = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-keyword kw">self</span>.<span class="ruby-identifier">dirty</span> = <span class="ruby-keyword kw">true</span>
+
+      <span class="ruby-identifier">warn</span> <span class="ruby-value str">&quot;good&quot;</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Interrupt</span>
+      <span class="ruby-identifier">puts</span> <span class="ruby-value str">&quot;User cancelled&quot;</span>
+      <span class="ruby-identifier">exit</span> <span class="ruby-value">1</span>
+    <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Exception</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+      <span class="ruby-identifier">broke</span> <span class="ruby-identifier">name</span>, <span class="ruby-identifier">path</span>, <span class="ruby-node">&quot;    UNKNOWN ERROR: #{e}: #{e.message.strip}&quot;</span>
+    <span class="ruby-keyword kw">end</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

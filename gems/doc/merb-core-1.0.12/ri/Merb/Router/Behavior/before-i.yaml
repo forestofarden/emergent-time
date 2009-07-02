@@ -1,0 +1,26 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Allows to insert the route at a certain spot in the list of routes instead of appending to the list.
+- !ruby/struct:SM::Flow::H 
+  level: 4
+  text: Params
+- !ruby/object:SM::Flow::LIST 
+  contents: 
+  - !ruby/struct:SM::Flow::LI 
+    label: "route<Route>:"
+    body: the route to insert before.
+  - !ruby/struct:SM::Flow::LI 
+    label: "&block:"
+    body: the route definition to insert.
+  type: :NOTE
+- !ruby/struct:SM::Flow::P 
+  body: ":api: plugin"
+full_name: Merb::Router::Behavior#before
+is_singleton: false
+name: before
+params: (route, &block)
+visibility: protected

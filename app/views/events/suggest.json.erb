@@ -1,0 +1,14 @@
+// Translate Hypertime suggested events into Simile event stream
+
+<% data = { 'dateTimeFormat' => 'iso8601',                %>
+<%          'events' => @top_events.map do |e| %>
+<%          { 'id'          => e.id.to_s,        %>
+<%            'start'       => e.start,              %>
+<%            'end'         => e.end ? e.end : nil,  %>
+<%            'real_title'       => e.title ? e.title : nil, %>
+<%            'description' => e.description,            %>
+<%            'interpretation' => '' }     %>
+<%          end %>
+<%        }                                               %>
+
+<%= data.to_json %>

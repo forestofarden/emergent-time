@@ -1,0 +1,37 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  name: moved
+  rw: RW
+class_methods: []
+
+comment: 
+constants: []
+
+full_name: DataMapper::Is::List::InstanceMethods
+includes: []
+
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: detach
+- !ruby/object:RI::MethodSummary 
+  name: left_sibling
+- !ruby/object:RI::MethodSummary 
+  name: list
+- !ruby/object:RI::MethodSummary 
+  name: list_query
+- !ruby/object:RI::MethodSummary 
+  name: list_scope
+- !ruby/object:RI::MethodSummary 
+  name: move
+- !ruby/object:RI::MethodSummary 
+  name: original_list_scope
+- !ruby/object:RI::MethodSummary 
+  name: reorder_list
+- !ruby/object:RI::MethodSummary 
+  name: repair_list
+- !ruby/object:RI::MethodSummary 
+  name: right_sibling
+name: InstanceMethods
+superclass: 

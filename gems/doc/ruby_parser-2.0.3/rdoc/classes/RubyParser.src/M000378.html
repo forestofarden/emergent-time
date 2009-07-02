@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>new_regexp (RubyParser)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/ruby_parser_extras.rb, line 589</span>
+  <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">new_regexp</span> <span class="ruby-identifier">val</span>
+    <span class="ruby-identifier">node</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">||</span> <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:str</span>, <span class="ruby-value str">''</span>)
+    <span class="ruby-identifier">options</span> = <span class="ruby-identifier">val</span>[<span class="ruby-value">2</span>]
+
+    <span class="ruby-identifier">o</span>, <span class="ruby-identifier">k</span> = <span class="ruby-value">0</span>, <span class="ruby-keyword kw">nil</span>
+    <span class="ruby-identifier">options</span>.<span class="ruby-identifier">split</span>(<span class="ruby-regexp re">//</span>).<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">c</span><span class="ruby-operator">|</span> <span class="ruby-comment cmt"># FIX: this has a better home</span>
+      <span class="ruby-identifier">v</span> = {
+        <span class="ruby-value str">'x'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">EXTENDED</span>,
+        <span class="ruby-value str">'i'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">IGNORECASE</span>,
+        <span class="ruby-value str">'m'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">MULTILINE</span>,
+        <span class="ruby-value str">'o'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ONCE</span>,
+        <span class="ruby-value str">'n'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_NONE</span>,
+        <span class="ruby-value str">'e'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_EUC</span>,
+        <span class="ruby-value str">'s'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_SJIS</span>,
+        <span class="ruby-value str">'u'</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-constant">Regexp</span><span class="ruby-operator">::</span><span class="ruby-constant">ENC_UTF8</span>,
+      }[<span class="ruby-identifier">c</span>]
+      <span class="ruby-identifier">raise</span> <span class="ruby-node">&quot;unknown regexp option: #{c}&quot;</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">v</span>
+      <span class="ruby-identifier">o</span> <span class="ruby-operator">+=</span> <span class="ruby-identifier">v</span>
+      <span class="ruby-identifier">k</span> = <span class="ruby-identifier">c</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">c</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/[esu]/</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-keyword kw">case</span> <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>]
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:str</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:lit</span>
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>] = <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">k</span> <span class="ruby-keyword kw">then</span>
+                  <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">o</span>, <span class="ruby-identifier">k</span>)
+                <span class="ruby-keyword kw">else</span>
+                  <span class="ruby-constant">Regexp</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">node</span>[<span class="ruby-value">1</span>], <span class="ruby-identifier">o</span>)
+                <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">when</span> <span class="ruby-identifier">:dstr</span> <span class="ruby-keyword kw">then</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/o/</span> <span class="ruby-keyword kw">then</span>
+        <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dregx_once</span>
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dregx</span>
+      <span class="ruby-keyword kw">end</span>
+      <span class="ruby-identifier">node</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">else</span>
+      <span class="ruby-identifier">node</span> = <span class="ruby-identifier">s</span>(<span class="ruby-identifier">:dregx</span>, <span class="ruby-value str">''</span>, <span class="ruby-identifier">node</span>);
+      <span class="ruby-identifier">node</span>[<span class="ruby-value">0</span>] = <span class="ruby-identifier">:dregx_once</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">options</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/o/</span>
+      <span class="ruby-identifier">node</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">o</span> <span class="ruby-keyword kw">and</span> <span class="ruby-identifier">o</span> <span class="ruby-operator">!=</span> <span class="ruby-value">0</span>
+    <span class="ruby-keyword kw">end</span>
+
+    <span class="ruby-identifier">node</span>
+  <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

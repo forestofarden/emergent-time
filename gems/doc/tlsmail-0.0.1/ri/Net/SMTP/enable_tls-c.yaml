@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: Enable SSL for all new instances. <tt>verify</tt> is the type of verification to do on the Server Cert; Defaults to OpenSSL::SSL::VERIFY_PEER. <tt>certs</tt> is a file or directory holding CA certs to use to verify the server cert; Defaults to nil.
+full_name: Net::SMTP::enable_tls
+is_singleton: true
+name: enable_tls
+params: (verify = OpenSSL::SSL::VERIFY_PEER, certs = nil)
+visibility: public

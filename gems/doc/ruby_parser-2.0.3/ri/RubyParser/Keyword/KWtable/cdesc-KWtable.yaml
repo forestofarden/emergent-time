@@ -1,0 +1,31 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  name: id0
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  name: id1
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  name: name
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  name: state
+  rw: RW
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: new
+comment: 
+constants: []
+
+full_name: RubyParser::Keyword::KWtable
+includes: []
+
+instance_methods: []
+
+name: KWtable
+superclass: Object

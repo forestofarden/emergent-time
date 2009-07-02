@@ -1,0 +1,12 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+- !ruby/struct:SM::Flow::P 
+  body: "@returns the set of roles under membership review for this user"
+full_name: RepertoireCore::Mixins::UserAuthorization::InstanceMethods#roles_pending_review
+is_singleton: false
+name: roles_pending_review
+params: ()
+visibility: public

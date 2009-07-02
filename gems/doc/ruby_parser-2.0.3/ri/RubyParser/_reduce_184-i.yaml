@@ -1,0 +1,10 @@
+--- !ruby/object:RI::MethodDescription 
+aliases: []
+
+block_params: 
+comment: 
+full_name: RubyParser#_reduce_184
+is_singleton: false
+name: _reduce_184
+params: (val, _values, result)
+visibility: public

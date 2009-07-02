@@ -1,0 +1,102 @@
+--- !ruby/object:RI::ClassDescription 
+attributes: 
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: plugin"
+  name: _benchmarks
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: private"
+  name: _thrown_content
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: plugin"
+  name: action_name
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: ":api: plugin"
+  name: body
+  rw: RW
+- !ruby/object:RI::Attribute 
+  comment: 
+  - !ruby/struct:SM::Flow::P 
+    body: "Stub so content-type support in RenderMixin doesn't throw errors :api: private"
+  name: content_type
+  rw: RW
+class_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: _reset_template_roots
+- !ruby/object:RI::MethodSummary 
+  name: _template_root=
+- !ruby/object:RI::MethodSummary 
+  name: _template_roots
+- !ruby/object:RI::MethodSummary 
+  name: _template_roots=
+- !ruby/object:RI::MethodSummary 
+  name: after
+- !ruby/object:RI::MethodSummary 
+  name: before
+- !ruby/object:RI::MethodSummary 
+  name: controller_name
+- !ruby/object:RI::MethodSummary 
+  name: inherited
+- !ruby/object:RI::MethodSummary 
+  name: new
+- !ruby/object:RI::MethodSummary 
+  name: skip_after
+- !ruby/object:RI::MethodSummary 
+  name: skip_before
+- !ruby/object:RI::MethodSummary 
+  name: subclasses_list
+comment: 
+constants: 
+- !ruby/object:RI::Constant 
+  comment: 
+  name: FILTER_OPTIONS
+  value: "[:only, :exclude, :if, :unless, :with]"
+full_name: Merb::AbstractController
+includes: 
+- !ruby/object:RI::IncludedModule 
+  name: Merb::RenderMixin
+- !ruby/object:RI::IncludedModule 
+  name: Merb::InlineTemplates
+instance_methods: 
+- !ruby/object:RI::MethodSummary 
+  name: _absolute_template_location
+- !ruby/object:RI::MethodSummary 
+  name: _call_action
+- !ruby/object:RI::MethodSummary 
+  name: _call_filter_for_action?
+- !ruby/object:RI::MethodSummary 
+  name: _call_filters
+- !ruby/object:RI::MethodSummary 
+  name: _dispatch
+- !ruby/object:RI::MethodSummary 
+  name: _evaluate_condition
+- !ruby/object:RI::MethodSummary 
+  name: _filter_condition_met?
+- !ruby/object:RI::MethodSummary 
+  name: _template_location
+- !ruby/object:RI::MethodSummary 
+  name: absolute_url
+- !ruby/object:RI::MethodSummary 
+  name: capture
+- !ruby/object:RI::MethodSummary 
+  name: concat
+- !ruby/object:RI::MethodSummary 
+  name: controller_name
+- !ruby/object:RI::MethodSummary 
+  name: relative_url
+- !ruby/object:RI::MethodSummary 
+  name: resource
+- !ruby/object:RI::MethodSummary 
+  name: url
+name: AbstractController
+superclass: Object

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>log_stream (Merb)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core.rb, line 371</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">log_stream</span>(<span class="ruby-identifier">port</span> = <span class="ruby-value str">&quot;main&quot;</span>)
+      <span class="ruby-identifier">port</span> = <span class="ruby-identifier">:test</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">testing?</span>
+      <span class="ruby-ivar">@streams</span> <span class="ruby-operator">||=</span> {}
+      <span class="ruby-ivar">@streams</span>[<span class="ruby-identifier">port</span>] <span class="ruby-operator">||=</span> <span class="ruby-keyword kw">begin</span>
+        <span class="ruby-identifier">log</span> = <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">testing?</span>
+          <span class="ruby-identifier">log_path</span> <span class="ruby-operator">/</span> <span class="ruby-value str">&quot;merb_test.log&quot;</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-operator">!</span><span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:daemonize</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-operator">!</span><span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:force_logging</span>]
+          <span class="ruby-constant">STDOUT</span>
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-identifier">log_path</span> <span class="ruby-operator">/</span> <span class="ruby-node">&quot;merb.#{port}.log&quot;</span>
+        <span class="ruby-keyword kw">end</span>
+        
+        <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">log</span>.<span class="ruby-identifier">is_a?</span>(<span class="ruby-constant">IO</span>)
+          <span class="ruby-identifier">stream</span> = <span class="ruby-identifier">log</span>
+        <span class="ruby-keyword kw">elsif</span> <span class="ruby-constant">File</span>.<span class="ruby-identifier">exist?</span>(<span class="ruby-identifier">log</span>)
+          <span class="ruby-identifier">stream</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">log</span>, (<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">WRONLY</span> <span class="ruby-operator">|</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">APPEND</span>))
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-constant">FileUtils</span>.<span class="ruby-identifier">mkdir_p</span>(<span class="ruby-constant">File</span>.<span class="ruby-identifier">dirname</span>(<span class="ruby-identifier">log</span>))
+          <span class="ruby-identifier">stream</span> = <span class="ruby-constant">File</span>.<span class="ruby-identifier">open</span>(<span class="ruby-identifier">log</span>, (<span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">WRONLY</span> <span class="ruby-operator">|</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">APPEND</span> <span class="ruby-operator">|</span> <span class="ruby-constant">File</span><span class="ruby-operator">::</span><span class="ruby-constant">CREAT</span>))
+          <span class="ruby-identifier">stream</span>.<span class="ruby-identifier">write</span>(<span class="ruby-node">&quot;#{Time.now.httpdate} #{Merb::Config[:log_delimiter]} &quot;</span> \
+            <span class="ruby-node">&quot;info #{Merb::Config[:log_delimiter]} Logfile created\n&quot;</span>)
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-identifier">stream</span>.<span class="ruby-identifier">sync</span> = <span class="ruby-keyword kw">true</span>
+        <span class="ruby-identifier">stream</span>
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

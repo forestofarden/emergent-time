@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>daemonize (Merb::Server)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/server.rb, line 141</span>
+      <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">daemonize</span>(<span class="ruby-identifier">port</span>)
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn!</span> <span class="ruby-value str">&quot;About to fork...&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:verbose</span>]
+        <span class="ruby-identifier">fork</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">setsid</span>
+          <span class="ruby-identifier">exit</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">fork</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn!</span> <span class="ruby-node">&quot;In #{Process.pid}&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>
+          <span class="ruby-constant">File</span>.<span class="ruby-identifier">umask</span> <span class="ruby-value">0000</span>
+          <span class="ruby-constant">STDIN</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>
+          <span class="ruby-constant">STDOUT</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-value str">&quot;/dev/null&quot;</span>, <span class="ruby-value str">&quot;a&quot;</span>
+          <span class="ruby-constant">STDERR</span>.<span class="ruby-identifier">reopen</span> <span class="ruby-constant">STDOUT</span>
+          <span class="ruby-keyword kw">begin</span>
+            <span class="ruby-constant">Dir</span>.<span class="ruby-identifier">chdir</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:merb_root</span>]
+          <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">Errno</span><span class="ruby-operator">::</span><span class="ruby-constant">EACCES</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+            <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-node">&quot;You specified Merb root as #{Merb::Config[:merb_root]}, &quot;</span> \
+              <span class="ruby-value str">&quot;yet the current user does not have access to it. &quot;</span>, <span class="ruby-identifier">e</span>
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-identifier">at_exit</span> { <span class="ruby-identifier">remove_pid_file</span>(<span class="ruby-identifier">port</span>) }
+          <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:port</span>] = <span class="ruby-identifier">port</span>
+          <span class="ruby-identifier">bootup</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">NotImplementedError</span> =<span class="ruby-operator">&gt;</span> <span class="ruby-identifier">e</span>
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">fatal!</span> <span class="ruby-value str">&quot;Daemonized mode is not supported on your platform. &quot;</span>, <span class="ruby-identifier">e</span>
+      <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>

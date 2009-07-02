@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html 
+     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html>
+<head>
+  <title>start_transaction (Merb::BootLoader::LoadClasses)</title>
+  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
+  <link rel="stylesheet" href="../../../.././rdoc-style.css" type="text/css" media="screen" />
+</head>
+<body class="standalone-code">
+  <pre><span class="ruby-comment cmt"># File lib/merb-core/bootloader.rb, line 690</span>
+    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">start_transaction</span>
+      <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn!</span> <span class="ruby-node">&quot;Parent pid: #{Process.pid}&quot;</span>
+      <span class="ruby-identifier">reader</span>, <span class="ruby-identifier">writer</span> = <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>
+
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">GC</span>.<span class="ruby-identifier">respond_to?</span>(<span class="ruby-identifier">:copy_on_write_friendly=</span>)
+        <span class="ruby-constant">GC</span>.<span class="ruby-identifier">copy_on_write_friendly</span> = <span class="ruby-keyword kw">true</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+        <span class="ruby-comment cmt"># create two connected endpoints</span>
+        <span class="ruby-comment cmt"># we use them for master/workers communication</span>
+        <span class="ruby-identifier">reader</span>, <span class="ruby-ivar">@writer</span> = <span class="ruby-constant">IO</span>.<span class="ruby-identifier">pipe</span>
+        <span class="ruby-identifier">pid</span> = <span class="ruby-constant">Kernel</span>.<span class="ruby-identifier">fork</span>
+
+        <span class="ruby-comment cmt"># pid means we're in the parent; only stay in the loop if that is case</span>
+        <span class="ruby-keyword kw">break</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">pid</span>
+        <span class="ruby-comment cmt"># writer must be closed so reader can generate EOF condition</span>
+        <span class="ruby-ivar">@writer</span>.<span class="ruby-identifier">close</span>
+
+        <span class="ruby-comment cmt"># master process stores pid to merb.main.pid</span>
+        <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Server</span>.<span class="ruby-identifier">store_pid</span>(<span class="ruby-value str">&quot;main&quot;</span>) <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:daemonize</span>] <span class="ruby-operator">||</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:cluster</span>]
+
+        <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:console_trap</span>]
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">trap</span>(<span class="ruby-value str">&quot;INT&quot;</span>) {}
+        <span class="ruby-keyword kw">else</span>
+          <span class="ruby-comment cmt"># send ABRT to worker on INT</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">trap</span>(<span class="ruby-value str">&quot;INT&quot;</span>) <span class="ruby-keyword kw">do</span>
+            <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn!</span> <span class="ruby-value str">&quot;Reaping Workers&quot;</span>
+            <span class="ruby-keyword kw">begin</span>
+              <span class="ruby-constant">Process</span>.<span class="ruby-identifier">kill</span>(<span class="ruby-identifier">reap_workers_signal</span>, <span class="ruby-identifier">pid</span>)
+            <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SystemCallError</span>
+            <span class="ruby-keyword kw">end</span>
+            <span class="ruby-identifier">exit_gracefully</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">trap</span>(<span class="ruby-value str">&quot;HUP&quot;</span>) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">logger</span>.<span class="ruby-identifier">warn!</span> <span class="ruby-value str">&quot;Doing a fast deploy\n&quot;</span>
+          <span class="ruby-constant">Process</span>.<span class="ruby-identifier">kill</span>(<span class="ruby-value str">&quot;HUP&quot;</span>, <span class="ruby-identifier">pid</span>)
+        <span class="ruby-keyword kw">end</span>
+
+        <span class="ruby-identifier">reader_ary</span> = [<span class="ruby-identifier">reader</span>]
+        <span class="ruby-identifier">loop</span> <span class="ruby-keyword kw">do</span>
+          <span class="ruby-comment cmt"># wait for worker to exit and capture exit status</span>
+          <span class="ruby-comment cmt">#</span>
+          <span class="ruby-comment cmt">#</span>
+          <span class="ruby-comment cmt"># WNOHANG specifies that wait2 exists without waiting</span>
+          <span class="ruby-comment cmt"># if no worker processes are ready to be noticed.</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">exit_status</span> = <span class="ruby-constant">Process</span>.<span class="ruby-identifier">wait2</span>(<span class="ruby-identifier">pid</span>, <span class="ruby-constant">Process</span><span class="ruby-operator">::</span><span class="ruby-constant">WNOHANG</span>)
+            <span class="ruby-comment cmt"># wait2 returns a 2-tuple of process id and exit</span>
+            <span class="ruby-comment cmt"># status.</span>
+            <span class="ruby-comment cmt">#</span>
+            <span class="ruby-comment cmt"># We do not care about specific pid here.</span>
+            <span class="ruby-identifier">exit_status</span>[<span class="ruby-value">1</span>] <span class="ruby-operator">&amp;&amp;</span> <span class="ruby-identifier">exit_status</span>[<span class="ruby-value">1</span>].<span class="ruby-identifier">exitstatus</span> <span class="ruby-operator">==</span> <span class="ruby-value">128</span> <span class="ruby-operator">?</span> <span class="ruby-keyword kw">break</span> <span class="ruby-operator">:</span> <span class="ruby-identifier">exit</span>
+          <span class="ruby-keyword kw">end</span>
+          <span class="ruby-comment cmt"># wait for data to become available, timeout in 0.25 of a second</span>
+          <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">select</span>(<span class="ruby-identifier">reader_ary</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-keyword kw">nil</span>, <span class="ruby-value">0</span><span class="ruby-value">.25</span>)
+            <span class="ruby-keyword kw">begin</span>
+              <span class="ruby-comment cmt"># no open writers</span>
+              <span class="ruby-keyword kw">next</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">reader</span>.<span class="ruby-identifier">eof?</span>
+              <span class="ruby-identifier">msg</span> = <span class="ruby-identifier">reader</span>.<span class="ruby-identifier">readline</span>
+              <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">msg</span> <span class="ruby-operator">=~</span> <span class="ruby-regexp re">/128/</span>
+                <span class="ruby-constant">Process</span>.<span class="ruby-identifier">detach</span>(<span class="ruby-identifier">pid</span>)
+                <span class="ruby-keyword kw">break</span>
+              <span class="ruby-keyword kw">else</span>
+                <span class="ruby-identifier">exit_gracefully</span>
+              <span class="ruby-keyword kw">end</span>
+            <span class="ruby-keyword kw">rescue</span> <span class="ruby-constant">SystemCallError</span>
+              <span class="ruby-identifier">exit_gracefully</span>
+            <span class="ruby-keyword kw">end</span>
+          <span class="ruby-keyword kw">end</span>
+        <span class="ruby-keyword kw">end</span>
+      <span class="ruby-keyword kw">end</span>
+
+      <span class="ruby-identifier">reader</span>.<span class="ruby-identifier">close</span>
+
+      <span class="ruby-comment cmt"># add traps to the worker</span>
+      <span class="ruby-keyword kw">if</span> <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Config</span>[<span class="ruby-identifier">:console_trap</span>]
+        <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">Server</span>.<span class="ruby-identifier">add_irb_trap</span>
+        <span class="ruby-identifier">at_exit</span> { <span class="ruby-identifier">reap_workers</span> }
+      <span class="ruby-keyword kw">else</span>
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">trap</span>(<span class="ruby-value str">'INT'</span>) <span class="ruby-keyword kw">do</span>
+          <span class="ruby-constant">Merb</span><span class="ruby-operator">::</span><span class="ruby-constant">BootLoader</span>.<span class="ruby-identifier">before_worker_shutdown_callbacks</span>.<span class="ruby-identifier">each</span> { <span class="ruby-operator">|</span><span class="ruby-identifier">cb</span><span class="ruby-operator">|</span> <span class="ruby-identifier">cb</span>.<span class="ruby-identifier">call</span> }
+        <span class="ruby-keyword kw">end</span>
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">trap</span>(<span class="ruby-value str">'ABRT'</span>) { <span class="ruby-identifier">reap_workers</span> }
+        <span class="ruby-constant">Merb</span>.<span class="ruby-identifier">trap</span>(<span class="ruby-value str">'HUP'</span>) { <span class="ruby-identifier">reap_workers</span>(<span class="ruby-value">128</span>, <span class="ruby-value str">&quot;ABRT&quot;</span>) }
+      <span class="ruby-keyword kw">end</span>
+    <span class="ruby-keyword kw">end</span></pre>
+</body>
+</html>
