@@ -2,7 +2,7 @@ default_run_options[:pty] = true
 ssh_options[:forward_agent] = true
 
 set :application, "emergent-time"
-set :repository,  "git@github.com:repertoire/Emergent-Time.git"
+set :repository,  "git@github.com:yorkc/Emergent-Time.git"
 set :scm, "git"
 set :scm_command, "/opt/local/bin/git"
 set :branch, "master"
