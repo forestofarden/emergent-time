@@ -13,6 +13,8 @@
                         'lib/smoothness/jquery-ui-1.7.2.custom'
                         # :bundle => true      # cant bundle because of url refs in css
                         %>
+    <% # add css required by any modules (e.g. repertoire-core) %>
+    <%= include_required_css %>
     
     <% # load jquery before dependents %>
     <%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery",
@@ -30,6 +32,9 @@
                        'lib/jquery.autogrow',
                        'lib/jquery.jeditable.autogrow.js',
                        'lib/template', :bundle => true %>
+                       
+  <% # add js required by any modules %>
+  <%= include_required_js %>
                        
    <% # configure Simile Timeline %>
    <script type="text/javascript">
