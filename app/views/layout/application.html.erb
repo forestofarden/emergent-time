@@ -2,25 +2,44 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    <% require_css "emt.css", "#{::RepertoireCore.public_path_for(:stylesheet)}/core.css" %>
-    <% require_css "assemble" %>
-    <%= include_required_css %>
     
-    <%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery" %>
+    <% # should properly be with their components, but doesn't work with asset bundling %>
     
-    <% require_js 'jquery.metadata' %>
-    <% require_js 'assemble' %>
-    <% require_js 'jquery.hint' %>
+    <%= css_include_tag 'emt',
+                        'event',
+                        'assemble',
+                        "#{::RepertoireCore.public_path_for(:stylesheet)}/rep.ajax-validate", 
+                        "#{::RepertoireCore.public_path_for(:stylesheet)}/core",
+                        'lib/smoothness/jquery-ui-1.7.2.custom'
+                        # :bundle => true      # cant bundle because of url refs in css
+                        %>
     
-    <script type="text/javascript">
-      <%# TODO.  does Simile require fully-qualified host name here? %>
-      Timeline_ajax_url="/javascripts/timeline/timeline_ajax/simile-ajax-api.js";
-      Timeline_urlPrefix="/javascripts/timeline/timeline_js/";       
-      Timeline_parameters="bundle=true";
-    </script>
-    <% require_js 'timeline/timeline_js/timeline-api' %>
-    <%= include_required_js %>
-    
+    <% # load jquery before dependents %>
+    <%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery",
+                       'ajax-load',
+                       'assemble',
+                       'rep.input_listener',
+                       'emt_event_format',
+                       "#{::RepertoireCore.public_path_for(:javascript)}/rep.ajax-validate",
+                       "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.form",
+                       'lib/jquery-ui-1.7.2.custom.min.js',
+                       'lib/jquery.metadata',
+                       'lib/jquery.hint',
+                       'lib/jquery.scrollTo',
+                       'lib/jeditable',
+                       'lib/jquery.autogrow',
+                       'lib/jquery.jeditable.autogrow.js',
+                       'lib/template', :bundle => true %>
+                       
+   <% # configure Simile Timeline %>
+   <script type="text/javascript">
+     <%# TODO.  does Simile require fully-qualified host name here? %>
+     Timeline_ajax_url="/javascripts/lib/timeline/timeline_ajax/simile-ajax-api.js";
+     Timeline_urlPrefix="/javascripts/lib/timeline/timeline_js/";       
+     Timeline_parameters="bundle=true";
+   </script>
+   <%= js_include_tag 'lib/timeline/timeline_js/timeline-api' %>
+   
     <script type="text/javascript">
       $().ready(function() {
         $('.assemble').assemble();

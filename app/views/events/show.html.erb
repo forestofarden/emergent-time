@@ -1,12 +1,3 @@
-<%= css_include_tag 'emt/event.css' %>
-<%= js_include_tag 'ajax-load' %>
-
-<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.form" %>
-<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/rep.ajax-validate" %>
-
-<link type="text/css" media="all" href="<%= ::RepertoireCore.public_path_for(:stylesheet) %>/lib/jquery-ui.css" rel="Stylesheet" charset="utf-8" />
-<%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.ui.all"%>
-
 <script language="javascript">
   $().ready(function() {
     $("a[alt=ajax-load]").ajaxLoad();

@@ -51,10 +51,10 @@
   //
   // { 'user[email]': [ 'Email has already been taken by another user', 'Email must be in mit.edu domain' ], ... }
   //
-  // One special case to ease usability: when the submit input is alone in a div, all fields are validated when the user
-  //    hovers in preparation to submit.  This handles the common case where the user has filled the final field and
-  //    would like to submit with cursor still in the field.  It also provides feedback if they attempt to submit without
-  //    tabbing through some of the fields.  [ configure using 'validate_hover', and remember to set float on the div ]
+  // One special case to ease usability: When the user hovers over the submit button in preparation to submit, the
+  //    validator runs if the input is disabled.  This handles a common case where the user has filled the final field
+  //    but not moved cursor focus.  Disabling is done via javascript rather than html, since some browsers swallow
+  //    all events for disabled inputs.
   // 
   $.fn.ajaxValidate = function($$options) {
     // plugin defaults + options
@@ -73,17 +73,31 @@
         field.$feedback.empty();
         // core operation: submit form via ajax and update field feedback with formatted errors
         validate_form($form, field.$feedback, o, function(data) {
+          disabled = data !== true
     	    set_disabled($form, data !== true, o);
       	  set_feedback(field.$feedback, data[field.name], o);
         });
       });
       
-      // special case prior to form submit: validate all on hover over element
-      $form.find(o.validate_hover).hover(function() {
-        if ($form.find(':submit:disabled').length > 0) {
+      // handle disabling form and submit button
+      if (o.disable) {
+        var $submit = $form.find(o.disable);
+        
+        // only allow submit if button not disabled
+        $form.submit(function() {
+          var disabled = $submit.hasClass('disabled');
+          var $validate = $form.find('.validate');
+          if (disabled) {
+            $validate.fadeOut(function() { $validate.fadeIn() });
+          }
+          return !disabled;
+        });
+        
+        // validate entire form when user hovers on disabled button
+        $submit.mouseover(function() {
           initialize($form, o, true);
-        }
-      });
+        });
+      };      
     });
   };
 
@@ -108,8 +122,6 @@
     type:          'POST',                   /* HTTP verb to use when calling web service */
     delegate:      {},                       /* delegate validation of one field to another */
     spinner:       'spinner',                /* css class to add to feedback during ajax processing */
-    validate_hover: 'div:has(:submit:only-child):last'  /* validate when hovering over matching elements
-                                                           default is lone div surrounding submit input */
   };
 
   // internal helper functions
@@ -161,7 +173,8 @@
   function set_disabled($form, status, opts) {
     // enable/disable submit button, if option selected
     if (opts.disable) {
-      $form.find(opts.disable).attr('disabled', status);
+      if (status) $form.find(opts.disable).addClass('disabled');
+      else $form.find(opts.disable).removeClass('disabled');
     }
   }
 

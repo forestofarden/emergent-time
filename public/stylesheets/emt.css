@@ -104,12 +104,12 @@ body { margin: 0; padding: 0; }
 .timeline_show #title_bar { clear:both; float: left; margin-top: 8px; }
 .timeline_show #title_bar #title { font-size: 16pt; clear:left; float:left; margin-right:6px; }
 .timeline_show #title_bar .timeline_opts { float:left; z-index: 181; display: none; }
-.timeline_show #title_bar .timeline_opts .rename { float:left; height: 20px; width: 20px; background: url('lib/pencil_sm.png') top left no-repeat; cursor: pointer; }
-.timeline_show #title_bar .timeline_opts .remove { float:left; height: 20px; width: 20px; background: url('lib/remove_sm.png') top left no-repeat; cursor: pointer; }
+.timeline_show #title_bar .timeline_opts .rename { float:left; height: 20px; width: 20px; background: url('images/pencil_sm.png') top left no-repeat; cursor: pointer; }
+.timeline_show #title_bar .timeline_opts .remove { float:left; height: 20px; width: 20px; background: url('images/remove_sm.png') top left no-repeat; cursor: pointer; }
 
 .timeline_show #timeline_intro #intro { max-width:65%; }
 .timeline_show #timeline_intro #intro { float: left; margin-right:6px; min-height:20px; }
-.timeline_show #timeline_intro .edit { float:left; height: 20px; width: 20px; background: url('lib/pencil_sm.png') top left no-repeat; cursor: pointer; display: none; }
+.timeline_show #timeline_intro .edit { float:left; height: 20px; width: 20px; background: url('images/pencil_sm.png') top left no-repeat; cursor: pointer; display: none; }
 
 .timeline_show .pageinfo { float: left; clear: left; width: 65%;}
 
@@ -176,7 +176,7 @@ body { margin: 0; padding: 0; }
 #events { margin: 0; }
 
 #events .event {  border-bottom: 1px gray dotted; }
-#events .event .event_remove { float:right; height: 20px; width: 20px; background: url('lib/remove_sm.png') top left no-repeat; cursor: pointer; z-index: 181; display: none;}
+#events .event .event_remove { float:right; height: 20px; width: 20px; background: url('images/remove_sm.png') top left no-repeat; cursor: pointer; z-index: 181; display: none;}
 
 .timeline_show #timeline_comments { float:left; width: 45%; margin-top: 10px;}
 

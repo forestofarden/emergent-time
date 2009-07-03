@@ -1,16 +1,16 @@
 div#detail_outer { position: absolute; left: 50%; top: 50%; display: block; z-index: 90; padding: 22px 22px 33px 22px; margin: 0; background: transparent; overflow: hidden; }
 div#detail_inner { position: relative; width:100%; height:100%; border: 1px solid #BBB; background: #FFF; }
 div#detail_content { margin: 0; z-index: 100; position: absolute; overflow: auto; }
-div#detail_close { position: absolute; top: -12px; right: -15px; height: 30px; width: 30px; background: url('lib/detail_closebox.png') top left no-repeat; cursor: pointer; z-index: 181; display: none; }
+div#detail_close { position: absolute; top: -12px; right: -15px; height: 30px; width: 30px; background: url('images/detail_closebox.png') top left no-repeat; cursor: pointer; z-index: 181; display: none; }
 div#detail_bg { position: absolute; top: 0; left: 0; width: 100%; height: 100%; z-index: 70; border: 0; padding: 0; margin: 0; }
 div.detail_bg { position: absolute; display: block; z-index: 70; border: 0; padding: 0; margin: 0; }
-div.detail_bg_n { top: -18px; width: 100%; height: 18px; background: transparent url('lib/detail_shadow_n.png') repeat-x; }
-div.detail_bg_ne { top: -18px; right: -13px; width: 13px; height: 18px; background: transparent url('lib/detail_shadow_ne.png') no-repeat; }
-div.detail_bg_e { right: -13px; height: 100%; width: 13px; background: transparent url('lib/detail_shadow_e.png') repeat-y; }
-div.detail_bg_se { bottom: -18px; right: -13px; width: 13px; height: 18px; background: transparent url('lib/detail_shadow_se.png') no-repeat; }
-div.detail_bg_s { bottom: -18px; width: 100%; height: 18px; background: transparent url('lib/detail_shadow_s.png') repeat-x; }
-div.detail_bg_sw { bottom: -18px; left: -13px; width: 13px; height: 18px; background: transparent url('lib/detail_shadow_sw.png') no-repeat; }
-div.detail_bg_w { left: -13px; height: 100%; width: 13px; background: transparent url('lib/detail_shadow_w.png') repeat-y; }
-div.detail_bg_nw { top: -18px; left: -13px; width: 13px; height: 18px; background: transparent url('lib/detail_shadow_nw.png') no-repeat; }
+div.detail_bg_n { top: -18px; width: 100%; height: 18px; background: transparent url('images/detail_shadow_n.png') repeat-x; }
+div.detail_bg_ne { top: -18px; right: -13px; width: 13px; height: 18px; background: transparent url('images/detail_shadow_ne.png') no-repeat; }
+div.detail_bg_e { right: -13px; height: 100%; width: 13px; background: transparent url('images/detail_shadow_e.png') repeat-y; }
+div.detail_bg_se { bottom: -18px; right: -13px; width: 13px; height: 18px; background: transparent url('images/detail_shadow_se.png') no-repeat; }
+div.detail_bg_s { bottom: -18px; width: 100%; height: 18px; background: transparent url('images/detail_shadow_s.png') repeat-x; }
+div.detail_bg_sw { bottom: -18px; left: -13px; width: 13px; height: 18px; background: transparent url('images/detail_shadow_sw.png') no-repeat; }
+div.detail_bg_w { left: -13px; height: 100%; width: 13px; background: transparent url('images/detail_shadow_w.png') repeat-y; }
+div.detail_bg_nw { top: -18px; left: -13px; width: 13px; height: 18px; background: transparent url('images/detail_shadow_nw.png') no-repeat; }
 
 #overlay { position: fixed; z-index:80; top: 0px; left: 0px; height:100%; width:100%; background-color:#000; filter:alpha(opacity=40); -moz-opacity: 0.40; opacity: 0.40; }

@@ -16,6 +16,9 @@ Merb::Config.use do |c|
   # cookie session store configuration
   c[:session_secret_key]  = '78581dedbb2e3fad89c6fb4f13f58127f7659cb0'  # required for cookie session store
   c[:session_id_key] = '_hypertime_session_id' # cookie session id key, defaults to "_session_id"
+  
+  # turn on asset bundling to ensure generated CSS is being compressed properly
+  c[:bundle_assets] = true
 end
 
 Merb::BootLoader.before_app_loads do
@@ -27,6 +30,14 @@ end
 
 Merb::BootLoader.after_app_loads do
   # This will get executed after your app's classes have been loaded.
+  
+  # YUI connection code from Dan Kubb
+  [ Merb::Assets::JavascriptAssetBundler, Merb::Assets::StylesheetAssetBundler ].each do |k|
+    k.add_callback do |filename|
+      Merb.logger.info "Compressing #{filename} with YUI Compressor"
+      system("java -jar #{Merb.root / 'lib' / 'yui' / 'compressor.jar'} #{filename} -o #{filename} --charset utf-8 -v")
+    end
+  end
 end
 
 

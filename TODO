@@ -1,9 +1,13 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
 - test registration
-- remove database password from public git repository
 
-- check popup on menzinga
+- nginx not serving static assets 
+- cull down the javascript  [ can't use js_include_tag in ajax payload ]
+- enable asset compaction
+
+- event entry page needs hook for mouseover submit  DONE
+- remove database password from public git repository  NOT POSSIBLE
 
 - some sample data & timelines
 
@@ -28,6 +32,7 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - comment moderation LATER
 - spam control LATER
 
+- check popup on menzinga  DONE
 - filter number of events (for demos in small networks - 500 250 100 50 25 10)  DONE
 - clear event comment form on submit  DONE
 - fix validation problem with need for tab on final field (eval on click outside form? or deactivated button? or hover over disabled submit?) DONE
