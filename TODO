@@ -2,9 +2,9 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 
 - test registration
 
-- nginx not serving static assets 
-- cull down the javascript  [ can't use js_include_tag in ajax payload ]
-- enable asset compaction
+- nginx not serving static assets  REQUIRES NEW MIT cname
+- cull down the javascript  [ can't use js_include_tag in ajax payload ]  DONE
+- enable asset compaction  DONE
 
 - event entry page needs hook for mouseover submit  DONE
 - remove database password from public git repository  NOT POSSIBLE
@@ -12,7 +12,7 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - some sample data & timelines
 
 - email to Kurt prompting for contract
-- email to IS&T
+- email to IS&T  DONE
 - draft invoice
 
 - throw errors on validate throughout

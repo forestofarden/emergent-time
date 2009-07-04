@@ -48,7 +48,6 @@ class Events < Application
         if @timeline
           # TODO.  why is DM's identity map not working? should be  @top_events -= @timeline.events?
           # TODO.  surely there's a way to get around this mumbo-jumbo.... 
-          puts "initially #{@top_events.size} events"
           if timeline_events = @timeline.events
             timeline_event_ids = timeline_events.map { |e| e.id }
             @top_events.delete_if { |e| timeline_event_ids.include?(e.id) }
