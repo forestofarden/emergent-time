@@ -1,6 +1,7 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
-- test registration
+- on activation, should go to home page
+- make default # of events dependent on total avail?
 
 - nginx not serving static assets  REQUIRES NEW MIT cname
 - cull down the javascript  [ can't use js_include_tag in ajax payload ]  DONE
@@ -32,6 +33,7 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - comment moderation LATER
 - spam control LATER
 
+- test registration  DONE
 - check popup on menzinga  DONE
 - filter number of events (for demos in small networks - 500 250 100 50 25 10)  DONE
 - clear event comment form on submit  DONE

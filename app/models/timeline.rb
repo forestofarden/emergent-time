@@ -11,7 +11,7 @@ class Timeline
   property :permalink, String, :nullable => false
   
   property :links, Integer
-  property :rank, Float, :precision => 15       # without precision, dm validations always reject
+  property :rank, Float, :auto_validation => false       # without, dm validations reject as wrong precision
   
   belongs_to :user
   

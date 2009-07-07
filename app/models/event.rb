@@ -14,7 +14,7 @@ class Event
   property :end,   DateTime
   
   property :links, Integer
-  property :rank, Float, :precision => 15       # without precision, dm validations always reject
+  property :rank, Float, :auto_validation => false       # without, dm validations reject as wrong precision
   
   property :created_at, DateTime
   property :modified_at, DateTime
