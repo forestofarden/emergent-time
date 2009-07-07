@@ -2,11 +2,20 @@ class Events < Application
 
   include Merb::RepertoireCore::ApplicationHelper
 
-  def index(q=nil, n=250)
+  def index(q=nil, n=nil)
     provides :json, :html
-    @limit = Integer(n.to_s)
+    
+    @event_count = Event.count
+    begin
+      @limit = Integer(n.to_s)
+    rescue ArgumentError => e
+      # in very small repositories, only show 20% of events (mostly for demoing overview timelines)
+      @limit = [500, @event_count / 5].min
+      @limit = [25, @limit].max
+    end
+    
     if q.blank?
-      @timelines = Timeline.recent(7)
+      @timelines = Timeline.recent(7)  
       @top_events = Event.all(:order => [:rank.desc], :limit => @limit)
     else
       # TODO.  integrate our event / timeline rank value with fulltext hit ranking
