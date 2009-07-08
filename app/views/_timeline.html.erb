@@ -54,7 +54,7 @@ $(document).ready(function() {
 	    eventSource:    eventSource,
         date:           d,
         width:          "75%", 
-        intervalUnit:   Timeline.DateTime.MONTH, 
+        intervalUnit:   Timeline.DateTime.YEAR, 
         intervalPixels: 320,
         theme:          hypertimeTheme
     }),
@@ -63,7 +63,7 @@ $(document).ready(function() {
         date:           d,
         overview:       true,
         width:          "17%", 
-        intervalUnit:   Timeline.DateTime.YEAR, 
+        intervalUnit:   Timeline.DateTime.DECADE, 
         intervalPixels: 160,
         theme:          hypertimeTheme
     }),
@@ -74,7 +74,7 @@ $(document).ready(function() {
         trackHeight:    0.5,
         trackGap:       0.2,
         width:          "8%", 
-        intervalUnit:   Timeline.DateTime.DECADE, 
+        intervalUnit:   Timeline.DateTime.CENTURY, 
         intervalPixels: 160
     })  ];
   bandInfos[1].syncWith = 0;

@@ -1,7 +1,12 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
-- on activation, should go to home page
-- make default # of events dependent on total avail?
+- really need a way to change scale of timeline
+- most of the fields need to be longer
+
+- splitting the event into description and interpretation is feeling artificial
+
+- somehow, need to be able to combine the description and interpretation fields into a single event with source citations.
+  [ then to run the algorithm we need to do clumping between everyone's events... and where does the description go? ]
 
 - nginx not serving static assets  REQUIRES NEW MIT cname
 - cull down the javascript  [ can't use js_include_tag in ajax payload ]  DONE
@@ -11,6 +16,7 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - remove database password from public git repository  NOT POSSIBLE
 
 - some sample data & timelines
+- on activation, should go to home page
 
 - email to Kurt prompting for contract
 - email to IS&T  DONE
@@ -33,6 +39,7 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - comment moderation LATER
 - spam control LATER
 
+- make default # of events dependent on total avail?  DONE
 - test registration  DONE
 - check popup on menzinga  DONE
 - filter number of events (for demos in small networks - 500 250 100 50 25 10)  DONE
