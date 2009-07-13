@@ -1,6 +1,8 @@
 class Events < Application
 
   include Merb::RepertoireCore::ApplicationHelper
+  
+  RANK_CUTOFF = 0.85                      # don't include overview events below this rank (for very very small repositories)
 
   def index(q=nil, n=nil)
     provides :json, :html
@@ -15,8 +17,8 @@ class Events < Application
     end
     
     if q.blank?
-      @timelines = Timeline.recent(7)  
-      @top_events = Event.all(:order => [:rank.desc], :limit => @limit)
+      @timelines = Timeline.recent(7)
+      @top_events = Event.all(:order => [:rank.desc], :limit => @limit, :rank.gt => RANK_CUTOFF)
     else
       # TODO.  integrate our event / timeline rank value with fulltext hit ranking
       @search_term = q

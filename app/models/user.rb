@@ -12,7 +12,7 @@ class User
                             timelines t2 JOIN timeline_events te2 ON (te2.timeline_id = t2.id)
     WHERE t1.user_id = #{id} AND te1.event_id = te2.event_id 
       AND t2.user_id != t1.user_id
-    GROUP BY t2.user_id HAVING count(*) > #{cutoff} ORDER BY count(*) DESC LIMIT #{n}
+    GROUP BY t2.user_id HAVING count(*) >= #{cutoff} ORDER BY count(*) DESC LIMIT #{n}
     SQL
     
     result = repository.adapter.query(sql)

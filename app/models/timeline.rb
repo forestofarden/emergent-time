@@ -59,7 +59,7 @@ class Timeline
     sql = <<-SQL.compress_lines
     SELECT te2.timeline_id FROM timeline_events te1, timeline_events te2
     WHERE te1.timeline_id = #{id} AND te1.event_id = te2.event_id AND te1.timeline_id != te2.timeline_id
-    GROUP BY te2.timeline_id HAVING count(*) > #{cutoff} 
+    GROUP BY te2.timeline_id HAVING count(*) >= #{cutoff} 
     ORDER BY count(*) DESC LIMIT #{n}
     SQL
     
