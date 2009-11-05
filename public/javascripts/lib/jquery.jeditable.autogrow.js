@@ -1,3 +1,6 @@
+//= require <jquery>
+//= require "jeditable"
+
 /*
  * Autogrow textarea for Jeditable
  *

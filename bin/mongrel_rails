@@ -1,0 +1,3 @@
+#!/usr/bin/env ruby
+require File.join(File.dirname(__FILE__), "../gems/environment")
+load File.join(File.dirname(__FILE__), "../gems/gems/mongrel-1.1.5/bin/mongrel_rails")

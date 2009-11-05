@@ -2,6 +2,8 @@
 // either in a dialog or on main page
 //
 
+//= require "../stylesheets/assemble.css"
+
 (function($) {
   $.fn.assemble = function($$options) {
     // plugin defaults + options

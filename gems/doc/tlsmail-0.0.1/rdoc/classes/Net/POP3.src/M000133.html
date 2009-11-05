@@ -1,120 +1,0 @@
-<?xml version="1.0" encoding="iso-8859-1"?>
-<!DOCTYPE html 
-     PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
-     "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
-
-<html>
-<head>
-  <title>command (Net::POP3)</title>
-  <meta http-equiv="Content-Type" content="text/html; charset=iso-8859-1" />
-  <link rel="stylesheet" href="../../.././rdoc-style.css" type="text/css" media="screen" />
-</head>
-<body class="standalone-code">
-  <pre><span class="ruby-comment cmt"># File lib/net/pop.rb, line 580</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">command</span>
-      <span class="ruby-identifier">raise</span> <span class="ruby-constant">IOError</span>, <span class="ruby-value str">'POP session not opened yet'</span> \
-                                      <span class="ruby-keyword kw">if</span> <span class="ruby-keyword kw">not</span> <span class="ruby-ivar">@socket</span> <span class="ruby-keyword kw">or</span> <span class="ruby-ivar">@socket</span>.<span class="ruby-identifier">closed?</span>
-      <span class="ruby-ivar">@command</span>
-    <span class="ruby-keyword kw">end</span>
-    <span class="ruby-identifier">private</span> <span class="ruby-identifier">:command</span>
-
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># POP protocol wrapper</span>
-    <span class="ruby-comment cmt">#</span>
-
-    <span class="ruby-comment cmt"># Returns the number of messages on the POP server.</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">n_mails</span>
-      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@n_mails</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@n_mails</span>
-      <span class="ruby-ivar">@n_mails</span>, <span class="ruby-ivar">@n_bytes</span> = <span class="ruby-identifier">command</span>().<span class="ruby-identifier">stat</span>
-      <span class="ruby-ivar">@n_mails</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-comment cmt"># Returns the total size in bytes of all the messages on the POP server.</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">n_bytes</span>
-      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@n_bytes</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@n_bytes</span>
-      <span class="ruby-ivar">@n_mails</span>, <span class="ruby-ivar">@n_bytes</span> = <span class="ruby-identifier">command</span>().<span class="ruby-identifier">stat</span>
-      <span class="ruby-ivar">@n_bytes</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-comment cmt"># Returns an array of Net::POPMail objects, representing all the</span>
-    <span class="ruby-comment cmt"># messages on the server.  This array is renewed when the session</span>
-    <span class="ruby-comment cmt"># restarts; otherwise, it is fetched from the server the first time</span>
-    <span class="ruby-comment cmt"># this method is called (directly or indirectly) and cached.</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># This method raises a POPError if an error occurs.</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">mails</span>
-      <span class="ruby-keyword kw">return</span> <span class="ruby-ivar">@mails</span>.<span class="ruby-identifier">dup</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@mails</span>
-      <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">n_mails</span>() <span class="ruby-operator">==</span> <span class="ruby-value">0</span>
-        <span class="ruby-comment cmt"># some popd raises error for LIST on the empty mailbox.</span>
-        <span class="ruby-ivar">@mails</span> = []
-        <span class="ruby-keyword kw">return</span> []
-      <span class="ruby-keyword kw">end</span>
-
-      <span class="ruby-ivar">@mails</span> = <span class="ruby-identifier">command</span>().<span class="ruby-identifier">list</span>.<span class="ruby-identifier">map</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">num</span>, <span class="ruby-identifier">size</span><span class="ruby-operator">|</span>
-        <span class="ruby-constant">POPMail</span>.<span class="ruby-identifier">new</span>(<span class="ruby-identifier">num</span>, <span class="ruby-identifier">size</span>, <span class="ruby-keyword kw">self</span>, <span class="ruby-identifier">command</span>())
-      }
-      <span class="ruby-ivar">@mails</span>.<span class="ruby-identifier">dup</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-comment cmt"># Yields each message to the passed-in block in turn.</span>
-    <span class="ruby-comment cmt"># Equivalent to:</span>
-    <span class="ruby-comment cmt"># </span>
-    <span class="ruby-comment cmt">#   pop3.mails.each do |popmail|</span>
-    <span class="ruby-comment cmt">#     ....</span>
-    <span class="ruby-comment cmt">#   end</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># This method raises a POPError if an error occurs.</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">each_mail</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)  <span class="ruby-comment cmt"># :yield: message</span>
-      <span class="ruby-identifier">mails</span>().<span class="ruby-identifier">each</span>(<span class="ruby-operator">&amp;</span><span class="ruby-identifier">block</span>)
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-keyword kw">alias</span> <span class="ruby-identifier">each</span> <span class="ruby-identifier">each_mail</span>
-
-    <span class="ruby-comment cmt"># Deletes all messages on the server.</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># If called with a block, yields each message in turn before deleting it.</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># === Example</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt">#     n = 1</span>
-    <span class="ruby-comment cmt">#     pop.delete_all do |m|</span>
-    <span class="ruby-comment cmt">#       File.open(&quot;inbox/#{n}&quot;) do |f|</span>
-    <span class="ruby-comment cmt">#         f.write m.pop</span>
-    <span class="ruby-comment cmt">#       end</span>
-    <span class="ruby-comment cmt">#       n += 1</span>
-    <span class="ruby-comment cmt">#     end</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># This method raises a POPError if an error occurs.</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">delete_all</span> <span class="ruby-comment cmt"># :yield: message</span>
-      <span class="ruby-identifier">mails</span>().<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
-        <span class="ruby-keyword kw">yield</span> <span class="ruby-identifier">m</span> <span class="ruby-keyword kw">if</span> <span class="ruby-identifier">block_given?</span>
-        <span class="ruby-identifier">m</span>.<span class="ruby-identifier">delete</span> <span class="ruby-keyword kw">unless</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">deleted?</span>
-      <span class="ruby-keyword kw">end</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-comment cmt"># Resets the session.  This clears all &quot;deleted&quot; marks from messages.</span>
-    <span class="ruby-comment cmt">#</span>
-    <span class="ruby-comment cmt"># This method raises a POPError if an error occurs.</span>
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">reset</span>
-      <span class="ruby-identifier">command</span>().<span class="ruby-identifier">rset</span>
-      <span class="ruby-identifier">mails</span>().<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span>
-        <span class="ruby-identifier">m</span>.<span class="ruby-identifier">instance_eval</span> {
-          <span class="ruby-ivar">@deleted</span> = <span class="ruby-keyword kw">false</span>
-        }
-      <span class="ruby-keyword kw">end</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">set_all_uids</span>   <span class="ruby-comment cmt">#:nodoc: internal use only (called from POPMail#uidl)</span>
-      <span class="ruby-identifier">command</span>().<span class="ruby-identifier">uidl</span>.<span class="ruby-identifier">each</span> <span class="ruby-keyword kw">do</span> <span class="ruby-operator">|</span><span class="ruby-identifier">num</span>, <span class="ruby-identifier">uid</span><span class="ruby-operator">|</span>
-        <span class="ruby-ivar">@mails</span>.<span class="ruby-identifier">find</span> {<span class="ruby-operator">|</span><span class="ruby-identifier">m</span><span class="ruby-operator">|</span> <span class="ruby-identifier">m</span>.<span class="ruby-identifier">number</span> <span class="ruby-operator">==</span> <span class="ruby-identifier">num</span> }.<span class="ruby-identifier">uid</span> = <span class="ruby-identifier">uid</span>
-      <span class="ruby-keyword kw">end</span>
-    <span class="ruby-keyword kw">end</span>
-
-    <span class="ruby-keyword kw">def</span> <span class="ruby-identifier">logging</span>(<span class="ruby-identifier">msg</span>)
-      <span class="ruby-ivar">@debug_output</span> <span class="ruby-operator">&lt;&lt;</span> <span class="ruby-identifier">msg</span> <span class="ruby-operator">+</span> <span class="ruby-value str">&quot;\n&quot;</span> <span class="ruby-keyword kw">if</span> <span class="ruby-ivar">@debug_output</span>
-    <span class="ruby-keyword kw">end</span>
-
-  <span class="ruby-keyword kw">end</span></pre>
-</body>
-</html>

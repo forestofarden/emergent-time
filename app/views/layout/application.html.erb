@@ -2,48 +2,8 @@
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en-us" lang="en-us">
   <head>
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
-    
-    <% # should properly be with their components, but doesn't work with asset bundling %>
-    
-    <%= css_include_tag 'emt',
-                        'event',
-                        'assemble',
-                        "#{::RepertoireCore.public_path_for(:stylesheet)}/rep.ajax-validate", 
-                        "#{::RepertoireCore.public_path_for(:stylesheet)}/core",
-                        'lib/smoothness/jquery-ui-1.7.2.custom'
-                        # :bundle => true      # cant bundle because of url refs in css
-                        %>
-    <% # add css required by any modules (e.g. repertoire-core) %>
-    <%= include_required_css %>
-    
-    <% # load jquery before dependents %>
-    <%= js_include_tag "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery",
-                       'ajax-load',
-                       'assemble',
-                       'rep.input_listener',
-                       'emt_event_format',
-                       "#{::RepertoireCore.public_path_for(:javascript)}/rep.ajax-validate",
-                       "#{::RepertoireCore.public_path_for(:javascript)}/lib/jquery.form",
-                       'lib/jquery-ui-1.7.2.custom.min.js',
-                       'lib/jquery.metadata',
-                       'lib/jquery.hint',
-                       'lib/jquery.scrollTo',
-                       'lib/jeditable',
-                       'lib/jquery.autogrow',
-                       'lib/jquery.jeditable.autogrow.js',
-                       'lib/template', :bundle => true %>
-                       
-  <% # add js required by any modules %>
-  <%= include_required_js %>
-                       
-   <% # configure Simile Timeline %>
-   <script type="text/javascript">
-     <%# TODO.  does Simile require fully-qualified host name here? %>
-     Timeline_ajax_url="/javascripts/lib/timeline/timeline_ajax/simile-ajax-api.js";
-     Timeline_urlPrefix="/javascripts/lib/timeline/timeline_js/";       
-     Timeline_parameters="bundle=true";
-   </script>
-   <%= js_include_tag 'lib/timeline/timeline_js/timeline-api' %>
+    <%# Repertoire assets script and link tags will be inserted here -%>
+    <script src="http://static.simile.mit.edu/timeline/api-2.3.0/timeline-api.js?bundle=true" type="text/javascript"></script>
    
     <script type="text/javascript">
       $().ready(function() {
@@ -58,9 +18,9 @@
   	  <div id="header">
         <div id="projectname">
           <a href="<%= url(:events) %>"><h1>Emergent Time</h1></a>
-          <div id="byline">A collaborative timelining tool for humanists and social scientists.  <a id="docs" class="assemble" href="/docs/intro.html">Read more...</a></div>
+          <div id="byline">A collaborative timelining tool for humanists and social scientists.  <a id="docs" class="assemble" href="<%= Merb::Config[:path_prefix] %>/docs/intro.html">Read more...</a></div>
         </div>
-        <div id="logo"><a href="<%= url(:events) %>"><img src="<%= ::RepertoireCore.public_path_for(:image) %>/hyperstudio.jpg" /></a></div>
+        <div id="logo"><a href="<%= url(:events) %>"><%= image_tag "/images/rep.core/hyperstudio.jpg" %></a></div>
         <div id="navigation">
           <% if session.user %>
             <%= link_to('My timelines', resource(session.user, :timelines)) %>
@@ -74,7 +34,7 @@
           <div id='search_box'>
             <form action='<%= url(:events) %>' method='get'>
               <input id='term' name='q' type='text' title='Search' value='<%= @search_term %>' autocomplete=off />
-              <input src='/images/search.png' type='image' />
+              <%= image_tag 'search.png' %>
             </form>
           </div>
         </div>  

@@ -1,3 +1,5 @@
+//= require <jquery>
+
 /*
  * Jeditable - jQuery in place edit plugin
  *

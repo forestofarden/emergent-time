@@ -1,0 +1,13 @@
+spec/models/event_comment_spec.rb
+spec/models/event_spec.rb
+spec/models/timeline_comment_spec.rb
+spec/models/timeline_event_spec.rb
+spec/models/timeline_spec.rb
+spec/models/timespan_spec.rb
+spec/models/timespan_unit_spec.rb
+spec/requests/docs_spec.rb
+spec/requests/event_comments_spec.rb
+spec/requests/events_spec.rb
+spec/requests/timeline_comments_spec.rb
+spec/requests/timeline_events_spec.rb
+spec/requests/timelines_spec.rb

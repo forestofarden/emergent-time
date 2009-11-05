@@ -7,4 +7,7 @@ Merb::Config.use { |c|
   c[:log_file]  = Merb.root / "log" / "production.log"
   # or redirect logger using IO handle
   # c[:log_stream] = STDOUT
+  
+  c[:path_prefix] = '/emt'
+  c[:compress_assets] = true
 }

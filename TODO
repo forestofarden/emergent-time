@@ -1,5 +1,23 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
+- bubble popup not working on safari
+- respect path_prefix
+- upgrade repertoire core for assets
+  - jquery ui??
+- javascript dependencies
+- test repertoire core
+- pull jquery from gems                     DONE
+
+- static html needs to work  (secondary page)
+- check add event popup
+- check submitting comments
+- registration page not showing
+- login not working
+- multiple passenger apps  DONE
+
+- repertoire core whois integration needs to be fixed (to fit new whois)
+- initial migration should automigrate (?)
+
 - really need a way to change scale of timeline
 - most of the fields need to be longer
 

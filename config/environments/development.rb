@@ -10,6 +10,8 @@ Merb::Config.use { |c|
 
   c[:log_stream] = STDOUT
   c[:log_file]   = nil
+  
+  c[:path_prefix] = '/emt'
   # Or redirect logging into a file:
   # c[:log_file]  = Merb.root / "log" / "development.log"
 }
