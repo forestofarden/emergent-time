@@ -40,7 +40,7 @@ $().ready(function() {
       if (confirm("Unlink this event from timeline?")) {
         $.ajax({
           type: "DELETE",
-          url: '/timeline_events/' + db_id,
+          url: '<%= Merb::Config[:path_prefix] %>/timeline_events/' + db_id,
           complete: function(XMLHttpRequest, textStatus) {
             // server will send 302: redirect
             $event_elem.remove();

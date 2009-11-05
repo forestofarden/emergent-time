@@ -1,11 +1,19 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
+- admin pages redirect to / instead of /emt    DONE
+- second level link of info pages not loading
+- safari bubble popup formatting wrong         DONE
+- bubble popups when logged in not loading     DONE
+- gravatar not being found  CANNOT REPRODUCE
+
+- ajax for the event create page not working (jquery ui error?)
+
 - bubble popup not working on safari
 - respect path_prefix
-- upgrade repertoire core for assets
-  - jquery ui??
-- javascript dependencies
 - test repertoire core
+- jquery ui??
+- upgrade repertoire core for assets        DONE
+- javascript dependencies                   DONE
 - pull jquery from gems                     DONE
 
 - static html needs to work  (secondary page)
