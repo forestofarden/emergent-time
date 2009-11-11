@@ -1,14 +1,14 @@
 bundle_path "gems"
 disable_system_gems
 
-merb_gems_version = "~>1.1"
+merb_gems_version = "~>1.0.15"
 dm_gems_version   = "~>0.10.1"
 do_gems_version   = "~>0.10.0"
-
-gem "repertoire_core", "~>0.3.3"
+gem "repertoire_core", "~>0.4.0"
 gem "repertoire-assets", "~>0.1.1"
 
-gem "jquery"
+gem "rep.jquery", "~>1.3.2"
+gem "rep.ajax.toolkit", "~>0.1.1"
 
 gem "merb-core", merb_gems_version
 gem "merb-action-args", merb_gems_version
@@ -37,10 +37,11 @@ gem "dm-timestamps", dm_gems_version
 gem "dm-types", dm_gems_version
 gem "dm-validations", dm_gems_version
 gem "dm-serializer", dm_gems_version
+gem "dm-ar-finders", dm_gems_version
 
 gem "merb_datamapper", merb_gems_version
 
-gem "RedCloth"
-gem "json"
+gem "RedCloth", "~>4.2.2"
+gem "json", "~>1.1.9"
 
-gem "mongrel"
+gem "mongrel", "~>1.1.5", :environment => :development

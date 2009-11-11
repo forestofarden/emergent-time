@@ -165,7 +165,7 @@ body { margin: 0; padding: 0; }
 /* same for source suggestion list and timeline events list */
 .event { padding-top: 3px; padding-bottom: 3px; cursor: pointer; }
 
-.event .event_container { padding: 7px; border: 1px white solid; min-height:30px; }
+.event .event_container { padding: 7px; border: 1px white solid; min-height:30px; overflow:hidden;}
 .event.selected .event_container { background: #ffe666; }
 
 .event .event_dates { color: gray; }

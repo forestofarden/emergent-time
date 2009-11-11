@@ -27,10 +27,12 @@
       });
       return false;
     });
-    
+
+/*    
     // select usage tab first
     var $tabs = $('#event_options').tabs();
     $tabs.tabs('select', '#event_usage');
+*/
     
   });
 </script>
@@ -45,15 +47,17 @@
 <div class="clear"></div>
 
 <div id="event_options">
+  <!--
   <ul>
     <li><a href="#event_comments"><span>Source critique</span></a></li>
     <li><a href="#event_usage"><span>Interpretations</span></a></li>
-  </ul>
+  </ul>	
+    -->
 
   <div id="event_usage">
     <a href="<%= url(:event_timelines, @event) %>" alt='ajax-load'>Usage</a>
   </div>
-
+<!--
   <div id="event_comments">
     <div class="comments">
       <a href="<%= resource(@event, :event_comments) %>" alt='ajax-load'>Source critique</a>
@@ -75,5 +79,5 @@
     </div>
     
   </div>
-
+-->
 </div>

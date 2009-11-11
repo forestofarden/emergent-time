@@ -1,25 +1,49 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
+- convert bang methods (save!) to un-banged    DONE
+- ajax for the event create page not working   DONE
+- callback for ajax validation not working     DONE
+- remove jquery ui							               DONE
+- rename jquery gem to rep.jquery              DONE
+- remove whois support                         DONE
+- check emails correct						             DONE
+- events list empty							               DONE
+- remove source comments                       DONE
+- bands of timeline are not connected		       DONE
+- syncing timeline to events not working       DONE
+- create edit event page
+- install on repertoire server
+- update machine for brett
+- email dave about laptop
+- new timeline graph?
+- longer field lengths
+- migrate popup window into separate gem
+- events not showing in right hand list
+- cannot click on events in user timelines     DONE
+- event validation failing bc of user key      DONE
+
+- postgresql crontab throttling respawn (10.6)
+
+- second level link of info pages not loading  DONE
+
+- rename jquery gem -> rep.jquery              DONE
+- github add rep.ajax.toolkit                  DONE
+
+- gravatar not being found                     DONE - BUNDLE & CHECK AGAIN
 - admin pages redirect to / instead of /emt    DONE
-- second level link of info pages not loading
 - safari bubble popup formatting wrong         DONE
 - bubble popups when logged in not loading     DONE
-- gravatar not being found  CANNOT REPRODUCE
-
-- ajax for the event create page not working (jquery ui error?)
-
-- bubble popup not working on safari
-- respect path_prefix
-- test repertoire core
-- jquery ui??
+ 
+- bubble popup not working on safari        DONE
+- respect path_prefix                       DONE
+- test repertoire core                      DONE
 - upgrade repertoire core for assets        DONE
 - javascript dependencies                   DONE
 - pull jquery from gems                     DONE
 
-- static html needs to work  (secondary page)
 - check add event popup
 - check submitting comments
-- registration page not showing
+- registration page not showing             DONE
 - login not working
 - multiple passenger apps  DONE
 

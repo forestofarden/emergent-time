@@ -1,3 +1,5 @@
+require 'dm-timestamps'
+
 class Timeline
   include DataMapper::Resource
   
@@ -5,7 +7,7 @@ class Timeline
   
   property :id, Serial
   
-  property :title, String, :size => 250, :nullable => false
+  property :title, String, :length => 250, :nullable => false
   property :intro, Text
   
   property :permalink, String, :nullable => false
@@ -39,7 +41,7 @@ class Timeline
     attribute_set(:title, new_title)
   end
   
-  def default_title!(prefix)
+  def default_title(prefix)
     self.title = Timeline.default_title(prefix)
   end
   

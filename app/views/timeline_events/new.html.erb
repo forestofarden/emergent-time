@@ -1,18 +1,19 @@
 <script language="javascript">
 
 $().ready(function() {
+	
+  var setSourceEvents = function(evts) {
+    $('#source_list .event[db_id!=]').remove();
+    $.each(evts, function() {
+      var $html = $(formatEvent(this)); 
+	    $('#source_list').append($html);
+	    $html.data('evt_json', this);
+	  });
+  };
+  
   // return currently selected source event for event form
   var selectedSourceEvent = function() {
     return $('#source_list .event.selected').attr('db_id');
-  };
-
-  var setSourceEvents = function(evts) {
-    $('#source_list .event[db_id!=]').remove();   // remove all generated sources
-    $.each(evts, function() {
-      var $html = $(formatEvent(this));
-      $('#source_list').append($html);
-      $html.data('evt_json', this);
-    });
   };
 
   var selectSource = function(id) {
@@ -46,7 +47,8 @@ $().ready(function() {
       // prompt for final field
       $('#create_event_form input[id=event\[interpretation\]]').focus();
     }
-  }
+  };
+  
   // if user selects a source event, copy it over
   $('#source_list .event').live('click', function() {
     selectSource($(this).attr('db_id'));
@@ -56,6 +58,7 @@ $().ready(function() {
   $('#create_event_form').ajaxValidate({ 
     url: '<%= url(:validate_create_te) %>'
   });
+  
   // event suggestion list based on changing fields in form
   $('#create_event_form .core_event :input').input_listen({
     min_chars: 4,
@@ -65,7 +68,7 @@ $().ready(function() {
       	  type: 'POST', 
       	  url: '<%= url(:suggest_event) %>',
       	  dataType: 'json',
-        	beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "application/json") }, /* JQuery uses wrong content type header */
+        	beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "application/json") }, // JQuery uses wrong content type header
           success: function(data) {
             setSourceEvents(data.events);
           }
@@ -73,6 +76,7 @@ $().ready(function() {
       }
     }
   });
+  
 });
 </script>
 
@@ -88,7 +92,7 @@ $().ready(function() {
     <div class="core_event">
       <div><label for="create_event_start">Start</label>
            <%= text_field :name => "event[start]"%><div class='validate'></div>
-           <div class='instructions'>Required: e.g. "11/22/1963"</div></div>
+           <div class='instructions'>Required: e.g. "22 Nov 1963"</div></div>
       <div><label for="create_event_end">End</label>
            <%= text_field :name => "event[end]" %><div class='validate'></div>
            <div class='instructions'>Optional</div></div>
@@ -106,11 +110,9 @@ $().ready(function() {
                                      
     </div>
     <div class="interpretation"><label for="create_event_interpretation">Interpretation</label>
-         <%= text_area :interpretation, :rows => 8, :cols => 40 %></textarea><div class='validate'></div>
+         <%= text_area :interpretation, :rows => 8, :cols => 40 %><div class='validate'></div>
          <div class='instructions'>Your interpretation of the event in the context of this timeline.<br/><br/>
                                    "Since Oswald was sighted 15mins before in the TSBD lunch room, he would have just had time to get to the 6th floor and set his gun sights."<br/><br/>
                                    Optional</div></div> 
     <div id="submit_buttons"><%= submit "Submit" %></div>
 <% end =%>
-</div>
-</div>

@@ -4,15 +4,21 @@
 
 /* jquery and plugins */
 //= require <jquery>
-//= require "lib/*.js"
+//= require <jquery/metadata>
+//= require <jquery/jeditable.autogrow>
+//= require <jquery/easing>
+//= require <jquery/form>
+//= require <jquery/scrollTo>
+//= require <jquery/suggest>
+//= require <jquery/template>
+//= require <jquery/tooltip>
+
+/* project-level css */
 
 //= require "../stylesheets/emt.css"
 //= require "../stylesheets/event.css"
 
+/* repertoire libraries */
 
-/* slices */
+//= require <rep.hint>
 //= require <rep.core>
-
-
-/* TODO. remove all dependencies on JQuery UI */
-//= require "../stylesheets/lib/smoothness/jquery-ui-1.7.2.custom.css"
