@@ -12,7 +12,7 @@ test:
  
 production:
   <<:       *defaults
-  password:
+  password: 
   database: hyperstudio_production
   host: menzinga.mit.edu
  
