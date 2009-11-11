@@ -1,3 +1,5 @@
+require 'dm-timestamps'
+
 class TimelineEvent
   include DataMapper::Resource
   

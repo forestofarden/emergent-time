@@ -1,3 +1,5 @@
+require 'dm-timestamps'
+
 class EventComment
   include DataMapper::Resource
   
@@ -6,7 +8,7 @@ class EventComment
   
   property :id, Serial
 
-  property :user_name, String, :size => 5..40, :nullable => false
+  property :user_name, String, :length => 5..40, :nullable => false
   property :user_email, String, :nullable => false
   property :user_ip, String, :nullable => false
   belongs_to :user                                 # null if anonymous comment

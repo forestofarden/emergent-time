@@ -32,7 +32,7 @@ Merb::Router.prepare do
   resources :event_comments
   slice(:merb_auth_slice_password, :name_prefix => nil, :path_prefix => app_path_prefix)
   slice(:repertoire_core, :name_prefix => nil, :path_prefix => app_path_prefix)
-
+  
   resources :timeline_events
   resources :events do
     resources :event_comments
@@ -62,7 +62,7 @@ Merb::Router.prepare do
   # special webservice to redirect to same timeline after its permalink changes
   match("/webservice/redirect/timelines/:id").to(:controller => "timelines", :action => :redirect_to).name(:redirect_to_timeline)
 
-  match("/docs/:page").to(:controller => "docs", :action => "show")
+  match("/docs/:page(.:format)").to(:controller => "docs", :action => "show").name(:docs)
   
   # This is the default route for /:controller/:action/:id
   # This is fine for most cases.  If you're heavily using resource-based

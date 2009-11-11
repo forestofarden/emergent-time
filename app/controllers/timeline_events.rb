@@ -44,8 +44,9 @@ class TimelineEvents < Application
     only_provides :json
   
     @event = Event.new(event)
+    @event.user  = session.user
     @event.title = nil if @event.title.blank?
-    @event.end = nil if @event.end.blank?
+    @event.end   = nil if @event.end.blank?
     # ignore timeline_event since its fields are optional now
   
     display @event.valid? || @event.errors_as_params
@@ -60,9 +61,10 @@ class TimelineEvents < Application
     if timeline_event[:event_id].blank?               # if the event passed in has an id, it already exists so dont create
       # create event
       @event = Event.new(event)
+      @event.user  = session.user
       @event.title = nil if @event.title.blank?
-      @event.end = nil if @event.end.blank?
-      @event.save!
+      @event.end   = nil if @event.end.blank?
+      @event.save || raise("Could not save #{@event}")
       
       # create source comment (if exists)... should have more explicit 
       if event_comment && !event_comment[:text].empty?
@@ -76,7 +78,7 @@ class TimelineEvents < Application
       # tie timeline entry to new event
       @timeline_event.event = @event
     end
-    @timeline_event.save!
+    @timeline_event.save || raise("Could not save #{@timeline_event}")
     
     @timeline = @timeline_event.timeline
     redirect resource(@timeline.user, @timeline, :cue => @event.id), :message => { :notice => 'Created your event entry' }

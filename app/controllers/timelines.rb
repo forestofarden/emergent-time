@@ -9,7 +9,7 @@ class Timelines < Application
     @timelines = @user.timelines
     
     @new_timeline = Timeline.new
-    @new_timeline.default_title!('New Timeline')
+    @new_timeline.default_title('New Timeline')
     
     display @timelines
   end

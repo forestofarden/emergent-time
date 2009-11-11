@@ -14,7 +14,7 @@ migration 2, :ranking  do
         -- update counts of links for all nodes in graph
         UPDATE events    SET links = (SELECT count(*) FROM timeline_events WHERE event_id = events.id);
         UPDATE timelines SET links = (SELECT count(*) FROM timeline_events WHERE timeline_id = timelines.id);
-        -- clear existing rankings (TODO: necessary?)
+        -- clear existing rankings (TODO: not sure if necessary...
         UPDATE events SET rank = 1.0;
         UPDATE timelines SET rank = 1.0;
         -- prepare to update rankings
