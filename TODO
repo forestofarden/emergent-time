@@ -11,14 +11,21 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - remove source comments                       DONE
 - bands of timeline are not connected		       DONE
 - syncing timeline to events not working       DONE
+- longer field lengths                         DONE
+- upload data                                  DONE
+
+- text in the intro not going into jeditable
+- selecting an event doesn't scroll up
 - create edit event page
+- create example timelines
+
 - install on repertoire server
-- update machine for brett
-- email dave about laptop
+- update machine for brett  NOT TO DO
+- email dave about laptop, rubygems on server, new packages DONE
+
 - new timeline graph?
-- longer field lengths
 - migrate popup window into separate gem
-- events not showing in right hand list
+- events not showing in right hand list        DONE
 - cannot click on events in user timelines     DONE
 - event validation failing bc of user key      DONE
 

@@ -34,9 +34,11 @@ class TimelineEvents < Application
 
   def edit(id)
     only_provides :html
+    
     @timeline_event = TimelineEvent.get(id)
     raise NotFound unless @timeline_event
-    display @timeline_event
+    
+    display @timeline_event, :layout => false
   end
   
   # User validation web service for edit and signup forms
@@ -87,6 +89,7 @@ class TimelineEvents < Application
   def update(id, timeline_event)
     @timeline_event = TimelineEvent.get(id)
     raise NotFound unless @timeline_event
+    
     if @timeline_event.update_attributes(timeline_event)
        redirect resource(@timeline_event)
     else

@@ -8,6 +8,6 @@ Merb::Config.use { |c|
   # or redirect logger using IO handle
   # c[:log_stream] = STDOUT
   
-  c[:path_prefix] = '/emt'
+  c[:path_prefix] = '/emergent-time'
   c[:compress_assets] = true
 }
