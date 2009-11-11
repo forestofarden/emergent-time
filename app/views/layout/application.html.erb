@@ -20,7 +20,7 @@
           <a href="<%= url(:events) %>"><h1>Emergent Time</h1></a>
           <div id="byline">A collaborative timelining tool for humanists and social scientists.  <%= link_to "Read more...", url(:docs, :page => 'intro', :id => 'docs'), :class=> 'assemble'%></div>
         </div>
-        <div id="logo"><a href="<%= url(:events) %>"><%= image_tag "/images/rep.core/hyperstudio.jpg" %></a></div>
+        <div id="logo"><a href="<%= url(:events) %>"><%= image_tag "rep.core/hyperstudio.jpg" %></a></div>
         <div id="navigation">
           <% if session.user %>
             <%= link_to('My timelines', resource(session.user, :timelines)) %>
