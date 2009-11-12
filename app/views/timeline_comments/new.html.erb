@@ -11,8 +11,9 @@
     <p>Logged in as <a href="<%= resource(session.user, :timelines) %>"><%= session.user.full_name %></a>.</p>
     <% if session.user == @user %>
       <p>You are the author of this timeline.</p>
-    <% end %>
+    <% end %>  
   <% else %>
+    <br/>
     <div class="name"><label for="create_timeline_comment_user_name">Name (Required)</label>
       <%= text_field :user_name %><div class="validate"></div>
     <div class="email"><label for="create_timeline_comment_user_email">Email (Required) - will not be published</label>
