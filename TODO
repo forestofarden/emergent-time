@@ -14,13 +14,14 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - longer field lengths                         DONE
 - upload data                                  DONE
 
-- text in the intro not going into jeditable
+- text in the intro not going into jeditable   DONE
+- comments aren't submitting
 - selecting an event doesn't scroll up
 - create edit event page
 - create example timelines
 
-- install on repertoire server
-- update machine for brett  NOT TO DO
+- install on repertoire server                 DONE
+- update machine for brett                     NOT TO DO
 - email dave about laptop, rubygems on server, new packages DONE
 
 - new timeline graph?

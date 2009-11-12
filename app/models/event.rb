@@ -11,7 +11,7 @@ class Event
   # size limits are intentional - event descriptions are limited to discourage
   #   extensive interpretation (see timeline_event.interpretation)
   property :title, String, :length => 100
-  property :description, String, :length => (10..250)
+  property :description, String, :nullable => false, :length => (15..250)
 
   property :start, DateTime, :nullable => false
   property :end,   DateTime

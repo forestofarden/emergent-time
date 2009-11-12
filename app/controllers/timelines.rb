@@ -45,7 +45,7 @@ class Timelines < Application
     end
   end
   
-  # following methods are webservices for inline editing of textile fields
+  # following method is webservice for inline editing of textile fields
   def field_value(shortname, permalink, id, textilize=false)
     provides :text
     @user = User.first(:shortname => shortname)
@@ -56,7 +56,7 @@ class Timelines < Application
     value = @timeline.send(id)
     value = textilize(value) if textilize
     
-    value
+    render value
   end
 
   def update(shortname, permalink, timeline, id=nil)

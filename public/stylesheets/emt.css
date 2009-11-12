@@ -176,7 +176,9 @@ body { margin: 0; padding: 0; }
 #events { margin: 0; }
 
 #events .event {  border-bottom: 1px gray dotted; }
-#events .event .event_remove { float:right; height: 20px; width: 20px; background: url('images/remove_sm.png') top left no-repeat; cursor: pointer; z-index: 181; display: none;}
+#events .event .options { float:right; display: none; }
+#events .event .event_edit { float:left; height: 20px; width: 20px; background: url('images/pencil_sm.png') top left no-repeat; cursor: pointer; z-index: 181; }
+#events .event .event_remove { float:left; height: 20px; width: 20px; background: url('images/remove_sm.png') top left no-repeat; cursor: pointer; z-index: 181; }
 
 .timeline_show #timeline_comments { float:left; width: 45%; margin-top: 10px;}
 

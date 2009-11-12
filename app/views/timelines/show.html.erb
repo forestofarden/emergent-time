@@ -31,8 +31,16 @@ $().ready(function() {
   
   // set up removing events from timeline
   <% if session.user == @user %>
-    $("#events .event").live("mouseover", function() { $(this).find(".event_remove").show(); });
-    $("#events .event").live("mouseout", function() { $(this).find(".event_remove").hide(); });
+    $("#events .event").live("mouseover", function() { $(this).find(".options").show(); });
+    $("#events .event").live("mouseout", function() { $(this).find(".options").hide(); });
+    $("#events .event .event_edit").live("click", function() {
+      var $event_elem = $(this).closest('.event');
+      var db_id = $event_elem.attr('db_id');
+      
+      // TODO. figure out a way to generate url using merb
+      //alert("<%= url(:edit_timeline_event, 1) %>" + db_id);
+      return false;
+    });
     $("#events .event .event_remove").live("click", function() {
       var $event_elem = $(this).closest('.event');
       var db_id = $event_elem.attr('db_id');
@@ -60,18 +68,6 @@ $().ready(function() {
     $elem.addClass('selected');
     $("#events").scrollTo($elem);
   }
-  
-  var updateEvents = function() {
-    var events_elem = $("#events");
-    events_elem.empty();
-    $.getJSON("<%= resource(@user, @timeline, :format => :json) %>", function(data) {
-      $.each(data.events, function() {
-        events_elem.append(formatEvent(this));
-      });
-    });
-  };
-  
-  updateEvents();
   
   // timeline edit metadata / delete
   <% if session.user == @user %>
@@ -132,7 +128,7 @@ $().ready(function() {
     // iterate through events and scroll to first one later than the timeline center
     $('#events .event').each(function() {
       var date = Timeline.DateTime.parseIso8601DateTime($(this).attr('evt_start'));
-      if (date.getTime() > centerDate.getTime()) {
+      if (date && date.getTime() > centerDate.getTime()) {
         $('#events').scrollTo($(this));
         return false;
       }
@@ -205,9 +201,7 @@ $().ready(function() {
         <% end %>
         <div class="clear"></div>
       </div>
-      <ul id="events">
-        <!-- filled via ajax -->
-      </ul>
+      <%= partial './interpretations', :interpretations => @timeline.timeline_events %>
     </div>
     <div class="clear">
   </div>

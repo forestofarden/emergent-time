@@ -1,0 +1,16 @@
+<ul id="events">
+<% interpretations.each do |te| -%>
+  <li class="event" db_id="<%= te.id %>" evt_start="<%= te.event.start.to_json %>">
+    <div class="event_container"> 
+      <div class="options">
+        <div class="event_edit" title="Edit this event"></div>
+        <div class="event_remove" title="Remove this event"></div>
+      </div>
+      <div class="event_dates"><%= te.event.start.formatted(:emt_date) %><%= " &mdash; " + te.event.end.formatted(:emt_date) if te.event.end %></div>
+      <div class="event_title"><%= (te.event.title || "") %></div>
+      <div class="event_description"><%= te.event.description %></div>
+      <div class="event_interpretation"><%= (te.interpretation || "") %></div>
+    </div>
+  </li>
+<% end -%>
+</ul>

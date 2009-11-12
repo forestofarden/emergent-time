@@ -10,7 +10,6 @@
 //= require <jquery/form>
 //= require <jquery/scrollTo>
 //= require <jquery/suggest>
-//= require <jquery/template>
 //= require <jquery/tooltip>
 
 /* project-level css */

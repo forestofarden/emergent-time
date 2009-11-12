@@ -1,12 +1,41 @@
 <script language="javascript">
 
 $().ready(function() {
+
+  var formatDate = function(d) {
+    var m_names = new Array("Jan", "Feb", "Mar", 
+    "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
+    "Oct", "Nov", "Dec");
+
+    d = Timeline.DateTime.parseIso8601DateTime(d);
+    if (d === undefined || d == null) { return ''; }
+    
+    var curr_date = d.getDate();
+    var curr_month = d.getMonth();
+    var curr_year = d.getFullYear();
+    return curr_date + "-" + m_names[curr_month] + "-" + curr_year;
+  };
+
+  var formatEvent = function(e) {
+    // not best to pollute event object, but templater has no access to other vars
+    var startDate = formatDate(e.start);
+    var endDate = formatDate(e.end);
+    
+    var event = '<li class="event" db_id="' + e.id + '" evt_start="' + e.start + '">' +
+           '<div class="event_container">' + 
+           '<div class="event_dates">' + startDate + '' + (endDate == "" ? "" : " &mdash; " + endDate) + '</div>' +
+           '<div class="event_title">' + (e.real_title || "") + '</div> ' +
+           '<div class="event_description">' + e.description + '</div> ' +
+           '</div>' + 
+           '</li>';
+    return event;
+  };
 	
   var setSourceEvents = function(evts) {
     $('#source_list .event[db_id!=]').remove();
     $.each(evts, function() {
       var $html = $(formatEvent(this)); 
-	    $('#source_list').append($html);
+      $('#source_list').append($html);
 	    $html.data('evt_json', this);
 	  });
   };

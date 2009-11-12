@@ -10,17 +10,6 @@ class TimelineEvents < Application
     render :layout => false
   end
 
-  def index
-    @timeline_events = TimelineEvent.all
-    display @timeline_events
-  end
-
-  def show(id)
-    @timeline_event = TimelineEvent.get(id)
-    raise NotFound unless @timeline_event
-    display @timeline_event
-  end
-
   def new(timeline_id)
     only_provides :html
     

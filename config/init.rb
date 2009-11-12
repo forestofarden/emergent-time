@@ -27,6 +27,8 @@ Merb::BootLoader.before_app_loads do
   require 'dm-validations'
   require 'repertoire_core'
   DataObjects::Postgres.logger = DataObjects::Logger.new(STDOUT, 0)
+  
+  Date.add_format(:emt_date, "%d %b %Y")
 end
 
 Merb::BootLoader.after_app_loads do

@@ -43,7 +43,7 @@ Merb::Router.prepare do
   identify(User => :shortname, Timeline => :permalink) do
     resources :users do
       resources :timelines do
-        match("/webservice/field_value/:id").to(:action => :field_value).name(:field_value)
+        match("/webservice/field_value/:id(.:format)").to(:action => :field_value).name(:field_value)
         resources :timeline_comments
       end
     end
