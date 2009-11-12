@@ -27,12 +27,6 @@
       });
       return false;
     });
-
-/*    
-    // select usage tab first
-    var $tabs = $('#event_options').tabs();
-    $tabs.tabs('select', '#event_usage');
-*/
     
   });
 </script>
@@ -46,38 +40,17 @@
 </div>
 <div class="clear"></div>
 
-<div id="event_options">
-  <!--
-  <ul>
-    <li><a href="#event_comments"><span>Source critique</span></a></li>
-    <li><a href="#event_usage"><span>Interpretations</span></a></li>
-  </ul>	
-    -->
-
-  <div id="event_usage">
-    <a href="<%= url(:event_timelines, @event) %>" alt='ajax-load'>Usage</a>
-  </div>
-<!--
-  <div id="event_comments">
-    <div class="comments">
-      <a href="<%= resource(@event, :event_comments) %>" alt='ajax-load'>Source critique</a>
+<div id="event_usage">
+  <% if @cross_section %>
+    <% @cross_section.each do |te| %>
+    <div class="cross_section">
+      <%= partial './timeline_stats', :timeline => te.timeline, :cue_event => te.event, :image_size => 40, :trunc => 250 %>
+      <div class="clear"></div>
+      <div class="interpretation">
+        <a href="<%= resource(te.timeline.user, te.timeline, :cue => te.event) %>"><%= te.interpretation ? te.interpretation.truncate(250) : "" %></a>
+      </div>
+      <div class="clear"></div>
     </div>
-  
-    <div id="event_create_comment">
-      <%= form_for @event_comment, :id => "create_event_comment_form", :action => resource(@event, :event_comments) do %>
-        <% if session.user %>
-          <p>Logged in as <a href="<%= resource(session.user, :timelines) %>"><%= session.user.full_name %></a>.</p>
-        <% else %>
-          <div class="name"><label for="create_event_comment_user_name">Name (Required)</label>
-            <%= text_field :user_name %><div class="validate"></div>
-          <div class="email"><label for="create_event_comment_user_email">Email (Required) - will not be published</label>
-            <%= text_field :user_email %><div class="validate"></div>
-        <% end %>
-        <div><label for="create_comment_text">Comment</label><%= text_area :text, :rows => 8, :cols => 45 %><br/><div class="validate"></div></div>
-        <div id="submit_buttons"><%= submit "Submit" %></div>
-      <% end =%>
-    </div>
-    
-  </div>
--->
+    <% end %>
+  <% end %>
 </div>

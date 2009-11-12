@@ -35,7 +35,7 @@ class Events < Application
     @event = Event.get(id)
     raise NotFound unless @event
     
-    @event_comment = EventComment.new(:event => @event )
+    @cross_section = TimelineEvent.all(:event_id => id)
     
     display @event, :layout => false
   end
