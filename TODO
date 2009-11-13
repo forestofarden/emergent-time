@@ -15,6 +15,11 @@ TASKS BEFORE INTERNAL RELEASE/INVOICE
 - upload data                                  DONE
 
 - text in the intro not going into jeditable   DONE
+
+- when editing an event, won't appear until indexed
+- routing to update an event not in place
+
+- calendar next to date fields on event editor
 - comments aren't submitting
 - selecting an event doesn't scroll up
 - create edit event page

@@ -18,7 +18,7 @@ class TimelineEvents < Application
 
     @timeline_event = TimelineEvent.new(:timeline => @timeline, :event => Event.new)
     
-    display @timeline_event, :layout => false
+    display @timeline_event, :template => 'timeline_events/edit', :layout => false
   end
 
   def edit(id)
@@ -46,44 +46,46 @@ class TimelineEvents < Application
   # create a new timeline event association, with options to create the event 
   #   and first source comment from scratch
   #
+  # N.B. handles both create and update calls
+  #
   #  TODO.  should be checking if save succeeds
   def create(timeline_event, event = nil, event_comment = nil)
-    @timeline_event = TimelineEvent.new(timeline_event)
-    if timeline_event[:event_id].blank?               # if the event passed in has an id, it already exists so dont create
+    @timeline_event = TimelineEvent.get(timeline_event[:id]) || TimelineEvent.new(timeline_event)
+    @event          = Event.get(timeline_event[:event_id])
+    
+    if @event.nil?
       # create event
       @event = Event.new(event)
       @event.user  = session.user
-      @event.title = nil if @event.title.blank?
+      @event.title = nil if @event.title.blank?           # fix optional fields
       @event.end   = nil if @event.end.blank?
-      @event.save || raise("Could not save #{@event}")
+      @event.save || raise("Could not save event #{@event}")
+            
+            # # create source comment (if exists)... should have more explicit 
+            # if event_comment && !event_comment[:text].empty?
+            #   @event_comment = EventComment.new(event_comment)
+            #   @event_comment.event = @event
+            #   @event_comment.user = session.user
+            #   @event_comment.user_ip  = request.remote_ip
+            #   @event_comment.save       # validation required 
+            # end
+    end  
       
-      # create source comment (if exists)... should have more explicit 
-      if event_comment && !event_comment[:text].empty?
-        @event_comment = EventComment.new(event_comment)
-        @event_comment.event = @event
-        @event_comment.user = session.user
-        @event_comment.user_ip  = request.remote_ip
-        @event_comment.save       # validation required 
-      end
-      
-      # tie timeline entry to new event
-      @timeline_event.event = @event
-    end
-    @timeline_event.save || raise("Could not save #{@timeline_event}")
+    # tie timeline entry to event
+    @timeline_event.id = nil if @timeline_event.id.blank?
+    @timeline_event.event = @event    
+    @timeline_event.interpretation = timeline_event[:interpretation]
+  
+  if @timeline_event.id.nil?
+    puts "ITS A BOY" 
+  else
+    puts "ITS A SECONDHAND GIRL"
+  end
+    
+    @timeline_event.save || raise("Could not save #{@timeline_event}: #{@timeline_event.errors.join(', ')}")
     
     @timeline = @timeline_event.timeline
-    redirect resource(@timeline.user, @timeline, :cue => @event.id), :message => { :notice => 'Created your event entry' }
-  end
-
-  def update(id, timeline_event)
-    @timeline_event = TimelineEvent.get(id)
-    raise NotFound unless @timeline_event
-    
-    if @timeline_event.update_attributes(timeline_event)
-       redirect resource(@timeline_event)
-    else
-      display @timeline_event, :edit
-    end
+    redirect resource(@timeline.user, @timeline, :cue => @event.id), :message => { :notice => 'Updated your event entry' }
   end
 
   def destroy(id)

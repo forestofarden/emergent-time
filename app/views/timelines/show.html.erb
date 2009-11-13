@@ -197,7 +197,7 @@ $().ready(function() {
       <div>
         <h3>Events</h3>
         <% if session.user == @user %>
-          <a href="<%= url(:new_timeline_event, :timeline_id => @timeline.id) %>" id="create_event_toggle" class='assemble {width: 850, height: 585}'>[+] Add an event</a>
+          <a href="<%= url(:new_timeline_event, :timeline_id => @timeline.id) %>" id="create_event_toggle" class='assemble {width: 850, height: 500}'>[+] Add an event</a>
         <% end %>
         <div class="clear"></div>
       </div>

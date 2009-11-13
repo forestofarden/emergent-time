@@ -15,7 +15,8 @@ class TimelineEvent
   belongs_to :event
   
   def <=>(other)
-    event <=> other.event
+    puts "comparing... #{event.start} and #{other.event.start}"
+    event.start <=> other.event.start
   end
     
 end

@@ -66,6 +66,17 @@ class Events < Application
           puts "pruned to #{@top_events.size}"
         end
         
+        # always include current event, if there is one
+        cur_evt_id =  timeline_event[:event_id]
+        unless cur_evt_id.empty?
+          cur_evt = Event.get(cur_evt_id)
+          @top_events.delete_if { |e| e.id == cur_evt_id }
+          @top_events.unshift(cur_evt)
+          puts "PUT IN THE TOP EVENT"
+        else
+          puts "DIDN'T PUT IT IN"
+        end
+        
       rescue ArgumentError => e
         # suggest nothing when given a non-parsing date
       end

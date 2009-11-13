@@ -6,6 +6,8 @@ $().ready(function() {
     var m_names = new Array("Jan", "Feb", "Mar", 
     "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
     "Oct", "Nov", "Dec");
+    
+    return d;
 
     d = Timeline.DateTime.parseIso8601DateTime(d);
     if (d === undefined || d == null) { return ''; }
@@ -17,7 +19,6 @@ $().ready(function() {
   };
 
   var formatEvent = function(e) {
-    // not best to pollute event object, but templater has no access to other vars
     var startDate = formatDate(e.start);
     var endDate = formatDate(e.end);
     
@@ -45,6 +46,8 @@ $().ready(function() {
     return $('#source_list .event.selected').attr('db_id');
   };
 
+  // highlight the given source event and copy its values
+  // over to the event form
   var selectSource = function(id) {
     var $source = $('#source_list .event[db_id=' + id + ']');
     var data = $source.data('evt_json');
@@ -60,7 +63,7 @@ $().ready(function() {
       $('#create_event_form .disabled').removeClass('disabled');
       $('#create_event_form :input').removeAttr('readonly');
       $('#create_event_form #timeline_event_event_id').val(''); // hidden event ids
-    } else {
+    } else if (data) {
       // and copy values into it from existing event
       $('#create_event_form #timeline_event_event_id').val(data['id']); // hidden event ids
       $('#create_event_form input[id=event\[start\]]').val(formatDate(data['start'])).blur();
@@ -77,6 +80,19 @@ $().ready(function() {
       $('#create_event_form input[id=event\[interpretation\]]').focus();
     }
   };
+
+  var suggestEvents = function(cur_evt_id) {
+    $('#create_event_form').ajaxSubmit({
+  	  type: 'POST', 
+  	  url: '<%= url(:suggest_event) %>',
+  	  dataType: 'json',
+    	beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "application/json") }, // JQuery uses wrong content type header
+      success: function(data) {
+        setSourceEvents(data.events);
+        if (cur_evt_id) { selectSource(cur_evt_id); }
+      }
+    });
+  };
   
   // if user selects a source event, copy it over
   $('#source_list .event').live('click', function() {
@@ -91,20 +107,18 @@ $().ready(function() {
   // event suggestion list based on changing fields in form
   $('#create_event_form .core_event :input').input_listen({
     min_chars: 4,
-    changed: function(s) {
+    changed: function(s) { 
       if (selectedSourceEvent() == '') {             // don't suggest when user has already made a choice
-        $('#create_event_form').ajaxSubmit({
-      	  type: 'POST', 
-      	  url: '<%= url(:suggest_event) %>',
-      	  dataType: 'json',
-        	beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "application/json") }, // JQuery uses wrong content type header
-          success: function(data) {
-            setSourceEvents(data.events);
-          }
-        }); 
+        suggestEvents();
       }
     }
   });
+  
+  <% if @timeline_event.event.id %>
+    // on load, suggest since current event already filled out
+    var default_evt = <%= @timeline_event.event.id %>;
+    suggestEvents(default_evt);
+  <% end %>
   
 });
 </script>
@@ -112,34 +126,39 @@ $().ready(function() {
 <div id="create_event_sources">
   <label>Build on an existing event</label>
   <ul id="source_list">
-    <li class="event selected" db_id=""><div class="event_container">[ Or create your own ]</div></li>
+    <li class="event selected" db_id=""><div class="event_container">[ Or create a new one ]</div></li>
   </ul>
 </div>
-<%= form_for @timeline_event, :id => "create_event_form", :action => resource(:timeline_events) do %>
-    <%= hidden_field :timeline_id, :value => @timeline.id %>
-    <%= hidden_field :event_id, :value => nil %>
+<% # should use rest here, but merb-helpers not recognizing route... -%>
+<%= form_for @timeline_event, :id => "create_event_form", :action => resource(:timeline_events), :method => :post do %>
+    <%= hidden_field :id, :value => @timeline_event.id %>
+    <%= hidden_field :timeline_id, :value => @timeline_event.timeline.id %>
+    <%= hidden_field :event_id, :value => @timeline_event.event.id %>
     <div class="core_event">
       <div><label for="create_event_start">Start</label>
-           <%= text_field :name => "event[start]"%><div class='validate'></div>
+           <% start_date = @timeline_event.event.start -%>
+           <%= text_field :name => "event[start]", :value => start_date ? start_date.formatted(:emt_date) : '' %><div class='validate'></div>
            <div class='instructions'>Required: e.g. "22 Nov 1963"</div></div>
       <div><label for="create_event_end">End</label>
-           <%= text_field :name => "event[end]" %><div class='validate'></div>
+           <% end_date = @timeline_event.event.end -%>
+           <%= text_field :name => "event[end]", :value => end_date ? end_date.formatted(:emt_date) : '' %><div class='validate'></div>
            <div class='instructions'>Optional</div></div>
       <div><label for="create_event_title">Title</label>
-          <%= text_field :name => "event[title]" %><div class='validate'></div>
+          <%= text_field :name => "event[title]", :value => @timeline_event.event.title %><div class='validate'></div>
           <div class='instructions'>2-5 optional words: e.g. "Kennedy shot"</div></div>
       <div><label for="create_event_description">Description</label>
-           <%= text_area :name => "event[description]", :id => 'event[description]', :rows => 4, :cols => 40  %><div class='validate'></div>
+           <%= text_area :name => "event[description]", :id => 'event[description]', :value => @timeline_event.event.description, :rows => 4, :cols => 40  %><div class='validate'></div>
            <div class='instructions'>A short factual description of the event.<br/><br/>
                                      "President Kennedy shot in Dallas."</div></div>
+     <!--
      <div><label for="create_event_source">Source</label>
           <%= text_area :name => "event_comment[text]", :id => 'event_comment[text]', :rows => 2, :cols => 40  %><div class='validate'></div>
           <div class='instructions'>Optional source for this information.<br/><br/>
-                                    A URL or footnote-style reference.</div></div>                               
+                                    A URL or footnote-style reference.</div></div> -->                    
                                      
     </div>
     <div class="interpretation"><label for="create_event_interpretation">Interpretation</label>
-         <%= text_area :interpretation, :rows => 8, :cols => 40 %><div class='validate'></div>
+         <%= text_area :interpretation, :value => @timeline_event.interpretation, :rows => 8, :cols => 40 %><div class='validate'></div>
          <div class='instructions'>Your interpretation of the event in the context of this timeline.<br/><br/>
                                    "Since Oswald was sighted 15mins before in the TSBD lunch room, he would have just had time to get to the 6th floor and set his gun sights."<br/><br/>
                                    Optional</div></div> 
