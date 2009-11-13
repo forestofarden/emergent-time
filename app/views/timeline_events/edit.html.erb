@@ -6,8 +6,6 @@ $().ready(function() {
     var m_names = new Array("Jan", "Feb", "Mar", 
     "Apr", "May", "Jun", "Jul", "Aug", "Sep", 
     "Oct", "Nov", "Dec");
-    
-    return d;
 
     d = Timeline.DateTime.parseIso8601DateTime(d);
     if (d === undefined || d == null) { return ''; }
