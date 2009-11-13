@@ -168,8 +168,9 @@ body { margin: 0; padding: 0; }
 .event .event_container { padding: 7px; border: 1px white solid; min-height:30px; overflow:hidden;}
 .event.selected .event_container { background: #ffe666; }
 
-.event .event_dates { color: gray; }
-.event .event_title { font-weight: bold; display: inline; }
+.event .event_dates { color: gray; float: left; clear: left; height: 20px;}
+.event .event_links { float: left; color: red; font-size: 7pt; margin-left: 3px;}
+.event .event_title { float: left; clear: left; font-weight: bold; display: inline; }
 .event .event_description { display: inline; }
 .event .event_interpretation { display: inline; }
 

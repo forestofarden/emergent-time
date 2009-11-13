@@ -22,10 +22,11 @@ $().ready(function() {
     
     var event = '<li class="event" db_id="' + e.id + '" evt_start="' + e.start + '">' +
            '<div class="event_container">' + 
-           '<div class="event_dates">' + startDate + '' + (endDate == "" ? "" : " &mdash; " + endDate) + '</div>' +
-           '<div class="event_title">' + (e.real_title || "") + '</div> ' +
-           '<div class="event_description">' + e.description + '</div> ' +
-           '</div>' + 
+             '<div class="event_dates">' + startDate + '' + (endDate == "" ? "" : " &mdash; " + endDate) + '</div>' +
+             '<div class="event_links">(' + e.links + ')</div><div style="clear:both"></div>' +
+             '<div class="event_title">' + (e.real_title || "") + '</div> ' +
+             '<div class="event_description">' + e.description + '</div> ' +
+             '</div>' + 
            '</li>';
     return event;
   };

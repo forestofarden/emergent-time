@@ -16,6 +16,7 @@ src/*
 .hgignore
 .hg/*
 .svn/*
+gems/bin/*
 gems/gems/*
 gems/specifications/*
 gems/environment.rb
