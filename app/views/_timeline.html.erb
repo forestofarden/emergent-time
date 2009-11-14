@@ -13,7 +13,7 @@ SimileAjax.History.enabled = false;  /* clobber Timeline's history hack, since i
 
 $(document).ready(function() {
   var tl;
-  
+
   var defaultHeight = 500;
   var defaultWidth  = 400;
 
@@ -23,7 +23,7 @@ $(document).ready(function() {
     function(elmt, theme, labeller) {
       //oldFillInfoBubble.call(this, elmt, theme, labeller);
       // ajax call to show other timelines this event was interpreted in
-      var $cs = $('<div id="bubble-ajax-contents"></div>');
+      var $cs = $('<div id="bubble-ajax-contents" style="width:' + defaultWidth + '"></div>');
       $(elmt).append($cs);
       $.ajax({
         type: "GET",
