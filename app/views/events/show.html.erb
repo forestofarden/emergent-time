@@ -33,7 +33,8 @@
 
 <div class="event selected" db_id="<%= @event.id %>" evt_start="<%= @event.start %>">
   <div class="event_container"> 
-    <div class="event_dates"><%= @event.start.formatted(:long) %><%= @event.end ? " &mdash;#{@event.end.formatted(:long)}" : "" %></div>
+    <div class="event_dates"><%= @event.start.formatted(:emt_date) %><%= @event.end ? " &mdash;#{@event.end.formatted(:emt_date)}" : "" %></div>
+    <div style="clear:both"></div>
     <div class="event_title"><%= @event.title %></div>
     <div class="event_description"><%= @event.description %></div>
   </div> 
