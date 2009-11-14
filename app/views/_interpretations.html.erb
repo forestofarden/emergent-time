@@ -1,6 +1,6 @@
 <ul id="events">
 <% interpretations.sort.each do |te| -%>
-  <li class="event" db_id="<%= te.id %>" evt_start="<%= te.event.start.to_json %>">
+  <li class="event" db_id="<%= te.id %>" evt_start=<%= te.event.start.to_json %> >
     <div class="event_container">
       <% # TODO. activate edit and remove work the same way: see timeline_event/show.html.erb -%>
       <div class="options">
