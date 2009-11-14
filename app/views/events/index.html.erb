@@ -32,7 +32,7 @@
           <%= partial './timeline_stats', :timeline => tl, :cue_event => te.event %>
           <div class="event">
           <a href="<%= resource(tl.user, tl, :cue => te.event) %>">
-            <div class="dates"><%= te.event.start.formatted(:long) %><%= te.event.end.blank? ? '' : " &mdash; #{te.event.end.formatted(:long)}" %></div>
+            <div class="dates"><%= te.event.start.formatted(:emt_date) %><%= te.event.end.blank? ? '' : " &mdash; #{te.event.end.formatted(:emt_date)}" %></div>
             <div class="title"><%= te.event.title %></div>
             <div class="description"><%= te.event.description %></div>
             <div class="interpretation"><%= te.interpretation %></div>

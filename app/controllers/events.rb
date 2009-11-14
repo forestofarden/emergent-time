@@ -63,7 +63,6 @@ class Events < Application
             timeline_event_ids = timeline_events.map { |e| e.id }
             @top_events.delete_if { |e| timeline_event_ids.include?(e.id) }
           end
-          puts "pruned to #{@top_events.size}"
         end
         
         # always include current event, if there is one
@@ -72,9 +71,6 @@ class Events < Application
           cur_evt = Event.get(cur_evt_id)
           @top_events.delete_if { |e| e.id == cur_evt_id }
           @top_events.unshift(cur_evt)
-          puts "PUT IN THE TOP EVENT"
-        else
-          puts "DIDN'T PUT IT IN"
         end
         
       rescue ArgumentError => e

@@ -38,8 +38,7 @@ class Timelines < Application
       redirect resource(@user, @timeline), :message => {:notice => "Timeline was successfully created"}
     else
       message[:error] = "Timeline could not be created"
-      
-      @timeline.errors.each { |ter| puts ter }
+      @timeline.errors.each { |ter| Merb.logger.error ter }
       
       render :index
     end
@@ -68,7 +67,7 @@ class Timelines < Application
     raise NotFound unless @timeline
     
     unless @timeline.update_attributes(timeline)
-      @timeline.errors.each { |e| puts e }
+      @timeline.errors.each { |e| Merb.logger.error e }
       raise "Error while updating"
     end
     

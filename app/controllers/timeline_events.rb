@@ -75,12 +75,6 @@ class TimelineEvents < Application
     @timeline_event.id = nil if @timeline_event.id.blank?
     @timeline_event.event = @event    
     @timeline_event.interpretation = timeline_event[:interpretation]
-  
-  if @timeline_event.id.nil?
-    puts "ITS A BOY" 
-  else
-    puts "ITS A SECONDHAND GIRL"
-  end
     
     @timeline_event.save || raise("Could not save #{@timeline_event}: #{@timeline_event.errors.join(', ')}")
     

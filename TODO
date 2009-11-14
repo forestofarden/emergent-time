@@ -1,5 +1,7 @@
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
+- relax non-null on timeline comments
+
 - convert bang methods (save!) to un-banged    DONE
 - ajax for the event create page not working   DONE
 - callback for ajax validation not working     DONE

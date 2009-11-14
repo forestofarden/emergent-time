@@ -8,10 +8,10 @@ class TimelineComment
   
   property :id, Serial
 
-  property :user_name, String, :length => 5..40, :nullable => false
+  property :user_name, String, :nullable => false
   property :user_email, String, :nullable => false
   property :user_ip, String, :nullable => false
-  belongs_to :user                                 # null if anonymous comment
+  belongs_to :user, :nullable => true                                 # null if anonymous comment
   
   property :text, Text, :nullable => false
 
@@ -26,7 +26,6 @@ class TimelineComment
       self.user_name = user.full_name
       self.user_email = user.email
     end
-    true
   end
   
 end

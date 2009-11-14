@@ -10,7 +10,7 @@
         <div class="event_remove" title="Remove this event"></div>
       </div>
       <div class="event_dates"><%= te.event.start.formatted(:emt_date) %><%= " &mdash; " + te.event.end.formatted(:emt_date) if te.event.end %></div>
-      <div class="event_links">(<%= te.event.links %>)</div><div style="clear:both"></div>
+      <div class="event_links">(<%= te.event.links || '*' %>)</div><div style="clear:both"></div>
       <div class="event_title"><%= (te.event.title || "") %></div>
       <div class="event_description"><%= te.event.description %></div>
       <div class="event_interpretation"><%= (te.interpretation || "") %></div>
