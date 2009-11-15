@@ -55,7 +55,7 @@ $(document).ready(function() {
         date:           d,
         width:          "75%", 
         intervalUnit:   Timeline.DateTime.YEAR, 
-        intervalPixels: 320,
+        intervalPixels: 120,
         theme:          hypertimeTheme
     }),
     Timeline.createBandInfo({
@@ -64,7 +64,7 @@ $(document).ready(function() {
         overview:       true,
         width:          "17%", 
         intervalUnit:   Timeline.DateTime.DECADE, 
-        intervalPixels: 160,
+        intervalPixels: 60,
         theme:          hypertimeTheme
     }),
     Timeline.createBandInfo({
@@ -75,7 +75,7 @@ $(document).ready(function() {
         trackGap:       0.2,
         width:          "8%", 
         intervalUnit:   Timeline.DateTime.CENTURY, 
-        intervalPixels: 160
+        intervalPixels: 60
     })  ];
   bandInfos[1].syncWith = 0;
   bandInfos[1].highlight = true;
