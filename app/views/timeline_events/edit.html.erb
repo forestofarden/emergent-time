@@ -18,7 +18,7 @@ $().ready(function() {
 
   var formatEvent = function(e) {
     var startDate = formatDate(e.start);
-    var endDate = formatDate(e.end);
+    var endDate = formatDate(e.finish);
     
     var event = '<li class="event" db_id="' + e.id + '" evt_start="' + e.start + '">' +
            '<div class="event_container">' + 
@@ -100,7 +100,7 @@ $().ready(function() {
 
   // event form validation
   $('#create_event_form').ajaxValidate({ 
-    url: '<%= url(:validate_create_te) %>'
+    url: '<%= validate_event_path %>'
   });
   
   // event suggestion list based on changing fields in form
@@ -136,11 +136,11 @@ $().ready(function() {
     <div class="core_event">
       <div><label for="create_event_start">Start</label>
            <% start_date = @timeline_event.event.start -%>
-           <%= text_field :name => "event[start]", :value => start_date ? start_date.formatted(:emt_date) : '' %><div class='validate'></div>
+           <%= text_field :name => "event[start]", :value => start_date ? start_date.to_s(:emt_date) : '' %><div class='validate'></div>
            <div class='instructions'>Required: e.g. "22 Nov 1963"</div></div>
       <div><label for="create_event_end">End</label>
-           <% end_date = @timeline_event.event.end -%>
-           <%= text_field :name => "event[end]", :value => end_date ? end_date.formatted(:emt_date) : '' %><div class='validate'></div>
+           <% end_date = @timeline_event.event.finish -%>
+           <%= text_field :name => "event[end]", :value => end_date ? end_date.to_s(:emt_date) : '' %><div class='validate'></div>
            <div class='instructions'>Optional</div></div>
       <div><label for="create_event_title">Title</label>
           <%= text_field :name => "event[title]", :value => @timeline_event.event.title %><div class='validate'></div>

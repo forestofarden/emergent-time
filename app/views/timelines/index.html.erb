@@ -13,7 +13,7 @@ $().ready(function() {
 
 <div class="emt timeline_index">
   <div class="pageinfo">
-    <%= partial './user_detail', :with => @user %>
+    <%= render :partial => './user_detail', :object => @user %>
   </div>
   <div class="timelines">
     <h3>Timelines</h3>
@@ -22,7 +22,7 @@ $().ready(function() {
       <% @user.timelines.each do |timeline| %>
         <li class="timeline"><a href="<%= resource(@user, timeline) %>"><%= timeline.title %></a></li>
       <% end %>
-      <% if session.user == @user %>
+      <% if current_user == @user %>
         <a id="create_timeline_link" href='#'>[+] Create a new timeline</a>
       <% end %>
     </ul>
@@ -30,7 +30,7 @@ $().ready(function() {
   <div class="related_users">
     <h3>Users with related work</h3>
     <% @user.related(5, 1).each do |user| %>
-      <%= partial './user_detail', :with => user %>
+      <%= render :partial => './user_detail', :object => user %>
     <% end %>
   </div>
 </div>

@@ -33,7 +33,7 @@
 
 <div class="event selected" db_id="<%= @event.id %>" evt_start="<%= @event.start %>">
   <div class="event_container"> 
-    <div class="event_dates"><%= @event.start.formatted(:emt_date) %><%= @event.end ? " &mdash;#{@event.end.formatted(:emt_date)}" : "" %></div>
+    <div class="event_dates"><%= @event.start.to_s(:emt_date) %><%= @event.finish ? " &mdash;#{@event.finish.to_s(:emt_date)}" : "" %></div>
     <div style="clear:both"></div>
     <div class="event_title"><%= @event.title %></div>
     <div class="event_description"><%= @event.description %></div>
@@ -45,7 +45,7 @@
   <% if @cross_section %>
     <% @cross_section.each do |te| %>
     <div class="cross_section">
-      <%= partial './timeline_stats', :timeline => te.timeline, :cue_event => te.event, :image_size => 40, :trunc => 250 %>
+      <%= render :partial => './timeline_stats', :locals => { :timeline => te.timeline, :cue_event => te.event, :image_size => 40, :trunc => 250 } %>
       <div class="clear"></div>
       <div class="interpretation">
         <a href="<%= resource(te.timeline.user, te.timeline, :cue => te.event) %>"><%= te.interpretation ? te.interpretation.truncate(250) : "" %></a>

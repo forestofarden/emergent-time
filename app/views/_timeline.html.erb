@@ -27,7 +27,7 @@ $(document).ready(function() {
       $(elmt).append($cs);
       $.ajax({
         type: "GET",
-        url:  '<%= Merb::Config[:path_prefix] %>/events/' + this.getEventID(),
+        url:  '<%= path_prefix %>/events/' + this.getEventID(),
         dataType: "html",	
         beforeSend: function(xhr) { xhr.setRequestHeader("Accept", "text/html"); },
         success: function(data) {

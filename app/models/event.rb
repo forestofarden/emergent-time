@@ -1,38 +1,19 @@
-require 'dm-ar-finders'
-require 'dm-timestamps'
+require 'postgresql_helpers'
 
-class Event
-  include DataMapper::Resource
-  
-  extend Hypertime::Utilities
-  
-  property :id, Serial
-  
-  # size limits are intentional - event descriptions are limited to discourage
-  #   extensive interpretation (see timeline_event.interpretation)
-  property :title, String, :length => 100
-  property :description, String, :nullable => false, :length => (15..250)
-
-  property :start, DateTime, :nullable => false
-  property :end,   DateTime
-  
-  property :links, Integer
-  property :rank, Float, :auto_validation => false       # without, dm validations reject as wrong precision
-  
-  property :created_at, DateTime
-  property :modified_at, DateTime
+class Event < ActiveRecord::Base
+  extend PostgreSQLHelpers
   
   belongs_to :user
   
-  has n, :timeline_events
-  has n, :timelines, :through => :timeline_events
+  has_many :timeline_events
+  has_many :timelines, :through => :timeline_events
   
-  has n, :event_comments, :order => [:created_at.desc]
+  has_many :event_comments, :order => 'created_at DESC'
   
-  validates_with_method :end, :method => :consistent?
+  validate :finish, :consistent?
 
   def consistent?
-    if self.end.nil? || (self.end > self.start)
+    if self.finish.nil? || (self.finish > self.start)
       true
     else
       [false, 'End should be after start.']
@@ -63,5 +44,6 @@ class Event
       sql << "LIMIT #{n} "      
       Event.find_by_sql(sql, :properties => props)
     end
-  end 
+  end
+   
 end

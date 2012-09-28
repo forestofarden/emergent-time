@@ -16,9 +16,8 @@ src/*
 .hgignore
 .hg/*
 .svn/*
-gems/bin/*
 gems/gems/*
 gems/specifications/*
-gems/environment.rb
-public/digest.*
 merb_profile_results
+media/*
+public/digest.*

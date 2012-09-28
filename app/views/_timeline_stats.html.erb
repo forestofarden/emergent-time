@@ -3,8 +3,8 @@
 <% cue_event ||= nil %>
 <% image_size ||= 40 %>
 <% trunc ||= 40%>
-<a class="picture" href="<%= resource(timeline.user, :timelines) %>"><img src="<%= gravatar_image_url(timeline.user.email, image_size) %>"/></a>
+<a class="picture" href="<%= user_path(timeline.user) %>"><img src="<%= gravatar_image_url(timeline.user.email, image_size) %>"/></a>
 <div class="stats">
-  <a class="title" href="<%= resource(timeline.user, timeline, :cue => cue_event ? cue_event.id : nil) %>" title="<%= timeline.title %>"><%=timeline.title.truncate(trunc) %></a>
-  <a class="name" href="<%= resource(timeline.user, :timelines) %>"><%= timeline.user.full_name %></a>
+  <%= link_to timeline.title.truncate(trunc), user_timeline_path(timeline.user, timeline, :cue => cue_event ? cue_event.id : nil), :html => {:class => 'title', :title => timeline.title } %>
+  <%= link_to timeline.user.full_name, user_path(timeline.user), :html => {:class => 'name'} %>
 </div>

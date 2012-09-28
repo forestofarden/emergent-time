@@ -4,7 +4,7 @@
 <%          'events' => @top_events.map do |e| %>
 <%          { 'id'          => e.id.to_s,        %>
 <%            'start'       => e.start,              %>
-<%            'end'         => e.end ? e.end : nil,  %>
+<%            'end'         => e.finish ? e.finish : nil,  %>
 <%            'real_title'       => e.title ? e.title : nil, %>
 <%            'description' => e.description,            %>
 <%            'interpretation' => '',     %>

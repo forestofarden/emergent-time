@@ -115,8 +115,8 @@ tl.getBand(0).addOnScrollListener(function() {
 <li class="event" evt_id="evt_<%= te.event.id %>" evt_startDate="<%= te.event.start.to_s %>">
   <div class="event_remove" removal_id="<%= te.id %>" style="display: block;"></div>
   <div class="event_title"><%= te.event.title %></div>
-  <div class="event_start"><%= te.event.start.formatted(:long) %></div>
-  <div class="event_end"><%= te.event.end ? te.event.end.formatted(:long) : '' %>
+  <div class="event_start"><%= te.event.start.to_s(:long) %></div>
+  <div class="event_end"><%= te.event.end ? te.event.end.to_s(:long) : '' %>
   <div class="event_description"><%= te.event.description %></div>
   <div class="event_interpretation"><%= te.interpretation %></div>
 </li>
@@ -137,7 +137,7 @@ return '<li class="event" te_id="' + e.id +'" evt_startDate="' + e.startDate +  
 
 TO call partial of timeline:
 
-<%= partial './timeline', :url => resource(@user, @timeline, :format => :json), :scroll => @timeline.events.last.start %>
+<%= render :partial => './timeline', :url => resource(@user, @timeline, :format => :json), :scroll => @timeline.events.last.start %>
 
 
 
@@ -204,9 +204,9 @@ $().ready(function() {
   def navigation(opts={})
     tag :div, :class => 'navigation' do
       html = []
-      if session.user
-        html << link_to('Home', resource(session.user, :timelines))
-        html << link_to('Profile', slice_url(:repertoire_core, :user, :shortname => session.user.shortname))
+      if current_user
+        html << link_to('Home', resource(current_user, :timelines))
+        html << link_to('Profile', slice_url(:repertoire_core, :user, :shortname => current_user.shortname))
         html << link_to('Log off', slice_url(:merb_auth_slice_password, :logout))
       else
         html << link_to('Sign in', slice_url(:merb_auth_slice_password, :login))

@@ -30,7 +30,7 @@ $().ready(function() {
   });
   
   // set up removing events from timeline
-  <% if session.user == @user %>
+  <% if current_user == @user %>
     $("#events .event").live("mouseover", function() { $(this).find(".options").show(); });
     $("#events .event").live("mouseout", function() { $(this).find(".options").hide(); });
     $("#events .event .event_edit").live("click", function() {
@@ -48,7 +48,7 @@ $().ready(function() {
       if (confirm("Unlink this event from timeline?")) {
         $.ajax({
           type: "DELETE",
-          url: '<%= Merb::Config[:path_prefix] %>/timeline_events/' + db_id,
+          url: '<%= path_prefix %>/timeline_events/' + db_id,
           complete: function(XMLHttpRequest, textStatus) {
             // server will send 302: redirect
             $event_elem.remove();
@@ -70,7 +70,7 @@ $().ready(function() {
   }
   
   // timeline edit metadata / delete
-  <% if session.user == @user %>
+  <% if current_user == @user %>
     $('#title_bar').hover(function() { $(this).find('.timeline_opts').show(); },
                           function() { $(this).find('.timeline_opts').hide(); });
     $('#title_bar .rename').click(function() { $('#title_bar .title').click(); });
@@ -148,7 +148,7 @@ $().ready(function() {
 <div class="emt timeline_show">
   <div>
     <div class="pageinfo">
-      <%= partial './user_detail', :with => @user %>
+      <%= render :partial => './user_detail', :object => @user %>
     </div>
     <div id="related_timelines">
       <% related = @timeline.related(5, 1) %>
@@ -158,21 +158,21 @@ $().ready(function() {
       <% else %>
         <% related.each do |tl| %>
           <div class="timeline">
-            <%= partial './timeline_stats', :timeline => tl, :image_size => 25 %>
+            <%= render :partial => './timeline_stats', :locals => { :timeline => tl, :image_size => 25 } %>
             <div class="clear"></div>
           </div>
         <% end %>
       <% end %>
     </div>
-    <div id="title_bar"><div id="title" <%= 'title="Sign in to edit timelines."' if !session.user %> ><%= @timeline.title %></div>
-    <% if session.user == @user %>
+    <div id="title_bar"><div id="title" <%= 'title="Sign in to edit timelines."' if !current_user %> ><%= @timeline.title %></div>
+    <% if current_user == @user %>
     <div class="timeline_opts"><div class="rename"></div><div class="remove"></div></div>
     <% end %>
   </div>
   <div id="timeinfo">
-  <div id="timeline_intro" <%= 'title="Sign in to edit timelines."' if !session.user %> >
+  <div id="timeline_intro" <%= 'title="Sign in to edit timelines."' if !current_user %> >
     <div id="intro" class="textarea"><%= textilize(@timeline.intro || "[ No intro yet ]") %></div>
-    <% if session.user == @user %>
+    <% if current_user == @user %>
       <div class="edit"></div>
     <% end %>
   </div>
@@ -183,11 +183,11 @@ $().ready(function() {
       </div>
       <%# Simile Timeline complains when the data file contains no events %>
       <% unless @timeline.events.empty? %>
-        <%= partial './timeline', :url => resource(@user, @timeline, :format => :json), :cue => best_cue(@cue_event, @timeline) %>
+        <%= render :partial => './timeline', :locals => { :url => resource(@user, @timeline, :format => :json), :cue => best_cue(@cue_event, @timeline) } %>
       <% else %>
         <div class="emt_timeline empty">
           This timeline is empty.  
-          <% if session.user == @user %>
+          <% if current_user == @user %>
             Start by clicking 'Add an event'.
           <% end %>
         </div>
@@ -196,12 +196,12 @@ $().ready(function() {
     <div id="timeline_events">
       <div>
         <h3>Events</h3>
-        <% if session.user == @user %>
+        <% if current_user == @user %>
           <a href="<%= url(:new_timeline_event, :timeline_id => @timeline.id) %>" id="create_event_toggle" class='assemble {width: 850, height: 500}'>[+] Add an event</a>
         <% end %>
         <div class="clear"></div>
       </div>
-      <%= partial './interpretations', :interpretations => @timeline.timeline_events %>
+      <%= render :partial => './interpretations', :object => @timeline.timeline_events %>
     </div>
     <div class="clear">
   </div>

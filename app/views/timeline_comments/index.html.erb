@@ -1,4 +1,4 @@
-<h3 id="comments"><%= numerize(@timeline.timeline_comments.size, 'Response')
+<h3 id="comments"><%= pluralize(@timeline.timeline_comments.size, 'Response')
 %> to "<%= @timeline.title%>"</h3>
 <ul class="comment_list">
   <% @timeline.timeline_comments.each do |comment| %>
@@ -11,7 +11,7 @@
   	      <%= comment.user_name %>
   	    </a>
   	  </div>
-  	  <small class='date'><%= comment.created_at.formatted(:long) %></small>
+  	  <small class='date'><%= comment.created_at.to_s(:long) %></small>
   	  <%= textilize(comment.text) %>
   	  <div class="clear"></div>
   	</li>

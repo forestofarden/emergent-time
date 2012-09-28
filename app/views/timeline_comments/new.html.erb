@@ -7,9 +7,9 @@
 </script>
 
 <%= form_for @timeline_comment, :id => "create_timeline_comment_form", :action => resource(@user, @timeline, :timeline_comments) do %>
-  <% if session.user %>
-    <p>Logged in as <a href="<%= resource(session.user, :timelines) %>"><%= session.user.full_name %></a>.</p>
-    <% if session.user == @user %>
+  <% if current_user %>
+    <p>Logged in as <a href="<%= resource(current_user, :timelines) %>"><%= current_user.full_name %></a>.</p>
+    <% if current_user == @user %>
       <p>You are the author of this timeline.</p>
     <% end %>  
   <% else %>

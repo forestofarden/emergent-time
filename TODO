@@ -1,3 +1,14 @@
+MIGRATION TO RAILS 3
+
+- figure out alternative to assemble for overlays
+
+- models
+  - rename event.end to event.finish
+- routes
+- controllers
+- launchd pagerank, fulltext indexing
+
+
 TASKS BEFORE INTERNAL RELEASE/INVOICE
 
 - relax non-null on timeline comments

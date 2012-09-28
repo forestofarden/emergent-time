@@ -12,7 +12,7 @@
   	      <%= comment.user_name %>
   	    </a>
   	  </div>
-  	  <small class='date'><%= comment.created_at.formatted(:long) %></small>
+  	  <small class='date'><%= comment.created_at.to_s(:long) %></small>
   	  <%= textilize(comment.text) %>
   	  <div class="clear"></div>
   	</li>

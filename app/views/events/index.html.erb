@@ -6,8 +6,8 @@
 </script>
 
 <div class="events_index">
-  <%= tag :div, message[:error], :class => 'error' if message[:error] %>
-  <%= tag :div, message[:notice], :class => 'notice' if message[:notice] %>
+  <%= tag :div, flash[:error], :class => 'error' if flash[:error] %>
+  <%= tag :div, flash[:notice], :class => 'notice' if flash[:notice] %>
   <div>
     <div class="clear"></div>
     <% if @search_term %>
@@ -18,7 +18,7 @@
         <% end %>
         <% @timelines.each do |tl| %>
         <div class="timeline">
-          <%= partial './timeline_stats', :timeline => tl %>
+          <%= render :partial => './timeline_stats', :locals => { :timeline => tl } %>
           <div class="clear"></div>
         </div>
         <% end %>
@@ -29,10 +29,10 @@
       <% @timelines.each do |tl| %>
         <% te = tl.recent_event %>
         <div class="timeline">
-          <%= partial './timeline_stats', :timeline => tl, :cue_event => te.event %>
+          <%= render :partial => './timeline_stats', :locals => { :timeline => tl, :cue_event => te.event } %>
           <div class="event">
-          <a href="<%= resource(tl.user, tl, :cue => te.event) %>">
-            <div class="dates"><%= te.event.start.formatted(:emt_date) %><%= te.event.end.blank? ? '' : " &mdash; #{te.event.end.formatted(:emt_date)}" %></div>
+          <a href="<%= user_timeline_path(tl.user, tl, :cue => te.event) %>">
+            <div class="dates"><%= te.event.start.to_s(:emt_date) %><%= te.event.finish.blank? ? '' : " &mdash; #{te.event.finish.to_s(:emt_date)}" %></div>
             <div class="title"><%= te.event.title %></div>
             <div class="description"><%= te.event.description %></div>
             <div class="interpretation"><%= te.interpretation %></div>
@@ -47,14 +47,14 @@
       <div id="timeline_graph">
         <h3><div id="timeline_caption">Most cited events<%= " matching '#{@search_term}' (total #{@total_events})" if @search_term %></div></h3>
         <div id="events_count" style="display:none">
-          <a href="<%= resource(:events, :q => @search_term, :n => 500)%>" class="<%= 'selected' if (251..500).include?(@limit) %>">500</a>
-          <a href="<%= resource(:events, :q => @search_term, :n => 250)%>" class="<%= 'selected' if (101..250).include?(@limit) %>">250</a>
-          <a href="<%= resource(:events, :q => @search_term, :n => 100)%>" class="<%= 'selected' if (51..100).include?(@limit) %>">100</a>
-          <a href="<%= resource(:events, :q => @search_term, :n => 50)%>" class="<%= 'selected' if (26..50).include?(@limit) %>">50</a>
-          <a href="<%= resource(:events, :q => @search_term, :n => 25)%>" class="<%= 'selected' if (1..25).include?(@limit) %>">25</a>
+          <a href="<%= events_path(:q => @search_term, :n => 500)%>" class="<%= 'selected' if (251..500).include?(@limit) %>">500</a>
+          <a href="<%= events_path(:q => @search_term, :n => 250)%>" class="<%= 'selected' if (101..250).include?(@limit) %>">250</a>
+          <a href="<%= events_path(:q => @search_term, :n => 100)%>" class="<%= 'selected' if (51..100).include?(@limit) %>">100</a>
+          <a href="<%= events_path(:q => @search_term, :n => 50)%>" class="<%= 'selected' if (26..50).include?(@limit) %>">50</a>
+          <a href="<%= events_path(:q => @search_term, :n => 25)%>" class="<%= 'selected' if (1..25).include?(@limit) %>">25</a>
         </div>
         <% unless @top_events.empty? %>
-          <%= partial './timeline', :url => url(:events, :format => :json, :q => @search_term), :cue => best_cue(@top_events.first) %>
+          <%= render :partial => './timeline', :locals => {:url => events_path(:json, :q => @search_term), :cue => best_cue(@top_events.first)} %>
         <% else %>
           <div class="emt_timeline empty">
             There are no results.

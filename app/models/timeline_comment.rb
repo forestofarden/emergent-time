@@ -1,27 +1,13 @@
-require 'dm-timestamps'
-
-class TimelineComment
-  include DataMapper::Resource
-  
+class TimelineComment < ActiveRecord::Base
   # TODO.  after dm-is-remixable can handle validation hooks and belongs_to,
   #        combine with EventComment and use remixable
-  
-  property :id, Serial
-
-  property :user_name, String, :nullable => false
-  property :user_email, String, :nullable => false
-  property :user_ip, String, :nullable => false
-  belongs_to :user, :nullable => true                                 # null if anonymous comment
-  
-  property :text, Text, :nullable => false
+  belongs_to :user
 
   belongs_to :timeline
   
-  property :created_at, DateTime
+  validate :user_email, :email => true
   
-  validates_format :user_email, :as => :email_address
-  
-  before :valid? do
+  before_validation do 
     if user
       self.user_name = user.full_name
       self.user_email = user.email

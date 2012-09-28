@@ -20,4 +20,3 @@
 /* repertoire libraries */
 
 //= require <rep.hint>
-//= require <rep.core>

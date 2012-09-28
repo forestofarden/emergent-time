@@ -22,12 +22,12 @@ var formatDate = function(d) {
 var formatEvent = function(e) {
   // not best to pollute event object, but templater has no access to other vars
   e.startDate = formatDate(e.start);
-  e.endDate = formatDate(e.end);
+  e.finishDate = formatDate(e.finish);
   
   var template = '<li class="event" db_id="<%= this.id %>" evt_start="<%= this.start %>">' +
          '<div class="event_container">' + 
          '<div class="event_remove" title="Remove this event"></div>' +
-         '<div class="event_dates"><%= this.startDate %><%= (this.endDate == "") ? "" : " &mdash; " + this.endDate %></div>' +
+         '<div class="event_dates"><%= this.startDate %><%= (this.finishDate == "") ? "" : " &mdash; " + this.finishDate %></div>' +
          '<div class="event_title"><%= (this.real_title || "") %></div> ' +
          '<div class="event_description"><%= this.description %></div> ' +
          '<div class="event_interpretation"><%= (this.interpretation || "") %></div>' +
